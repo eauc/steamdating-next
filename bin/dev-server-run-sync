@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+sleep 3
+browser-sync start --no-open --proxy=http://localhost:3000 --port=3002 --files client/app/styles/css/app.css --ws

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+nodemon --watch server --exec babel-node server/app.js
