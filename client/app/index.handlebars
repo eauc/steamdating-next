@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!-- build:css /dist/css/app.css -->
+    <link rel="stylesheet" href="/app/styles/css/app.css" />
+    <!-- /build -->
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>SteamDating</title>
+  </head>
+  <body>
+    <div id="app">
+    </div>
+    <script>
+      {{{state}}}
+    </script>
+    <!-- build:js /dist/js/app.js -->
+    <script src="/lib/system.js"></script>
+    <script src="/config.js"></script>
+    <script>
+      System.trace = true;
+      System.import('app/app.js');
+    </script>
+    <!-- /build -->
+  </body>
+</html>
