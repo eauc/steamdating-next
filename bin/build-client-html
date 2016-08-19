@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+htmlprocessor client/app/index.handlebars -o client/dist/index.handlebars
