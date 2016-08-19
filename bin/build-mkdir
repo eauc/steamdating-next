@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+mkdir -vp client/dist/css && \
+mkdir -vp client/dist/js

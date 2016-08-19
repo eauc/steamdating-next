@@ -4,6 +4,15 @@
   "description": "Warmachine Tournament Organizer",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npm run -s build",
+    "build": "npm run build:client",
+    "prebuild": "npm-run-all clean:dist build:mkdir",
+    "build:client": "npm run build:client:copy",
+    "build:client:copy": "bin/build-client-copy",
+    "prebuild:client:copy": "npm run build:client:css",
+    "build:client:css": "bin/build-client-css",
+    "build:mkdir": "bin/build-mkdir",
+    "clean:dist": "rm -vrf client/dist/* && rm -vrf client/app/styles/css/*",
     "start": "babel-node server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +26,8 @@
     "consign": "^0.1.2",
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
-    "express-state": "^1.4.0"
+    "express-state": "^1.4.0",
+    "node-sass": "^3.8.0",
+    "npm-run-all": "^3.0.0"
   }
 }
