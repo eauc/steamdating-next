@@ -4,20 +4,23 @@
   "description": "Warmachine Tournament Organizer",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build:client",
+    "build": "jspm install && npm run build:client",
     "prebuild": "npm-run-all clean:dist build:mkdir",
     "build:client": "npm run build:client:copy",
     "build:client:copy": "bin/build-client-copy",
-    "prebuild:client:copy": "npm run build:client:css",
+    "prebuild:client:copy": "npm-run-all build:client:css build:client:js",
     "build:client:css": "bin/build-client-css",
+    "build:client:js": "bin/build-client-js",
     "build:mkdir": "bin/build-mkdir",
     "clean:dist": "rm -vrf client/dist/* && rm -vrf client/app/styles/css/*",
     "dev": "npm-run-all -p dev:server** dev:client:css:watch",
     "dev:server": "npm-run-all -p dev:server:**",
+    "dev:server:run:jspm": "bin/dev-server-run-jspm",
     "dev:server:run:node": "bin/dev-server-run-node",
     "dev:server:run:sync": "bin/dev-server-run-sync",
     "dev:client": "npm run dev:client:css:watch",
     "dev:client:css:watch": "npm run build:client:css -- --watch",
+    "jspm": "jspm",
     "postinstall": "npm run -s build",
     "start": "babel-node server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,11 +36,27 @@
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
     "express-state": "^1.4.0",
+    "jspm": "^0.16.42",
     "node-sass": "^3.8.0",
     "npm-run-all": "^3.0.0"
   },
   "devDependencies": {
     "browser-sync": "^2.14.0",
+    "jspm-server": "^1.0.1",
     "nodemon": "^1.10.2"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "client",
+      "packages": "client/lib"
+    },
+    "dependencies": {
+      "ramda": "npm:ramda@^0.22.1"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
   }
 }

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+sleep 3
+jspm-server --proxy=http://localhost:3000 --port=3001 --only-exts=".js, .html, .js.map" client/

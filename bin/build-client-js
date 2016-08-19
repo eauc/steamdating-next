@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+jspm bundle-sfx app/app.js client/dist/js/app.js --minify

@@ -1,4 +1,5 @@
 node_modules
 *.log
 /client/dist
+/client/lib
 /client/app/styles/css
