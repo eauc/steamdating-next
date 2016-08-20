@@ -6,6 +6,7 @@
     "/": ["client/dist/index.handlebars"]
   },
   "staticFileGlobs": [
+    "client/vendor/**",
     "client/dist/css/**.css",
     "client/dist/fonts/**",
     "client/dist/js/**.js*"
