@@ -1,0 +1,9 @@
+{
+  "name": "SteamDating",
+  "short_name": "SteamDating",
+  "start_url": "/",
+  "display": "fullscreen",
+  "background_color": "#fff",
+  "description": "Warmachine Tournament Organizer",
+  "icons": []
+}
