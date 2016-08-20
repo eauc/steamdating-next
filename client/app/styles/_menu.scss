@@ -26,7 +26,7 @@
             background-color: $color_hover;
         }
     }
-    &-wrap.show {
+    &.show {
         border-top: $border_default;
         border-color: $color_border_light;
 
@@ -39,7 +39,7 @@
         }
     }
     @media (min-width: $tablet_break) {
-        &-wrap {
+        & {
             display: flex;
             flex-direction: row;
             justify-content: space-around;
@@ -60,7 +60,7 @@
         padding: 0.5em 1em 0 0;
         text-align: right;
 
-        &-wrap {
+        & {
             display: initial;
         }
         &-item {
