@@ -63,6 +63,7 @@
       "ramda": "npm:ramda@^0.22.1",
       "react": "npm:react@^15.3.1",
       "react-dom": "npm:react-dom@^15.3.1",
+      "react-pacomo": "npm:react-pacomo@^0.5.3",
       "react-router": "npm:react-router@^2.6.1"
     },
     "devDependencies": {

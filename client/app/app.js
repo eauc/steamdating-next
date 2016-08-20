@@ -3,9 +3,9 @@ export let __hotReload = true;
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import log from 'app/services/log';
+import log from 'app/helpers/log';
 import offlineService from 'app/services/offline';
-import { Nav } from 'app/components/nav/view';
+import { NavMenu } from 'app/components/nav/view';
 import { Root } from 'app/components/root/view';
 
 self.STEAMDATING_APP = {
@@ -13,12 +13,12 @@ self.STEAMDATING_APP = {
 };
 
 ReactDOM.render((
-  <Nav />
-), document.querySelector('.sd-nav-menu'));
+  <NavMenu />
+), document.querySelector('.sd-NavMenu-container'));
 
 ReactDOM.render((
   <Root />
-), document.querySelector('.sd-content'));
+), document.querySelector('.sd-Page-container'));
 
 function appInit() {
   log('STEAMDATING APP init');

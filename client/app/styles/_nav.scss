@@ -1,17 +1,17 @@
-&-nav {
+&-Nav {
     $nav_padding: 0.2em;
 
     position: relative;
     background-color: $color-primary;
     box-shadow: $box_shadow_default;
 
-    &-brand {
+    &Brand {
         font-family: Cookie;
         font-size: 1.8em;
         color: $color_text_inverted;
         padding: $nav_padding;
     }
-    &-toggle {
+    &Toggle {
         position: absolute;
         top: 0;
         right: 0;
@@ -28,7 +28,7 @@
             background-color: $color_primary_dark;
         }
     }
-    &-item {
+    &Item {
         display: none;
         color: $color_text_inverted;
         text-decoration: none;
@@ -37,25 +37,25 @@
 
         &:hover,
         &:active,
-        &.active {
+        &-active {
             background-color: $color_primary_dark;
         }
     }
-    &-menu-wrap.show &-item {
+    &Menu-show &Item {
         display: block;
     }
     @media (min-width: $tablet_break) {
         display: flex;
         flex-direction: row;
 
-        &-menu-wrap {
+        &Menu {
             display: flex;
             flex-direction: row;
         }
-        &-item {
+        &Item {
             display: block;
         }
-        &-toggle {
+        &Toggle {
             display: none;
         }
     }

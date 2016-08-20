@@ -11,7 +11,7 @@ function aboutRender() {
   return (
     <Page>
       <PageContent>
-        <p>About StemDating</p>
+        <p>About SteamDating</p>
       </PageContent>
     </Page>
   );

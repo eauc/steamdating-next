@@ -1,7 +1,7 @@
 export let __hotReload = true;
 
 import React from 'react';
-import { Menu, MenuItem } from 'app/components/menu/view';
+import { PageMenu, PageMenuItem } from 'app/components/pageMenu/view';
 import { Page, PageContent } from 'app/components/page/view';
 
 export const Home = React.createClass({
@@ -11,11 +11,11 @@ export const Home = React.createClass({
 function homeRender() {
   return (
     <Page>
-      <Menu>
-        <MenuItem>Home Menu 1</MenuItem>
-        <MenuItem>Home Menu 2</MenuItem>
-        <MenuItem>Home Menu 3</MenuItem>
-      </Menu>
+      <PageMenu>
+        <PageMenuItem>Home Menu 1</PageMenuItem>
+        <PageMenuItem>Home Menu 2</PageMenuItem>
+        <PageMenuItem>Home Menu 3</PageMenuItem>
+      </PageMenu>
       <PageContent>
         <p>Welcome Home !</p>
         <p>Welcome Home !</p>

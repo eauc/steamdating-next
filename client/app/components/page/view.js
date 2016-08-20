@@ -1,27 +1,30 @@
 export let __hotReload = true;
 
 import React from 'react';
+import styles from 'app/helpers/styles';
 
-export const Page = React.createClass({
+export const Page = styles.decorator(React.createClass({
+  displayName: 'Page',
   render: pageRender
-});
+}));
 
 function pageRender() {
   return (
-    <div className="sd-content-wrap">
+    <div>
       {this.props.children}
     </div>
   );
 }
 
-export const PageContent = React.createClass({
+export const PageContent = styles.decorator(React.createClass({
+  displayName: 'PageContent',
   render: pageContentRender
-});
+}));
 
 function pageContentRender() {
   return (
-    <div className="sd-page">
-      <div className="sd-page-wrap">
+    <div>
+      <div className="insider">
         {this.props.children}
       </div>
     </div>

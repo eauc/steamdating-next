@@ -1,20 +1,20 @@
-&-menu {
+&-PageMenu {
     $menu_toggle_size : 2.5em;
 
     text-align: center;
     position: relative;
 
-    &-toggle {
+    &Toggle {
         z-index: 1000;
         position: absolute;
-        bottom: 3px;
-        right: 3px;
+        bottom: 10px;
+        right: 15px;
         height: $menu_toggle_size;
         width: $menu_toggle_size;
         border-radius: ($menu_toggle_size/2);
         box-shadow: $box_shadow_default;
     }
-    &-item {
+    &Item {
         display: none;
         padding: $padding_default;
         text-decoration: none;
@@ -26,14 +26,14 @@
             background-color: $color_hover;
         }
     }
-    &.show {
+    &-show {
         border-top: $border_default;
         border-color: $color_border_light;
 
-        .sd-menu-item {
+        .sd-PageMenuItem {
             display: block;
         }
-        .sd-menu-toggle {
+        .sd-PageMenuToggle {
             top: 0;
             margin-top: (-$menu_toggle_size/2);
         }
@@ -44,14 +44,14 @@
             flex-direction: row;
             justify-content: space-around;
 
-            &.show {
+            &-show {
                 border-top: 0px;
             }
         }
-        &-toggle {
+        &Toggle {
             display: none;
         }
-        &-item {
+        &Item {
             display: block;
             flex-grow: 1;
         }
@@ -63,7 +63,7 @@
         & {
             display: initial;
         }
-        &-item {
+        &Item {
             padding-left: 1em;
         }
     }
