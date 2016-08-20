@@ -6,12 +6,14 @@
   "scripts": {
     "build": "jspm install && npm run build:client",
     "prebuild": "npm-run-all clean:dist build:mkdir",
-    "build:client": "npm run build:client:copy",
+    "build:client": "npm run build:client:sw-precache",
+    "prebuild:client": "npm run build:client:copy",
     "build:client:copy": "bin/build-client-copy",
     "prebuild:client:copy": "npm-run-all build:client:css build:client:html build:client:js",
     "build:client:css": "bin/build-client-css",
     "build:client:html": "bin/build-client-html",
     "build:client:js": "bin/build-client-js",
+    "build:client:sw-precache": "bin/build-client-sw-precache",
     "build:mkdir": "bin/build-mkdir",
     "clean:dist": "rm -vrf client/dist/* && rm -vrf client/app/styles/css/*",
     "dev": "npm-run-all -p dev:server** dev:client:css:watch",
@@ -40,7 +42,8 @@
     "htmlprocessor": "^0.2.3",
     "jspm": "^0.16.42",
     "node-sass": "^3.8.0",
-    "npm-run-all": "^3.0.0"
+    "npm-run-all": "^3.0.0",
+    "sw-precache": "git+https://github.com/eauc/sw-precache.git"
   },
   "devDependencies": {
     "browser-sync": "^2.14.0",

@@ -3,3 +3,4 @@ node_modules
 /client/dist
 /client/lib
 /client/app/styles/css
+/client/service-worker.js

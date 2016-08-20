@@ -1,0 +1,13 @@
+{
+  "root": "client/",
+  "cacheId": "steamdating",
+  "ignoreUrlParametersMatching": [ "/./" ],
+  "dynamicUrlToDependencies": {
+    "/": ["client/dist/index.handlebars"]
+  },
+  "staticFileGlobs": [
+    "client/dist/css/**.css",
+    "client/dist/fonts/**",
+    "client/dist/js/**.js*"
+  ]
+}

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+sw-precache --verbose --config=sw-precache-config.json

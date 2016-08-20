@@ -24,5 +24,12 @@
       System.import('app/app.js');
     </script>
     <!-- /build -->
+    <script>
+      function init() {
+      if(window.STEAMDATING_APP) window.STEAMDATING_APP.init();
+      else window.setTimeout(init, 0);
+      }
+      init();
+    </script>
   </body>
 </html>

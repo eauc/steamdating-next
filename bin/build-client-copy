@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-cp -v client/app/styles/css/app.css* client/dist/css/. # && \
-# cp -vrf client/app/styles/fonts client/dist/
+cp -v client/app/styles/css/app.css* client/dist/css/. && \
+cp -vrf client/app/styles/fonts client/dist/
