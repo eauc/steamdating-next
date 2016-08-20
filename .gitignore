@@ -2,5 +2,6 @@ node_modules
 *.log
 /client/dist
 /client/lib
+/client/vendor
 /client/app/styles/css
 /client/service-worker.js

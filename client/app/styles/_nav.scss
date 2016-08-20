@@ -1,0 +1,62 @@
+&-nav {
+    $nav_padding: 0.2em;
+
+    position: relative;
+    background-color: $color-primary;
+    box-shadow: $box_shadow_default;
+
+    &-brand {
+        font-family: Cookie;
+        font-size: 1.8em;
+        color: $color_text_inverted;
+        padding: $nav_padding;
+    }
+    &-toggle {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 1.4em;
+        width: 1.4em;
+        padding: 0;
+        font-size: 2em;
+        border: 0px;
+        background-color: transparent;
+        color: $color_text_inverted;
+
+        &:hover,
+        &:focus {
+            background-color: $color_primary_dark;
+        }
+    }
+    &-item {
+        display: none;
+        color: $color_text_inverted;
+        text-decoration: none;
+        padding: $padding_default;
+        line-height: 1.8em;
+
+        &:hover,
+        &:active,
+        &.active {
+            background-color: $color_primary_dark;
+        }
+    }
+    &-menu-wrap.show &-item {
+        display: block;
+    }
+    @media (min-width: $tablet_break) {
+        display: flex;
+        flex-direction: row;
+
+        &-menu-wrap {
+            display: flex;
+            flex-direction: row;
+        }
+        &-item {
+            display: block;
+        }
+        &-toggle {
+            display: none;
+        }
+    }
+}

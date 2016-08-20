@@ -11,9 +11,9 @@ self.STEAMDATING_APP = {
   init: appInit
 };
 
-ReactDOM.render((
-  <App />
-), document.querySelector('#app'));
+// ReactDOM.render((
+//   <App />
+// ), document.querySelector('#app'));
 
 function appInit() {
   log('STEAMDATING APP init');

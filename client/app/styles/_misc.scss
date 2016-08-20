@@ -1,0 +1,12 @@
+button {
+    cursor: pointer;
+    background-color: white;
+    border: $border_default;
+    border-radius: $border_radius_default;
+
+    &:hover,
+    &:focus {
+        background-color: $color_hover;
+        outline: none;
+    }
+}

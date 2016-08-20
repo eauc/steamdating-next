@@ -5,12 +5,12 @@
     src: local('Droid Sans'), local('DroidSans');
 }
 
-/* @font-face { */
-/*     font-family: 'Cookie'; */
-/*     font-style: normal; */
-/*     font-weight: 400; */
-/*     src: local('Cookie-Regular'), url(../fonts/Cookie-Regular.ttf) format('truetype'); */
-/* } */
+@font-face {
+    font-family: 'Cookie';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Cookie-Regular'), url(../fonts/Cookie-Regular.ttf) format('truetype');
+}
 
 *, html, body {
     font-family: Droid Sans;
