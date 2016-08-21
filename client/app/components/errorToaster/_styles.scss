@@ -1,0 +1,16 @@
+&-ErrorToaster {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: $padding_default;
+    background-color: rgba(255, 0, 0, 0.75);
+    text-align: center;
+    color: $color_text_inverted;
+    font-weight: bold;
+
+    &-show {
+        display: block;
+    }
+}
