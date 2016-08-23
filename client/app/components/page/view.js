@@ -2,7 +2,7 @@ export let __hotReload = true;
 
 import React from 'react';
 import styles from 'app/helpers/styles';
-import { ErrorToaster } from 'app/components/errorToaster/view';
+import { ErrorToaster } from 'app/components/error/toasterView';
 
 export const Page = styles.decorator(React.createClass({
   displayName: 'Page',

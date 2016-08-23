@@ -13,11 +13,18 @@ const HANDLERS = {};
 const SUBSCRIPTIONS = {};
 const EVENT_QUEUE = tasksQueueModel.create();
 
-export function registerHandler(event, handler) {
+export function registerHandler(event, ...args) {
   if(R.prop(event, HANDLERS)) {
     log(`overwriting event "${event}" handler`);
   }
-  HANDLERS[event] = handler;
+  if(args.length === 1) {
+    const [handler] = args;
+    HANDLERS[event] = handler;
+  }
+  else {
+    const [middlewares, handler] = args;
+    HANDLERS[event] = R.apply(R.compose, R.flatten(middlewares))(handler);
+  }
 }
 
 export function registerSubscription(view, subscription) {
@@ -55,7 +62,9 @@ function _dispatch([ resolve, reject, event, ...args]) {
   }
   log(`-- handling event "${event}"`, args);
   try {
-    STATE = HANDLERS[event](STATE, [event, ...args]);
+    const new_state = HANDLERS[event](STATE, [event, ...args]);
+    if(new_state === STATE) return null;
+    STATE = new_state;
   }
   catch(e) {
     log.error(`xx error in event "${event}" handler`, e);

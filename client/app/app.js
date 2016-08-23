@@ -1,5 +1,10 @@
 export let __hotReload = true;
 
+import R from 'ramda';
+self.R = R;
+import Joi from 'joi-browser';
+self.Joi = Joi;
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 

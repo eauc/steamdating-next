@@ -1,8 +1,8 @@
 export let __hotReload = true;
 
 import subscriptionsMixin from 'app/mixins/subscriptions';
-import _sub_ from 'app/components/errorToaster/sub';
-import _handler_ from 'app/components/errorToaster/handler';
+import _sub_ from 'app/components/error/sub';
+import _handler_ from 'app/components/error/handler';
 
 import React from 'react';
 import styles from 'app/helpers/styles';
