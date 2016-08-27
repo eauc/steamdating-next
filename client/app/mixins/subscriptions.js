@@ -13,12 +13,12 @@ const subscriptionsMixin = {
 export default subscriptionsMixin;
 
 function subscriptionsWillMount() {
-  // log.warn('subscriptionsMixin','willMount', this, this.subscriptions);
+  log.cycle('subscriptionsMixin','willMount', this, this.subscriptions);
   this.getSubscriptions();
 }
 
 function subscriptionsWillUnmount() {
-  // log.warn('subscriptionsMixin','willUnmount', this, this.views);
+  log.cycle('subscriptionsMixin','willUnmount', this, this.views);
   R.forEach((view) => {
     revokeSubscription(this.views[view]);
   }, R.keys(this.views));

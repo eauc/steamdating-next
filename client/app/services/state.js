@@ -15,7 +15,7 @@ const EVENT_QUEUE = tasksQueueModel.create();
 
 export function registerHandler(event, ...args) {
   if(R.prop(event, HANDLERS)) {
-    log(`overwriting event "${event}" handler`);
+    log.state(`overwriting event "${event}" handler`);
   }
   if(args.length === 1) {
     const [handler] = args;
@@ -29,14 +29,14 @@ export function registerHandler(event, ...args) {
 
 export function registerSubscription(view, subscription) {
   if(R.prop(view, SUBSCRIPTIONS)) {
-    log(`overwriting view "${view}" subscription`);
+    log.state(`overwriting view "${view}" subscription`);
   }
   SUBSCRIPTIONS[view] = subscription;
 }
 
 export function getSubscription([view, ...args]) {
   if(R.isNil(R.prop(view, SUBSCRIPTIONS))) {
-    log.warn(`-- ignoring view "${event}" without subscription`);
+    log.warn(`-- ignoring view "${view}" without subscription`);
     return cellModel.from(null);
   }
   const cell = STATE_CELL.map(SUBSCRIPTIONS[view]([view, ...args]));
@@ -54,13 +54,12 @@ export function dispatch([ event, ...args]) {
 }
 
 function _dispatch([ resolve, reject, event, ...args]) {
-  log.info('>> dispatch', event, args);
+  log.state('>> dispatch', event, args);
   if(R.isNil(R.prop(event, HANDLERS))) {
     log.warn(`-- ignoring event "${event}" without handler`);
     reject('ignored');
     return null;
   }
-  log(`-- handling event "${event}"`, args);
   try {
     const new_state = HANDLERS[event](STATE, [event, ...args]);
     if(new_state === STATE) return null;
@@ -71,7 +70,7 @@ function _dispatch([ resolve, reject, event, ...args]) {
     reject(e);
     return null;
   }
-  log.info('<< new STATE', STATE);
+  log.state('<< new STATE', STATE);
   TICK = TICK + 1;
   return cellModel.resolveCells(TICK, CELLS)
     .then(() => {

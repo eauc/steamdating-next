@@ -1,17 +1,38 @@
 export let __hotReload = true;
 
-export default function log(...args) {
-  if(self.STEAMDATING_CONFIG.debug) console.log(...args);
-}
+import R from 'ramda';
 
-log.info = function info(...args) {
-  if(self.STEAMDATING_CONFIG.debug) console.info(...args);
+// self.STEAMDATING_CONFIG.debug = true;
+self.STEAMDATING_CONFIG.debug_flags = {
+  cell: null, //'debug',
+  cycle: null, //'warn',
+  sub: null, //'debug',
+  state: 'info',
+  storage: null //'warn'
 };
 
-log.warn = function warn(...args) {
-  if(self.STEAMDATING_CONFIG.debug) console.warn(...args);
-};
+export default (function() {
+  let log = self.STEAMDATING_CONFIG.debug
+        ? console.log.bind(console)
+        : () => {};
 
-log.error = function error(...args) {
-  console.error(...args);
-};
+  log.log = self.STEAMDATING_CONFIG.debug
+    ? console.log.bind(console)
+    : () => {};
+  log.info = self.STEAMDATING_CONFIG.debug
+    ? console.info.bind(console)
+    : () => {};
+  log.warn = self.STEAMDATING_CONFIG.debug
+    ? console.warn.bind(console)
+    : () => {};
+  log.error = console.error.bind(console);
+
+  R.forEach((flag) => {
+    log[flag] = ( self.STEAMDATING_CONFIG.debug &&
+                  self.STEAMDATING_CONFIG.debug_flags[flag] )
+      ? console[self.STEAMDATING_CONFIG.debug_flags[flag]].bind(console, `#${flag}`)
+      : () => {};
+  }, R.keys(self.STEAMDATING_CONFIG.debug_flags));
+
+  return log;
+})();

@@ -1,7 +1,7 @@
 export let __hotReload = true;
 
 import R from 'ramda';
-// import log from 'app/helpers/log';
+import log from 'app/helpers/log';
 
 const cellModel = {
   from: cellFrom,
