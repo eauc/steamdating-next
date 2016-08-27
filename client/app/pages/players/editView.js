@@ -9,22 +9,31 @@ import { PlayerEdit } from 'app/components/players/players';
 import { dispatch } from 'app/services/state';
 
 export const PlayersEditPage = React.createClass({
-  render: playersEditPageRender
+  render: playersEditPageRender,
+  remove: playersEditRemove
 });
 
 function playersEditPageRender() {
   return (
     <Page>
       <PageMenu>
+        <PageMenuItem onClick={this.remove}>
+          <span>Delete Player </span>
+          <Icon name="trash" />
+        </PageMenuItem>
         <PageMenuItem onClick={() => history.goBack()}>
           <span>Cancel </span>
           <Icon name="close" />
         </PageMenuItem>
       </PageMenu>
       <PageContent>
-        <PlayerEdit label="Edit"
+        <PlayerEdit label="Update"
                     onSubmit="players-update" />
       </PageContent>
     </Page>
   );
+}
+
+function playersEditRemove() {
+  dispatch(['players-remove-current-edit']);
 }
