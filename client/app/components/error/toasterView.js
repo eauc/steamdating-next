@@ -4,11 +4,12 @@ import React from 'react';
 import styles from 'app/helpers/styles';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
 import subscriptionsMixin from 'app/mixins/subscriptions';
+import { errorSub } from 'app/components/error/sub';
 
 export const ErrorToaster = styles.decorator(React.createClass({
   displayName: 'ErrorToaster',
   mixins: [ subscriptionsMixin, pureRenderMixin ],
-  subscriptions: { error: ['error'] },
+  subscriptions: { error: errorSub },
   getInitialState: errorToasterGetInitialState,
   render: errorToasterRender
 }));
