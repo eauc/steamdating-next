@@ -1,8 +1,9 @@
 export let __hotReload = true;
 
 import React from 'react';
-import { Router, Route, IndexRedirect, hashHistory } from 'react-router';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
+import { Router, Route, IndexRedirect } from 'react-router';
+import history from 'app/helpers/history';
 
 import { Home }from 'app/pages/home/view';
 import { About } from 'app/pages/about/view';
@@ -14,7 +15,7 @@ export const Root = React.createClass({
 
 function rootRender() {
   return (
-    <Router history={hashHistory}>
+    <Router history={history}>
       <Route path="/">
         <IndexRedirect to="home" />
         <Route path="/home" components={Home} />
