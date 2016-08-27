@@ -6,7 +6,7 @@ self.STEAMDATING_CONFIG.debug_flags = {
   cycle: null, //'warn',
   sub: null, //'debug',
   state: 'info',
-  storage: null //'warn'
+  storage: 'warn'
 };
 
 export default (function() {
