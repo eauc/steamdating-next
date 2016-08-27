@@ -8,11 +8,11 @@ import { Icon } from 'app/components/misc/misc';
 import { PlayerEdit } from 'app/components/players/players';
 import { dispatch } from 'app/services/state';
 
-export const PlayersCreatePage = React.createClass({
-  render: playersCreatePageRender
+export const PlayersEditPage = React.createClass({
+  render: playersEditPageRender
 });
 
-function playersCreatePageRender() {
+function playersEditPageRender() {
   return (
     <Page>
       <PageMenu>
@@ -22,8 +22,8 @@ function playersCreatePageRender() {
         </PageMenuItem>
       </PageMenu>
       <PageContent>
-        <PlayerEdit label="Create"
-                    onSubmit="players-create" />
+        <PlayerEdit label="Edit"
+                    onSubmit="players-update" />
       </PageContent>
     </Page>
   );

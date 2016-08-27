@@ -1,20 +1,28 @@
 export let __hotReload = true;
 
-// import R from 'app/helpers/ramda';
-import log from 'app/helpers/log';
 import { registerHandler } from 'app/services/state';
 import history from 'app/helpers/history';
-// import path from 'app/helpers/middlewares/path';
-// import stripv from 'app/helpers/middlewares/stripv';
-// import { scope } from 'app/components/players/state';
+import path from 'app/helpers/middlewares/path';
+import stripv from 'app/helpers/middlewares/stripv';
+import validate from 'app/helpers/middlewares/validate';
 
-// const middlewares = [
-//   path(scope, {}),
-//   stripv
-// ];
+import { scope, schema } from 'app/components/players/state';
+import playerModel from '/app/models/player';
+import playersModel from '/app/models/players';
 
-registerHandler('players-create', (state) => {
-  log('create-player', state);
+const middlewares = [
+  path(scope, []),
+  validate(schema.players),
+  stripv
+];
+
+registerHandler('players-create', middlewares, (state, [{edit}]) => {
+  const player = playerModel.create(edit);
   history.goBack();
-  return state;
+  return playersModel.add(player, state);
+});
+
+registerHandler('players-update', middlewares, (state, [{base, edit}]) => {
+  history.goBack();
+  return playersModel.update(base.name, edit, state);
 });

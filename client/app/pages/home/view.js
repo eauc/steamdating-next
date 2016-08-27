@@ -18,11 +18,11 @@ registerHandler('test', [
   return 'Oups';
 });
 
-export const Home = React.createClass({
-  render: homeRender
+export const HomePage = React.createClass({
+  render: homePageRender
 });
 
-function homeRender() {
+function homePageRender() {
   return (
     <Page>
       <PageMenu>

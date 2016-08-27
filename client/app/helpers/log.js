@@ -2,7 +2,7 @@ export let __hotReload = true;
 
 // self.STEAMDATING_CONFIG.debug = true;
 self.STEAMDATING_CONFIG.debug_flags = {
-  cell: null, //'debug',
+  cell: 'debug',
   cycle: null, //'warn',
   sub: null, //'debug',
   state: 'info',

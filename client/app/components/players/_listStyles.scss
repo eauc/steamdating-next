@@ -1,0 +1,21 @@
+&-PlayersList {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+
+    tr{
+        &:hover {
+            background-color: $color_hover;
+        }
+    }
+
+    th,
+    td {
+        padding: 0.65em 0.25em;
+        border-bottom: 1px solid $color_border;
+    }
+
+    td {
+        border-color: lighten($color_border, 50%);
+    }
+}

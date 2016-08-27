@@ -6,13 +6,14 @@ import { PageMenu, PageMenuItem } from 'app/components/pageMenu/view';
 import { Page, PageContent } from 'app/components/page/view';
 import { Icon } from 'app/components/misc/misc';
 import { dispatch } from 'app/services/state';
+import { PlayersList } from 'app/components/players/players';
 
-export const PlayersList = React.createClass({
-  render: playersListRender,
-  onCreatePlayer: playersListOnCreatePlayer
+export const PlayersListPage = React.createClass({
+  render: playersListPageRender,
+  onCreatePlayer: playersListPageOnCreatePlayer
 });
 
-function playersListRender() {
+function playersListPageRender() {
   return (
     <Page>
       <PageMenu>
@@ -22,13 +23,13 @@ function playersListRender() {
         </PageMenuItem>
       </PageMenu>
       <PageContent>
-        <h4>Players List</h4>
+        <PlayersList />
       </PageContent>
     </Page>
   );
 }
 
-function playersListOnCreatePlayer() {
+function playersListPageOnCreatePlayer() {
   dispatch(['form-reset', 'player', {}])
     .then(() => {
       history.push('/players/create');

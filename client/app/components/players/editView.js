@@ -6,12 +6,12 @@ import pureRenderMixin from 'react-addons-pure-render-mixin';
 import subscriptionsMixin from 'app/mixins/subscriptions';
 import { FormEdit, FormInput } from 'app/components/form/form';
 import { schema } from 'app/components/players/state';
-import { playersNamesSub } from 'app/components/players/sub';
+import { playersEditOtherNamesSub } from 'app/components/players/sub';
 
 export const PlayerEdit = React.createClass({
   mixins: [ subscriptionsMixin, pureRenderMixin ],
   subscriptions: {
-    players_names: playersNamesSub
+    players_names: playersEditOtherNamesSub
   },
   render: playerEditRender,
   getInitialState: playerEditGetInitialState
@@ -30,14 +30,37 @@ function playerEditRender() {
                  type="text"
                  required="required"
                  order="1" />
-      <FormInput name="faction"
-                 label="Faction"
+      <FormInput name="origin"
+                 label="Origin"
                  type="text"
                  order="2" />
+      <FormInput name="faction"
+                 label="Faction"
+                 type="select"
+                 options={this.factions}
+                 order="3" />
+      <FormInput name="notes"
+                 label="Notes"
+                 type="textarea"
+                 order="4" />
     </FormEdit>
   );
 }
 
 function playerEditGetInitialState() {
+  this.factions = [
+    'Circle Orboros',
+    'Convergence of Cyriss',
+    'Cryx',
+    'Cygnar',
+    'Khador',
+    'Legion of Everblight',
+    'Mercenaries',
+    'Minions',
+    'Protectorate of Menoth',
+    'Retribution of Scyrah',
+    'Skorne',
+    'Trollbloods',
+  ];
   return { players_names: [] };
 }

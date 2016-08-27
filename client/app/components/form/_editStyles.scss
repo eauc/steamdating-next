@@ -1,6 +1,7 @@
 &-FormEdit {
     $submit_size: 2.5em;
     $group_horizontal_padding: 0.5em;
+    margin-bottom: $submit_size;
 
     &-group {
         position: relative;

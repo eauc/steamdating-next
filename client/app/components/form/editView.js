@@ -27,7 +27,6 @@ export const FormEdit = styles.decorator(React.createClass({
 }));
 
 function formEditFormSubscription() {
-  log.cycle('form getSub', this.props);
   return formSub([this.props.name, () => this.props.schema]);
 }
 
@@ -70,5 +69,5 @@ function formEditGetChildContext() {
 function formEditOnSubmit(e) {
   e.preventDefault();
   if(this.state.form.error) return;
-  dispatch([this.props.onSubmit]);
+  dispatch([this.props.onSubmit, this.state.form]);
 }

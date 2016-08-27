@@ -3,11 +3,11 @@ export let __hotReload = true;
 import React from 'react';
 import { Page, PageContent } from 'app/components/page/view';
 
-export const About = React.createClass({
-  render: aboutRender
+export const AboutPage = React.createClass({
+  render: aboutPageRender
 });
 
-function aboutRender() {
+function aboutPageRender() {
   return (
     <Page>
       <PageContent>

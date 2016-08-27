@@ -6,9 +6,9 @@ import { debounce } from 'app/helpers/ramda/debounce';
 import { deepMerge, deepMergeObject, deepMergeArray } from 'app/helpers/ramda/deepMerge';
 import { exists } from 'app/helpers/ramda/exists';
 import { jsonParse, jsonStringify } from 'app/helpers/ramda/json';
+import { lensPropOr, lensPathOr } from 'app/helpers/ramda/lensOr';
 import { spy } from 'app/helpers/ramda/spy';
 import { thread, threadP } from 'app/helpers/ramda/thread';
-import { viewOr } from 'app/helpers/ramda/viewOr';
 
 export default R.pipe(
   R.assoc('curryService', curryService),
@@ -19,8 +19,9 @@ export default R.pipe(
   R.assoc('exists', exists),
   R.assoc('jsonParse', jsonParse),
   R.assoc('jsonStringify', jsonStringify),
+  R.assoc('lensPathOr', lensPathOr),
+  R.assoc('lensPropOr', lensPropOr),
   R.assoc('spy', spy),
   R.assoc('thread', thread),
-  R.assoc('threadP', threadP),
-  R.assoc('viewOr', viewOr)
+  R.assoc('threadP', threadP)
 )(R);

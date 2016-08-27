@@ -13,8 +13,8 @@ export const formSub = registerSubscription(
                : schema
              );
     return state
-      .map(R.pathOr({}, ['forms', form, 'edit']))
-      .map((edit) => {
+      .map(R.pathOr({}, ['forms', form]))
+      .map(({ edit, base }) => {
         log.sub('form edit', edit, schema);
         const validation = schema().validate(edit, { abortEarly: false });
         const {error} = validation;
@@ -22,7 +22,7 @@ export const formSub = registerSubscription(
         if(error) {
           error.details = R.groupBy(R.prop('path'), error.details);
         }
-        return {edit, error};
+        return {edit, base, error};
       });
   }
 );

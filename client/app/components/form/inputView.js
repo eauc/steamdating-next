@@ -46,24 +46,62 @@ function formInputRender() {
   const clear = this.state.pristine && !has_value;
   const show_error = !clear && has_error;
   const show_valid = !clear && !has_error;
+  const className = {
+    'input': true,
+    'input-pristine': this.state.pristine,
+    'input-valid': show_valid,
+    'input-error': show_error
+  };
+  const props = R.pick(['required','type','order'], this.props);
+  let input;
+  if('textarea' === this.props.type) {
+    input = (
+      <textarea
+         id={this.path}
+         className={className}
+         name={this.props.name}
+         value={this.state.value}
+         onChange={this.update}
+         {...props}
+         />
+    );
+  }
+  else if('select' === this.props.type) {
+    const options = R.thread(this.props.options)(
+      R.map((o) => (<option key={o} value={o}>{o}</option>)),
+      R.prepend((<option key="null" value=""></option>))
+    );
+    input= (
+      <select
+         id={this.path}
+         className={className}
+         name={this.props.name}
+         value={this.state.value}
+         onChange={this.update}
+         {...props}>
+        {options}
+      </select>
+    );
+  }
+  else {
+    input = (
+      <input
+         id={this.path}
+         className={className}
+         name={this.props.name}
+         value={this.state.value}
+         onChange={this.update}
+         {...props}
+         />
+    );
+  }
   return (
     <div>
       <label className="label"
              htmlFor={this.id}>
         {this.props.label}
       </label>
-      <input id={this.path}
-             className={{
-               'input': true,
-               'input-pristine': this.state.pristine,
-               'input-valid': show_valid,
-               'input-error': show_error
-             }}
-             name={this.props.name}
-             value={this.state.value}
-             onChange={this.update}
-             {...R.pick(['required','type','order'], this.props)}
-             />
+      {input}
       <p className="error-info">
         {show_error ? error: ''}
       </p>
