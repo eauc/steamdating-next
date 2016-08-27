@@ -57,7 +57,8 @@ export const PageMenuItem = styles.decorator(React.createClass({
 
 function pageMenuItemRender() {
   return (
-    <a onClick={this.props.onClick}>
+    <a href={this.props.href}
+       onClick={this.props.onClick}>
       {this.props.children}
     </a>
   );

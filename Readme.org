@@ -1,1 +1,19 @@
 * SteamDating v2
+
+** TODO
+
+- [ ] inputs textarea select
+- [ ] submit validate
+- [ ] Button submit disabled
+- [X] ramda helpers debounce deepmerge
+- [X] Debug flags trace
+- [X] getSubscription info into cell, use in cell traces
+- [X] permanent subscription on window / revoked on unmount
+- [X] store state : subscritpion ? Init db handler
+- [X] pure render mixin
+- [X] React perf addon
+- [X] why did you update
+- [X] Ff form novalidate
+- [X] Player schema case insensitive
+- [X] input focus lighter blue
+- [X] registerSubscription returns getSubscription

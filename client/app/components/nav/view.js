@@ -25,6 +25,8 @@ function navMenuRender() {
       <NavLink current_hash={this.state.current_hash}
                path="/home">Home</NavLink>
       <NavLink current_hash={this.state.current_hash}
+               path="/players">Players</NavLink>
+      <NavLink current_hash={this.state.current_hash}
                path="/about">About</NavLink>
       <NavToggle onToggle={this.toggleShow} />
     </div>
