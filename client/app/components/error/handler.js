@@ -10,7 +10,7 @@ import validateArgs from 'app/helpers/middlewares/validateArgs';
 import { scope, schema } from 'app/components/error/state';
 
 const middlewares = [
-  path(scope),
+  path(scope, null),
   validate(schema),
   stripv
 ];
