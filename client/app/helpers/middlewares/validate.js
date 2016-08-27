@@ -8,7 +8,7 @@ import { dispatch } from 'app/services/state';
 export default R.curry(function validate(schema, handler) {
   return function(state, [event, ...args]) {
     const new_state = handler(state, [event, ...args]);
-    const validation = Joi.validate(new_state, schema);
+    const validation = schema.validate(new_state, {abortEarly:false});
     if(!validation.error) return new_state;
 
     log.error(`State validation error: ${validation.error.message}`, validation);
