@@ -4,7 +4,7 @@ import React from 'react';
 import history from 'app/helpers/history';
 import { PageMenu, PageMenuItem } from 'app/components/pageMenu/view';
 import { Page, PageContent } from 'app/components/page/view';
-import { Icon } from 'app/components/misc/view';
+import { Icon } from 'app/components/misc/misc';
 import { PlayerEdit } from 'app/components/players/players';
 import { dispatch } from 'app/services/state';
 
@@ -16,18 +16,9 @@ function playersCreateRender() {
   return (
     <Page>
       <PageMenu>
-        <PageMenuItem>
-          <span>Save </span>
-          <Icon name="save" />
-        </PageMenuItem>
         <PageMenuItem onClick={() => history.goBack()}>
           <span>Cancel </span>
           <Icon name="close" />
-        </PageMenuItem>
-        <PageMenuItem onClick={() => {
-            dispatch(['error-set', 'Ouuups1!']);
-          }}>
-          Home Menu 1
         </PageMenuItem>
       </PageMenu>
       <PageContent>

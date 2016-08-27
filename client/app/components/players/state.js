@@ -17,3 +17,5 @@ export const schema = {
       .empty('')
   })
 };
+
+export const scope = ['tournament','players'];

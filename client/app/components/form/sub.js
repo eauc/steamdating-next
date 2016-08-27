@@ -27,6 +27,14 @@ export const formSub = registerSubscription(
   }
 );
 
+export const formValidSub = registerSubscription(
+  'form-valid',
+  (_state_, [_name_, form_view]) => {
+    return form_view
+      .map(({error}) => !error);
+  }
+);
+
 export const formFieldSub = registerSubscription(
   'form-field',
   (_state_, [_name_, form_view, field]) => {

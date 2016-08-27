@@ -4,7 +4,7 @@ import React from 'react';
 import history from 'app/helpers/history';
 import { PageMenu, PageMenuItem } from 'app/components/pageMenu/view';
 import { Page, PageContent } from 'app/components/page/view';
-import { Icon } from 'app/components/misc/view';
+import { Icon } from 'app/components/misc/misc';
 import { dispatch } from 'app/services/state';
 
 export const PlayersList = React.createClass({
