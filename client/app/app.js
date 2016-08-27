@@ -13,12 +13,12 @@ import log from 'app/helpers/log';
 import offlineService from 'app/services/offline';
 import { NavMenu } from 'app/components/nav/view';
 import { Root } from 'app/components/root/view';
-import { dispatch } from 'app/services/state';
-
-import _init_ from 'app/services/init';
+import { dispatch, stateDebug } from 'app/services/state';
+export * from 'app/services/init';
 
 self.STEAMDATING_APP = {
-  init: appInit
+  init: appInit,
+  state: stateDebug
 };
 
 ReactDOM.render((

@@ -96,3 +96,12 @@ function _dispatch([ resolve, reject, event, ...args]) {
   return cellModel.resolveCells(TICK, CELLS)
     .then(resolve);
 }
+
+export const stateDebug = {
+  cells: () => {
+    console.table(R.map(R.pick(['_name', '_args', '_tick', '_value']), CELLS));
+  },
+  current: () => {
+    return STATE;
+  }
+};
