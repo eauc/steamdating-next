@@ -6,6 +6,7 @@ import Joi from 'joi-browser';
 self.Joi = Joi;
 
 import React from 'react';
+export * from 'app/helpers/react';
 import ReactDOM from 'react-dom';
 
 import log from 'app/helpers/log';

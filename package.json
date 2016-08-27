@@ -63,9 +63,12 @@
       "joi-browser": "npm:joi-browser@^9.0.4",
       "ramda": "npm:ramda@^0.22.1",
       "react": "npm:react@^15.3.1",
+      "react-addons-perf": "npm:react-addons-perf@^15.3.1",
+      "react-addons-pure-render-mixin": "npm:react-addons-pure-render-mixin@^15.3.1",
       "react-dom": "npm:react-dom@^15.3.1",
       "react-pacomo": "npm:react-pacomo@^0.5.3",
-      "react-router": "npm:react-router@^2.6.1"
+      "react-router": "npm:react-router@^2.6.1",
+      "why-did-you-update": "npm:why-did-you-update@^0.0.8"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",

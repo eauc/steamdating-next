@@ -2,12 +2,13 @@ export let __hotReload = true;
 
 import R from 'ramda';
 import React from 'react';
-// import log from 'app/helpers/log';
+import pureRenderMixin from 'react-addons-pure-render-mixin';
 import styles from 'app/helpers/styles';
 import { Icon } from 'app/components/misc/view.js';
 
 export const NavMenu = styles.decorator(React.createClass({
   displayName: 'NavMenu',
+  mixins: [ pureRenderMixin ],
   render: navMenuRender,
   getInitialState: navMenuGetInitialState,
   updateState: navMenuUpdateState,
@@ -17,7 +18,6 @@ export const NavMenu = styles.decorator(React.createClass({
 }));
 
 function navMenuRender() {
-  // log.info('NavMenu render');
   return (
     <div className={{
            'show': this.state.show
@@ -66,7 +66,6 @@ const NavLink = styles.decorator(React.createClass({
 }));
 
 function navLinkRender() {
-  // log.info('NavLink render', this.props.path);
   const hash = `#${this.props.path}`;
   const is_active = this.props.current_hash.startsWith(hash);
   return (
@@ -85,7 +84,6 @@ const NavToggle = styles.decorator(React.createClass({
 }));
 
 function navToggleRender() {
-  // log.info('NavToggle render');
   return (
     <button onClick={this.props.onToggle}>
       <Icon name="bars" />
