@@ -1,0 +1,43 @@
+&-FormInput {
+    $input_shadow: inset 0 1px 1px rgba(0,0,0,0.3),0 0 8px;
+
+    display: flex;
+    flex-direction: column;
+
+    &-label {
+        font-weight: bold;
+        margin-bottom: 0.5em;
+    }
+    &-input {
+        border: $border_default;
+        padding: 0.5em;
+
+        &[required] {
+            border-width: 1px 1px 1px 5px;
+        }
+        &:focus {
+            border-color: $color_focus;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.3),0 0 8px $color_focus_shadow;
+            outline: none;
+        }
+        &-valid[required] {
+            border-color: $color_valid;
+            &:focus {
+                border-color: $color_focus;
+            }
+        }
+        &-error {
+            border-color: $color_error;
+            &:focus {
+                border-color: $color_error;
+                box-shadow: $input_shadow $color_error_shadow;
+            }
+        }
+    }
+    &-error-info {
+        color: $color_error;
+        font-size: 0.75em;
+        font-style: italic;
+        min-height: 1em;
+    }
+}

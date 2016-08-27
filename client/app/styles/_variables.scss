@@ -6,8 +6,15 @@ $color_primary_light: #03A9F4;
 $color_border: rgba(0, 0, 0, 0.4);
 $color_shadow: rgba(0, 0, 0, 0.6);
 $color_hover: #D0D0D0;
+$color_focus: $color_primary_light;
+$color_focus_shadow: rgba($color_focus, 0.75);
+$color_error: #F44336;
+$color_error_shadow: rgba($color_error, 0.75);
+$color_valid: #4CAF50;
+$color_valid_shadow: rgba($color_valid, 0.75);
 
 $color_text: rgba(0,0,0,0.75);
+$color_text_light: rgba(0,0,0,0.6);
 $color_text_muted: rgba(0,0,0,0.4);
 $color_text_inverted: white;
 

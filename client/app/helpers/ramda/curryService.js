@@ -2,7 +2,7 @@ export let __hotReload = true;
 
 import R from 'ramda';
 
-export default function curryService(obj) {
+export function curryService(obj) {
   return R.pipe(
     R.keys,
     R.filter(R.compose(R.equals('Function'), R.type, R.prop(R.__, obj))),

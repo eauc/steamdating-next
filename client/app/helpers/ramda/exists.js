@@ -2,4 +2,4 @@ export let __hotReload = true;
 
 import R from 'ramda';
 
-export default R.complement(R.isNil);
+export const exists = R.complement(R.isNil);
