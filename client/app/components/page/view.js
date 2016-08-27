@@ -3,7 +3,7 @@ export let __hotReload = true;
 import React from 'react';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
 import styles from 'app/helpers/styles';
-import { ErrorToaster } from 'app/components/error/toasterView';
+import { ErrorToaster } from 'app/components/error/error';
 
 export const Page = styles.decorator(React.createClass({
   displayName: 'Page',

@@ -1,12 +1,9 @@
 export let __hotReload = true;
 
-import subscriptionsMixin from 'app/mixins/subscriptions';
-import _sub_ from 'app/components/error/sub';
-import _handler_ from 'app/components/error/handler';
-
 import React from 'react';
 import styles from 'app/helpers/styles';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
+import subscriptionsMixin from 'app/mixins/subscriptions';
 
 export const ErrorToaster = styles.decorator(React.createClass({
   displayName: 'ErrorToaster',
