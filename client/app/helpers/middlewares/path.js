@@ -1,6 +1,6 @@
 export let __hotReload = true;
 
-import R from 'ramda';
+import R from 'app/helpers/ramda';
 
 export default R.curry(function path(scope_path, handler) {
   return function(state, event) {

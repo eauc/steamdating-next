@@ -1,6 +1,6 @@
 export let __hotReload = true;
 
-import R from 'ramda';
+import R from 'app/helpers/ramda';
 self.R = R;
 import Joi from 'joi-browser';
 self.Joi = Joi;

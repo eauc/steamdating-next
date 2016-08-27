@@ -1,6 +1,6 @@
 export let __hotReload = true;
 
-import R from 'ramda';
+import R from 'app/helpers/ramda';
 import { registerSubscription } from 'app/services/state';
 import { scope } from 'app/components/error/state';
 

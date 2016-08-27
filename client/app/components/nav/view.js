@@ -1,6 +1,6 @@
 export let __hotReload = true;
 
-import R from 'ramda';
+import R from 'app/helpers/ramda';
 import React from 'react';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
 import styles from 'app/helpers/styles';

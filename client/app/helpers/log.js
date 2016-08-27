@@ -1,7 +1,5 @@
 export let __hotReload = true;
 
-import R from 'ramda';
-
 // self.STEAMDATING_CONFIG.debug = true;
 self.STEAMDATING_CONFIG.debug_flags = {
   cell: null, //'debug',
@@ -27,12 +25,14 @@ export default (function() {
     : () => {};
   log.error = console.error.bind(console);
 
-  R.forEach((flag) => {
-    log[flag] = ( self.STEAMDATING_CONFIG.debug &&
-                  self.STEAMDATING_CONFIG.debug_flags[flag] )
-      ? console[self.STEAMDATING_CONFIG.debug_flags[flag]].bind(console, `#${flag}`)
-      : () => {};
-  }, R.keys(self.STEAMDATING_CONFIG.debug_flags));
+  for(let flag in self.STEAMDATING_CONFIG.debug_flags) {
+    if(self.STEAMDATING_CONFIG.debug_flags.hasOwnProperty(flag)) {
+      log[flag] = ( self.STEAMDATING_CONFIG.debug &&
+                    self.STEAMDATING_CONFIG.debug_flags[flag] )
+        ? console[self.STEAMDATING_CONFIG.debug_flags[flag]].bind(console, `#${flag}`)
+        : () => {};
+    }
+  }
 
   return log;
 })();
