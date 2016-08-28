@@ -18,6 +18,11 @@ registerHandler('test', [
   return 'Oups';
 });
 
+registerHandler('test-prompt', (state, [_event_, ...result]) => {
+  dispatch(['error-set', result.join(', ')]);
+  return state;
+});
+
 export const HomePage = React.createClass({
   render: homePageRender
 });
@@ -29,7 +34,7 @@ function homePageRender() {
         <PageMenuItem onClick={() => {
             dispatch(['error-set', 'Ouuups1!']);
           }}>
-          Home Menu 1
+          Test Error
         </PageMenuItem>
         <PageMenuItem onClick={() => {
             dispatch(['error-set', 'Ouuups1!']);
@@ -38,17 +43,44 @@ function homePageRender() {
             dispatch(['error-set', 'Ouuups4!']);
             dispatch(['error-set', 'Ouuups5!']);
           }}>
-          Home Menu 2
+          Test Error x5
         </PageMenuItem>
         <PageMenuItem onClick={() => {
             dispatch(['test', 'Baaaaka', null, 1]);
           }}>
-          Home Menu 3
+          Test Validate
         </PageMenuItem>
         <PageMenuItem onClick={() => {
             dispatch(['test', 1, 'Baaaaka']);
           }}>
-          Home Menu 4
+          Test ValidateArgs
+        </PageMenuItem>
+        <PageMenuItem onClick={() => {
+            dispatch(['prompt-set',
+                      { type:'alert',
+                        msg: 'This is an alert',
+                        onOk: ['test-prompt', 'alert-ok'] }]);
+          }}>
+          Test Alert
+        </PageMenuItem>
+        <PageMenuItem onClick={() => {
+            dispatch(['prompt-set',
+                      { type: 'confirm',
+                        msg: 'This is a confirm',
+                        onOk: ['test-prompt', 'confirm-ok'],
+                        onCancel: ['test-prompt', 'confirm-cancel'] }]);
+          }}>
+          Test Confirm
+        </PageMenuItem>
+        <PageMenuItem onClick={() => {
+            dispatch(['prompt-set',
+                      { type: 'prompt',
+                        msg: 'This is a prompt',
+                        value: 42,
+                        onOk: ['test-prompt', 'prompt-ok'],
+                        onCancel: ['test-prompt', 'prompt-cancel'] }]);
+          }}>
+          Test Prompt
         </PageMenuItem>
       </PageMenu>
       <PageContent>

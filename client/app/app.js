@@ -13,6 +13,7 @@ import log from 'app/helpers/log';
 import offlineService from 'app/services/offline';
 import { NavMenu } from 'app/components/nav/view';
 import { Root } from 'app/components/root/view';
+import { Prompt } from 'app/components/prompt/prompt';
 import { dispatch, stateDebug } from 'app/services/state';
 export * from 'app/services/init';
 
@@ -28,6 +29,10 @@ ReactDOM.render((
 ReactDOM.render((
   <Root />
 ), document.querySelector('.sd-Page-container'));
+
+ReactDOM.render((
+  <Prompt />
+), document.querySelector('.sd-Prompt-container'));
 
 function appInit() {
   log('STEAMDATING APP init');

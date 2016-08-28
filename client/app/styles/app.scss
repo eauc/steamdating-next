@@ -1,10 +1,6 @@
 @import "styles/variables";
 @import "styles/faces";
-/* @import "styles/octicons"; */
-/* @import "bootstrap-reboot"; */
-
 @import "styles/misc";
-/* @import "styles/common/icon"; */
 
 .sd {
     @import "styles/layout";
@@ -13,10 +9,5 @@
     @import "components/error/toasterStyles";
     @import "components/form/styles";
     @import "components/players/styles";
-/*     @import "styles/common/menu"; */
-/*     @import "components/debug/debug"; */
-/*     @import "components/errorToaster/errorToaster"; */
-/*     @import "components/home/home"; */
-/*     @import "components/navBar/navBar"; */
-/*     @import "components/tasks/tasks"; */
+    @import "components/prompt/styles";
 }

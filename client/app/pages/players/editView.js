@@ -35,5 +35,9 @@ function playersEditPageRender() {
 }
 
 function playersEditRemove() {
-  dispatch(['players-remove-current-edit']);
+  dispatch(['prompt-set', {
+    type: 'confirm',
+    msg: 'Are you sure you want to delete this player ?',
+    onOk: ['players-remove-current-edit']
+  }]);
 }

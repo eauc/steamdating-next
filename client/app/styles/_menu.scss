@@ -5,13 +5,14 @@
     position: relative;
 
     &Toggle {
+        @include button(white, $color_text, $menu_toggle_size/2);
+
         z-index: 1000;
         position: absolute;
         bottom: 10px;
         right: 15px;
         height: $menu_toggle_size;
         width: $menu_toggle_size;
-        border-radius: ($menu_toggle_size/2);
         box-shadow: $box_shadow_default;
     }
     &Item {

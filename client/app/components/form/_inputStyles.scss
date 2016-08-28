@@ -9,18 +9,8 @@
         margin-bottom: 0.5em;
     }
     &-input {
-        background-color: white;
-        border: $border_default;
-        padding: 0.5em;
+        @include input;
 
-        &[required] {
-            border-width: 1px 1px 1px 5px;
-        }
-        &:focus {
-            border-color: $color_focus;
-            box-shadow: 0 0 4px $color_focus_shadow;
-            outline: none;
-        }
         &-valid[required] {
             border-color: $color_valid;
             &:focus {

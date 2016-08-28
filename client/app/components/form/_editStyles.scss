@@ -20,28 +20,20 @@
     &-submit {
         $color_submit: $color_accent;
 
+        @include button($color_accent, $color_text_inverted, $submit_size/2);
         position: absolute;
         bottom: 0;
         left: $group_horizontal_padding;
         margin-bottom: -$submit_size/2;
         width: $submit_size;
         height: $submit_size;
-        border-radius: $submit_size/2;
-        background-color: $color_submit;
-        border-color: darken($color_submit, 10%);
-        color: $color_text_inverted;
         font-weight: 200%;
-
-        &:hover,
-        &:focus {
-            background-color: darken($color_submit, 10%);
-        }
     }
 
     &-disabled {
         pointer-events: none;
         background-color: #B0B0B0;
-        border-color: darken(#B0B0B0, 10%);
+        border-color: darken(#B0B0B0, 20%);
     }
 
     @media(min-width: $tablet_break) {
