@@ -1,6 +1,7 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
+import { dispatch, registerHandler } from 'app/services/state';
 
 const offlineService = {
   unregisterWorker: offlineUnregisterWorker,
@@ -50,11 +51,14 @@ function offlineRegisterWorker() {
       case 'installed':
         {
           if(navigator.serviceWorker.controller) {
-            alert('New version available !');
-            self.location.reload(true);
+            dispatch(['prompt-set', { type: 'alert',
+                                      msg: 'New version available !',
+                                      onOk: ['offline-reload'] }]);
           }
           else {
-            alert('Application installed !');
+            dispatch(['prompt-set', { type: 'alert',
+                                      msg: 'Application installed !',
+                                      onOk: ['offline-installed'] }]);
           }
           break;
         }
@@ -67,3 +71,11 @@ function offlineRegisterWorker() {
     }
   }
 }
+
+registerHandler('offline-reload', (state) => {
+  console.log('reloading');
+  self.location.reload(true);
+  return state;
+});
+
+registerHandler('offline-installed', R.identity);

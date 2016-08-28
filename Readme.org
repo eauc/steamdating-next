@@ -2,10 +2,10 @@
 
 ** TODO
 
-- [ ] use prompt in online register
-- [X] error toggle show with opacity
 - [ ] layout players large screens
-- [ ] fold nav on click
-- [ ] setup appCache
-- [ ] setup tests
 - [ ] players list sort/filter
+- [ ] setup tests
+- [ ] setup appCache
+- [X] use prompt in online register
+- [X] error toggle show with opacity
+- [X] fold nav on click
