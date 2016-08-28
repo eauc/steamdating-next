@@ -1,5 +1,6 @@
 &-ErrorToaster {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
     position: absolute;
     left: 0;
     right: 0;
@@ -11,6 +12,6 @@
     font-weight: bold;
 
     &-show {
-        display: block;
+        opacity: 1;
     }
 }

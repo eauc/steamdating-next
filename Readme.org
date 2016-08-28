@@ -3,7 +3,7 @@
 ** TODO
 
 - [ ] use prompt in online register
-- [ ] error toggle show with opacity
+- [X] error toggle show with opacity
 - [ ] layout players large screens
 - [ ] fold nav on click
 - [ ] setup appCache
