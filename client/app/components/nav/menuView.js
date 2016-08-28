@@ -5,6 +5,8 @@ import React from 'react';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
 import styles from 'app/helpers/styles';
 import { Icon } from 'app/components/misc/misc';
+import { NavLink } from 'app/components/nav/linkView';
+import { NavToggle } from 'app/components/nav/toggleView';
 
 export const NavMenu = styles.decorator(React.createClass({
   displayName: 'NavMenu',
@@ -23,11 +25,14 @@ function navMenuRender() {
            'show': this.state.show
          }}>
       <NavLink current_hash={this.state.current_hash}
-               path="/home">Home</NavLink>
+               path="/home"
+               onClick={this.toggleShow}>Home</NavLink>
       <NavLink current_hash={this.state.current_hash}
-               path="/players">Players</NavLink>
+               path="/players"
+               onClick={this.toggleShow}>Players</NavLink>
       <NavLink current_hash={this.state.current_hash}
-               path="/about">About</NavLink>
+               path="/about"
+               onClick={this.toggleShow}>About</NavLink>
       <NavToggle onToggle={this.toggleShow} />
     </div>
   );
@@ -60,35 +65,4 @@ function navMenuComponentWillMount() {
 
 function navMenuComponentWillUnmount() {
   self.removeEventListener('hashchange', this.updateState);
-}
-
-const NavLink = styles.decorator(React.createClass({
-  displayName: 'NavItem',
-  render: navLinkRender
-}));
-
-function navLinkRender() {
-  const hash = `#${this.props.path}`;
-  const is_active = this.props.current_hash.startsWith(hash);
-  return (
-    <a href={hash}
-       className={{
-         'active': is_active
-       }}>
-      {this.props.children}
-    </a>
-  );
-}
-
-const NavToggle = styles.decorator(React.createClass({
-  displayName: 'NavToggle',
-  render: navToggleRender
-}));
-
-function navToggleRender() {
-  return (
-    <button onClick={this.props.onToggle}>
-      <Icon name="bars" />
-    </button>
-  );
 }

@@ -11,8 +11,8 @@ import ReactDOM from 'react-dom';
 
 import log from 'app/helpers/log';
 import offlineService from 'app/services/offline';
-import { NavMenu } from 'app/components/nav/view';
-import { Root } from 'app/components/root/view';
+import { NavMenu } from 'app/components/nav/nav';
+import { Root } from 'app/components/root/root';
 import { Prompt } from 'app/components/prompt/prompt';
 import { dispatch, stateDebug } from 'app/services/state';
 export * from 'app/services/init';
