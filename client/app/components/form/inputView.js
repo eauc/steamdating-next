@@ -4,6 +4,7 @@ import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
 import styles from 'app/helpers/styles';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
 import subscriptionsMixin from 'app/mixins/subscriptions';
 import { dispatch } from 'app/services/state';
@@ -22,6 +23,7 @@ export const FormInput = styles.decorator(React.createClass({
   },
   render: formInputRender,
   getInitialState: formInputGetInitialState,
+  componentDidMount: formInputComponentDidMount,
   update: formInputUpdate,
   dispatchUpdate: formInputDispatchUpdate
 }));
@@ -57,6 +59,7 @@ function formInputRender() {
   if('textarea' === this.props.type) {
     input = (
       <textarea
+         ref="input"
          id={this.path}
          className={className}
          name={this.props.name}
@@ -73,6 +76,7 @@ function formInputRender() {
     );
     input= (
       <select
+         ref="input"
          id={this.path}
          className={className}
          name={this.props.name}
@@ -86,6 +90,7 @@ function formInputRender() {
   else {
     input = (
       <input
+         ref="input"
          id={this.path}
          className={className}
          name={this.props.name}
@@ -114,6 +119,14 @@ function formInputGetInitialState() {
   this.update = R.bind(this.update, this);
   this.dispatchUpdate = R.debounce(300, R.bind(this.dispatchUpdate, this));
   return { value: null, pristine: true };
+}
+
+function formInputComponentDidMount() {
+  if(this.props.autofocus) {
+    self.setTimeout(() => {
+      ReactDOM.findDOMNode(this.refs.input).focus();
+    }, 100);
+  }
 }
 
 function formInputUpdate(e) {

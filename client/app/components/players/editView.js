@@ -29,6 +29,7 @@ function playerEditRender() {
                  label="Name"
                  type="text"
                  required="required"
+                 autofocus="autofocus"
                  order="1" />
       <FormInput name="origin"
                  label="Origin"
