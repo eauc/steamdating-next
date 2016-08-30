@@ -6,7 +6,7 @@ $color_primary_light: #03A9F4;
 $color_accent: #4CAF50;
 $color_border: rgba(0, 0, 0, 0.4);
 $color_shadow: rgba(0, 0, 0, 0.6);
-$color_hover: #D0D0D0;
+$color_hover: darken(white, 15%);
 $color_focus: $color_primary_light;
 $color_focus_shadow: rgba($color_focus, 0.75);
 $color_error: #F44336;

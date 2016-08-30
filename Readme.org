@@ -2,9 +2,9 @@
 
 ** TODO
 
-- [X] layout players large screens
-- [ ] players list sort/filter
+- [X] players list sort/filter
 - [ ] factions info/icons
+- [ ] layout players large screens
 - [ ] setup tests
 - [ ] setup appCache
 - [X] use prompt in online register

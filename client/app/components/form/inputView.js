@@ -63,7 +63,7 @@ function formInputRender() {
          id={this.path}
          className={className}
          name={this.props.name}
-         value={this.state.value}
+         value={this.state.value || ''}
          onChange={this.update}
          {...props}
          />
@@ -94,7 +94,7 @@ function formInputRender() {
          id={this.path}
          className={className}
          name={this.props.name}
-         value={this.state.value}
+         value={this.state.value || ''}
          onChange={this.update}
          {...props}
          />

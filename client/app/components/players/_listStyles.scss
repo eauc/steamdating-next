@@ -1,11 +1,21 @@
 &-PlayersList {
-    width: 100%;
-    text-align: left;
-    border-collapse: collapse;
+    &-list {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+    }
 
-    tr{
-        &:hover {
-            background-color: $color_hover;
+    tr {
+        cursor: pointer;
+    }
+
+    tbody {
+        tr {
+            vertical-align: top;
+
+            &:hover {
+                background-color: $color_hover;
+            }
         }
     }
 
@@ -16,6 +26,16 @@
     }
 
     td {
-        border-color: lighten($color_border, 50%);
+        border-color: lighten($color_border, 80%);
+    }
+
+    &Header {
+        &-icon {
+            opacity: 0;
+
+            &-show {
+                opacity: 1;
+            }
+        }
     }
 }
