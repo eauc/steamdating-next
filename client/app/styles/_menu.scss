@@ -59,14 +59,14 @@
         }
     }
     @media (min-width: $pc_break) {
-        padding: 0.5em 1em 0 0;
+        padding: 0 1em 0 0;
         text-align: right;
 
         & {
             display: initial;
         }
         &Item {
-            padding-left: 1em;
+            padding-left: 3em;
         }
     }
 }

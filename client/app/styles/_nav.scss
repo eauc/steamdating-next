@@ -1,6 +1,7 @@
 &-Nav {
     $nav_padding: 0.2em;
 
+    z-index: 500;
     position: relative;
     background-color: $color-primary;
     box-shadow: $box_shadow_default;
