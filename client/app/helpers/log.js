@@ -1,5 +1,6 @@
 export let __hotReload = true;
 
+self.STEAMDATING_CONFIG = self.STEAMDATING_CONFIG || {};
 // self.STEAMDATING_CONFIG.debug = true;
 self.STEAMDATING_CONFIG.debug_flags = {
   cell: null, //'debug',
