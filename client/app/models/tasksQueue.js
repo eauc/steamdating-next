@@ -28,8 +28,9 @@ function dispatchTasksQueue(tqueue) {
   const [task, ...rest] = tqueue.queue;
   if(undefined === task) return;
   tqueue.queue = rest;
-  const [fn, ...args] = task;
-  self.Promise.resolve(fn(args))
+  const [fn, resolve, reject, ...args] = task;
+  self.Promise.resolve(fn([resolve, reject, ...args]))
+    .catch((e) => { reject(e); })
     .then(() => {
       tqueue.timeout = self.setTimeout(() => dispatchTasksQueue(tqueue), 1);
     });
