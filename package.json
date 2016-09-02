@@ -69,7 +69,10 @@
       "packages": "client/lib"
     },
     "dependencies": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "joi-browser": "npm:joi-browser@^9.0.4",
+      "moment": "npm:moment@2.14.1",
+      "process": "github:jspm/nodelibs-process@0.1.2",
       "ramda": "github:ramda/ramda@^0.22.1",
       "react": "npm:react@^15.3.1",
       "react-addons-perf": "npm:react-addons-perf@^15.3.1",

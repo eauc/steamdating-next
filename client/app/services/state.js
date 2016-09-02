@@ -14,6 +14,12 @@ const HANDLERS = {};
 const SUBSCRIPTIONS = {};
 const EVENT_QUEUE = tasksQueueModel.create();
 
+const stateService = {
+  dispatch: stateDispatch
+};
+export default stateService;
+export const dispatch = (...args) => stateService.dispatch(...args);
+
 export function registerHandler(event, ...args) {
   if(R.prop(event, HANDLERS)) {
     log.state(`overwriting event "${event}" handler`);
@@ -66,7 +72,7 @@ export function revokeView(cell) {
   CELLS = R.reject((c) => (c === cell), CELLS);
 }
 
-export function dispatch([ event, ...args]) {
+function stateDispatch([ event, ...args]) {
   return tasksQueueModel
     .push([_dispatch, event, ...args], EVENT_QUEUE);
 }

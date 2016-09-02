@@ -15,18 +15,22 @@ const middlewares = [
   stripv
 ];
 
-let timeout;
-
 registerHandler('error-set', [
   validateArgs([Joi.string()]),
   middlewares
-], (_state_, [msg]) => {
+], errorSetHandler);
+
+registerHandler('error-clear', middlewares, errorClearHandler);
+
+let timeout;
+
+export function errorSetHandler(_state_, [msg]) {
   if(timeout) self.clearTimeout(timeout);
   timeout = self.setTimeout(() => dispatch(['error-clear']), 1000);
   return msg;
-});
+}
 
-registerHandler('error-clear', middlewares, (_state_) => {
+export function errorClearHandler(_state_) {
   timeout = null;
   return null;
-});
+}
