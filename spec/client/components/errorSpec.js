@@ -21,7 +21,7 @@ describe('errorComponent', function() {
     });
   });
 
-  context('errorSetHandler()', function() {
+  context('errorSetHandler(<msg>)', function() {
     return errorSetHandler(this.state, ['msg']);
   }, function() {
     it('should set error field', function() {

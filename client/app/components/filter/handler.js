@@ -10,5 +10,9 @@ registerHandler(
   'filter-set',
   [ path(scope, {}),
     stripv
-  ], (state, [name, value]) => R.assoc(name, value, state)
+  ], filterSetHandler
 );
+
+export function filterSetHandler(state, [name, value]) {
+  return R.assoc(name, value, state);
+}
