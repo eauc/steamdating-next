@@ -16,6 +16,7 @@ import { Root } from 'app/components/root/root';
 import { Prompt } from 'app/components/prompt/prompt';
 import { dispatch, stateDebug } from 'app/services/state';
 export * from 'app/services/init';
+export * from 'app/components/storage/storage';
 
 self.STEAMDATING_APP = {
   init: appInit,

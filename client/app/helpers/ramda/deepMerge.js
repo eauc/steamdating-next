@@ -16,14 +16,14 @@ function _deepMergeObject(src, dst) {
     let src_val = src[key];
     if('Object' === R.type(acc[key]) &&
        'Object' === R.type(src[key])) {
-      src_val = _deepMergeObject(acc[key], src[key]);
+      src_val = _deepMergeObject(src[key], acc[key]);
     }
     if('Array' === R.type(acc[key]) &&
        'Array' === R.type(src[key])) {
-      src_val = _deepMergeArray(acc[key], src[key]);
+      src_val = _deepMergeArray(src[key], acc[key]);
     }
     if(acc[key] === src_val) return acc;
-    return R.assoc(key, src[key], acc);
+    return R.assoc(key, src_val, acc);
   }, dst, R.keys(src));
 }
 
@@ -34,11 +34,11 @@ function _deepMergeArray(src, dst) {
   return R.addIndex(R.reduce)((acc, src_val, ind) => {
     if('Object' === R.type(acc[ind]) &&
        'Object' === R.type(src_val)) {
-      src_val = _deepMergeObject(acc[ind], src_val);
+      src_val = _deepMergeObject(src_val, acc[ind]);
     }
     if('Array' === R.type(acc[ind]) &&
        'Array' === R.type(src_val)) {
-      src_val = _deepMergeArray(acc[ind], src_val);
+      src_val = _deepMergeArray(src_val, acc[ind]);
     }
     if(acc[ind] === src_val) return acc;
     return R.update(ind, src_val, acc);

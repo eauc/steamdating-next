@@ -5,6 +5,8 @@ self.STEAMDATING_CONFIG = self.STEAMDATING_CONFIG || {};
 self.STEAMDATING_CONFIG.debug_flags = {
   cell: null, //'debug',
   cycle: null, //'warn',
+  http: 'debug',
+  init: 'log',
   sub: null, //'debug',
   state: 'info',
   storage: 'warn'

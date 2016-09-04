@@ -5,7 +5,7 @@
 - [X] players list sort/filter
 - [ ] factions info/icons
 - [ ] layout players large screens
-- [ ] setup tests
+- [X] setup tests
 - [ ] setup appCache
 - [X] use prompt in online register
 - [X] error toggle show with opacity
