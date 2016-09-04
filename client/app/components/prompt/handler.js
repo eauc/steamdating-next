@@ -13,36 +13,28 @@ const middlewares = [
   stripv
 ];
 
-registerHandler(
-  'prompt-set',
-  middlewares,
-  (_state_, [prompt]) => prompt
-);
+registerHandler('prompt-set', middlewares, (_state_, [prompt]) => prompt);
 
-registerHandler(
-  'prompt-update-value',
-  middlewares,
-  (state, [value]) => R.assoc('value', value, state)
-);
+registerHandler('prompt-update-value', middlewares, promptUpdateValueHandler);
 
-registerHandler(
-  'prompt-ok',
-  middlewares,
-  (state) => {
-    let event = state.onOk;
-    if(state.type === 'prompt') {
-      event = R.append(state.value, event);
-    }
-    dispatch(event);
-    return null;
+registerHandler('prompt-ok', middlewares, promptOkHandler);
+
+registerHandler('prompt-cancel', middlewares, promptCancelHandler);
+
+export function promptUpdateValueHandler(state, [value]) {
+  return R.assoc('value', value, state);
+}
+
+export function promptOkHandler(state) {
+  let event = state.onOk;
+  if(state.type === 'prompt') {
+    event = R.append(state.value, event);
   }
-);
+  dispatch(event);
+  return null;
+}
 
-registerHandler(
-  'prompt-cancel',
-  middlewares,
-  (state) => {
-    if(state.onCancel) dispatch(state.onCancel);
-    return null;
-  }
-);
+export function promptCancelHandler(state) {
+  if(state.onCancel) dispatch(state.onCancel);
+  return null;
+}

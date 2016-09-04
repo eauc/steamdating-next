@@ -12,14 +12,18 @@ const middlewares = [
   stripv
 ];
 
-registerHandler('form-reset', middlewares, (state, [form, value]) => {
+registerHandler('form-reset', middlewares, formResetHandler);
+
+registerHandler('form-update', middlewares, formUpdateHandler);
+
+export function formResetHandler(state, [form, value]) {
   return R.thread(state)(
     R.assocPath([form, 'base'], value),
     R.assocPath([form, 'edit'], value)
   );
-});
+}
 
-registerHandler('form-update', middlewares, (state, [field, value]) => {
+export function formUpdateHandler(state, [field, value]) {
   const [form, ...field_path] = R.split('.', field);
   return R.assocPath([form, 'edit', ...field_path], value, state);
-});
+}

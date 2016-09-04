@@ -2,7 +2,7 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import { registerSubscription } from 'app/services/state';
-import { scope } from 'app/componens/form/state';
+import { scope } from 'app/components/form/state';
 import formModel from 'app/models/form';
 
 export const formSub = registerSubscription(
