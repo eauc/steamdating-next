@@ -6,6 +6,7 @@ import history from 'app/helpers/history';
 import styles from 'app/helpers/styles';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
 import { dispatch } from 'app/services/state';
+import { FactionIcon } from 'app/components/factions/factions';
 
 export const PlayersListRow = styles.decorator(React.createClass({
   displayName: 'PlayersListRow',
@@ -18,7 +19,20 @@ export const PlayersListRow = styles.decorator(React.createClass({
 function playersListRowRender() {
   const player = this.props.player;
   const cells = R.map((p) => {
-    return (<td key={p}>{player[p]}</td>);
+    let icon;
+    if(p==='faction') {
+      icon = (
+        <FactionIcon
+           faction={player[p]}
+           factions={this.props.factions} />
+      );
+    }
+    return (
+      <td key={p}>
+        {icon}
+        <span>{player[p]}</span>
+      </td>
+    );
   }, this.props.columns);
   return (
     <tr onClick={this.edit}>

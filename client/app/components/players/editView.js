@@ -6,11 +6,13 @@ import pureRenderMixin from 'react-addons-pure-render-mixin';
 import subscriptionsMixin from 'app/mixins/subscriptions';
 import { FormEdit, FormInput } from 'app/components/form/form';
 import { schema } from 'app/components/players/state';
+import { factionsNamesSub } from 'app/components/factions/factions';
 import { playersEditOtherNamesSub } from 'app/components/players/sub';
 
 export const PlayerEdit = React.createClass({
   mixins: [ subscriptionsMixin, pureRenderMixin ],
   subscriptions: {
+    factions: factionsNamesSub,
     players_names: playersEditOtherNamesSub
   },
   render: playerEditRender,
@@ -38,7 +40,7 @@ function playerEditRender() {
       <FormInput name="faction"
                  label="Faction"
                  type="select"
-                 options={this.factions}
+                 options={this.state.factions}
                  order="3" />
       <FormInput name="notes"
                  label="Notes"
@@ -49,19 +51,8 @@ function playerEditRender() {
 }
 
 function playerEditGetInitialState() {
-  this.factions = [
-    'Circle Orboros',
-    'Convergence of Cyriss',
-    'Cryx',
-    'Cygnar',
-    'Khador',
-    'Legion of Everblight',
-    'Mercenaries',
-    'Minions',
-    'Protectorate of Menoth',
-    'Retribution of Scyrah',
-    'Skorne',
-    'Trollbloods',
-  ];
-  return { players_names: [] };
+  return {
+    factions: {},
+    players_names: []
+  };
 }

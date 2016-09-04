@@ -3,7 +3,7 @@
 ** TODO
 
 - [X] players list sort/filter
-- [ ] factions info/icons
+- [X] factions info/icons
 - [ ] layout players large screens
 - [X] setup tests
 - [ ] setup appCache

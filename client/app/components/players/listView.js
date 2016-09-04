@@ -9,6 +9,7 @@ import subscriptionsMixin from 'app/mixins/subscriptions';
 import { dispatch } from 'app/services/state';
 import { FilterInput } from 'app/components/filter/filter';
 import { sortSub } from 'app/components/sort/sort';
+import { factionsSub } from 'app/components/factions/factions';
 import { playersListSub } from 'app/components/players/sub';
 import { Icon } from 'app/components/misc/misc';
 import { PlayersListHeader } from 'app/components/players/listHeaderView';
@@ -18,6 +19,7 @@ export const PlayersList = styles.decorator(React.createClass({
   displayName: 'PlayersList',
   mixins: [ subscriptionsMixin, pureRenderMixin ],
   subscriptions: {
+    factions: factionsSub,
     players: playersListSub,
     sort: [sortSub, 'players', 'name']
   },
@@ -45,6 +47,7 @@ function playersListRender() {
          key={p.name}
          columns={this.state.players.columns}
          player={p}
+         factions={this.state.factions}
          />
     );
   }, this.state.players.list);
