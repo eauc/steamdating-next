@@ -9,6 +9,7 @@
     "client/vendor/**/*.{css,min.css,ttf,woff,woff2}",
     "client/dist/css/**.css",
     "client/dist/fonts/**",
+    "client/data/**",
     "client/dist/js/**.js*"
   ]
 }

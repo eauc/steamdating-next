@@ -2,12 +2,7 @@
 
 ** TODO
 
-- [X] players list sort/filter
-- [X] factions info/icons
-- [ ] layout players large screens
-- [X] setup tests
+- [ ] players list filter list matching columns first but display all
 - [ ] setup appCache
-- [X] use prompt in online register
-- [X] error toggle show with opacity
-- [X] fold nav on click
-- [X] autofocus
+- [ ] tournament file save/load
+- [ ] pairing/steps trace
