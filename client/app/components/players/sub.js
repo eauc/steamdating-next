@@ -3,9 +3,11 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import { registerSubscription } from 'app/services/state';
 import playersModel from 'app/models/players';
+import factionsModel from 'app/models/factions';
 import { scope } from 'app/components/players/state';
 import { filterSub } from 'app/components/filter/filter';
 import { sortSub } from 'app/components/sort/sort';
+import { factionsSub } from 'app/components/factions/factions';
 
 export const playersListSub = registerSubscription(
   'players-list',
@@ -31,5 +33,16 @@ export const playersEditOtherNamesSub = registerSubscription(
     return base_name
       .join(players_names)
       .map(R.apply(R.without));
+  }
+);
+
+export const playersEditCastersNamesSub = registerSubscription(
+  'players-edit-casters-names',
+  (state) => {
+    const faction_name = state
+            .map(R.pathOr('', ['forms','player','edit','faction']));
+    return faction_name
+      .join(factionsSub(state))
+      .map(R.apply(factionsModel.castersFor));
   }
 );

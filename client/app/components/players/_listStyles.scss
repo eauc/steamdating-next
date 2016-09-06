@@ -7,6 +7,15 @@
 
     tr {
         cursor: pointer;
+
+        th:nth-child(n+4),
+        td:nth-child(n+4) {
+            display: none;
+
+            @media(min-width: $tablet_break) {
+                display: table-cell;
+            }
+        }
     }
 
     tbody {

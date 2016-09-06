@@ -41,6 +41,10 @@ function _deepMergeArray(src, dst) {
       src_val = _deepMergeArray(src_val, acc[ind]);
     }
     if(acc[ind] === src_val) return acc;
-    return R.update(ind, src_val, acc);
+    return (
+      ind < acc.length
+        ? R.update(ind, src_val, acc)
+        : R.append(src_val, acc)
+    );
   }, dst, src);
 }

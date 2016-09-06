@@ -27,10 +27,15 @@ function playersListRowRender() {
            factions={this.props.factions} />
       );
     }
+    const value = (
+      'Array' === R.type(player[p])
+        ? player[p].join(', ')
+        : player[p]
+    );
     return (
       <td key={p}>
         {icon}
-        <span>{player[p]}</span>
+        <span>{value}</span>
       </td>
     );
   }, this.props.columns);

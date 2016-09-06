@@ -54,7 +54,7 @@ function formInputRender() {
     'input-valid': show_valid,
     'input-error': show_error
   };
-  const props = R.pick(['required','type','order'], this.props);
+  const props = R.pick(['required','type','order','multiple'], this.props);
   let input;
   if('textarea' === this.props.type) {
     input = (
@@ -72,7 +72,10 @@ function formInputRender() {
   else if('select' === this.props.type) {
     const options = R.thread(this.props.options)(
       R.map((o) => (<option key={o} value={o}>{o}</option>)),
-      R.prepend((<option key="null" value=""></option>))
+      R.when(
+        () => !this.props.multiple,
+        R.prepend((<option key="null" value=""></option>))
+      )
     );
     input= (
       <select
@@ -118,7 +121,10 @@ function formInputGetInitialState() {
   this.path = `${this.context.formName}.${this.props.name}`;
   this.update = R.bind(this.update, this);
   this.dispatchUpdate = R.debounce(300, R.bind(this.dispatchUpdate, this));
-  return { value: null, pristine: true };
+  return {
+    value: (this.props.multiple ? [] : null),
+    pristine: true
+  };
 }
 
 function formInputComponentDidMount() {
@@ -130,8 +136,18 @@ function formInputComponentDidMount() {
 }
 
 function formInputUpdate(e) {
-  this.setState({value: e.target.value, pristine: false});
-  this.dispatchUpdate(e.target.value);
+  let value = e.target.value;
+  if(this.props.multiple) {
+    value = R.thread(e.target.options)(
+      R.filter(R.prop('selected')),
+      R.map(R.prop('value'))
+    );
+  }
+  this.setState({
+    value,
+    pristine: false
+  });
+  this.dispatchUpdate(value);
 }
 
 function formInputDispatchUpdate(value) {

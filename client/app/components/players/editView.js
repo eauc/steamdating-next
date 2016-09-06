@@ -7,12 +7,14 @@ import subscriptionsMixin from 'app/mixins/subscriptions';
 import { FormEdit, FormInput } from 'app/components/form/form';
 import { schema } from 'app/components/players/state';
 import { factionsNamesSub } from 'app/components/factions/factions';
-import { playersEditOtherNamesSub } from 'app/components/players/sub';
+import { playersEditCastersNamesSub,
+         playersEditOtherNamesSub } from 'app/components/players/sub';
 
 export const PlayerEdit = React.createClass({
   mixins: [ subscriptionsMixin, pureRenderMixin ],
   subscriptions: {
-    factions: factionsNamesSub,
+    factions_names: factionsNamesSub,
+    casters_names: playersEditCastersNamesSub,
     players_names: playersEditOtherNamesSub
   },
   render: playerEditRender,
@@ -40,12 +42,18 @@ function playerEditRender() {
       <FormInput name="faction"
                  label="Faction"
                  type="select"
-                 options={this.state.factions}
+                 options={this.state.factions_names}
                  order="3" />
+      <FormInput name="lists"
+                 label="Lists"
+                 type="select"
+                 options={this.state.casters_names}
+                 multiple="multiple"
+                 order="4" />
       <FormInput name="notes"
                  label="Notes"
                  type="textarea"
-                 order="4" />
+                 order="5" />
     </FormEdit>
   );
 }
