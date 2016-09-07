@@ -1,8 +1,11 @@
 export let __hotReload = true;
 
 import Joi from 'joi-browser';
+import { registerValidator } from 'app/services/state';
 
-const player = (players_names) => Joi.object().keys({
+export const scope = ['tournament','players'];
+
+export const player_schema = (players_names) => Joi.object({
   name: Joi.string()
     .min(1)
     .invalid(players_names)
@@ -33,8 +36,6 @@ const player = (players_names) => Joi.object().keys({
     .label('Droped')
     .empty('')
 });
+const players_schema = Joi.array().items(player_schema([]));
 
-const players = Joi.array().items(player([]));
-
-export const schema = { player, players };
-export const scope = ['tournament','players'];
+registerValidator('tournament-players', scope, players_schema);

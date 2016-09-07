@@ -12,6 +12,7 @@ STATE_CELL._name = 'STATE';
 let CELLS = [];
 const HANDLERS = {};
 const SUBSCRIPTIONS = {};
+const VALIDATORS = {};
 const EVENT_QUEUE = tasksQueueModel.create();
 
 const stateService = {
@@ -19,6 +20,20 @@ const stateService = {
 };
 export default stateService;
 export const dispatch = (...args) => stateService.dispatch(...args);
+
+export function registerValidator(name, path, schema) {
+  if(R.prop(name, VALIDATORS)) {
+    log.state(`overwriting validator "${name}" `);
+  }
+  VALIDATORS[name] = (state) => R.thread(state)(
+    R.path(path),
+    (scope) => schema.validate(scope),
+    ({error}) => {
+      if(error) log.error(`Validator "${name}" rejected state`, state, path, error);
+      return !error;
+    }
+  );
+}
 
 export function registerHandler(event, ...args) {
   if(R.prop(event, HANDLERS)) {
@@ -88,6 +103,13 @@ function _dispatch([ resolve, reject, event, ...args]) {
     const new_state = HANDLERS[event](STATE, [event, ...args]);
     if(new_state === STATE) {
       resolve();
+      return null;
+    }
+    if(!R.allPass(R.values(VALIDATORS))(new_state)) {
+      if(event !== 'error-set') {
+        stateDispatch(['error-set', 'Invalid state']);
+      }
+      reject('invalid');
       return null;
     }
     STATE = new_state;

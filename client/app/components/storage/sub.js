@@ -18,12 +18,7 @@ const stateStoreSub = registerSubscription(
 
 getPermanentSubscription('state-store', [ stateStoreSub ]);
 
-let initialized = false;
 export function storageUpdate(state) {
-  if(!initialized) {
-    initialized = true;
-    return;
-  }
   if(storage_state.refreshing) {
     storage_state.refreshing = false;
     return;

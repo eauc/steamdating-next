@@ -4,12 +4,10 @@ import R from 'app/helpers/ramda';
 import { dispatch, registerHandler } from 'app/services/state';
 import path from 'app/helpers/middlewares/path';
 import stripv from 'app/helpers/middlewares/stripv';
-import validate from 'app/helpers/middlewares/validate';
-import { scope, schema } from 'app/components/prompt/state';
+import { scope } from 'app/components/prompt/state';
 
 const middlewares = [
   path(scope, null),
-  validate(schema),
   stripv
 ];
 

@@ -123,7 +123,6 @@
     }
   },
   "Menoth": {
-    "name": "Menoth",
     "icon": "menoth.png",
     "casters": {
       "Amon1": "High Allegiant Amon Ad-Raza",

@@ -5,7 +5,7 @@ import React from 'react';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
 import subscriptionsMixin from 'app/mixins/subscriptions';
 import { FormEdit, FormInput } from 'app/components/form/form';
-import { schema } from 'app/components/players/state';
+import { player_schema } from 'app/components/players/state';
 import { factionsNamesSub } from 'app/components/factions/factions';
 import { playersEditCastersNamesSub,
          playersEditOtherNamesSub } from 'app/components/players/sub';
@@ -23,7 +23,7 @@ export const PlayerEdit = React.createClass({
 
 function playerEditRender() {
   log.cycle('playerEdit render', this.state);
-  const form_schema = schema.player(this.state.players_names);
+  const form_schema = player_schema(this.state.players_names);
   return (
     <FormEdit name="player"
               label={`${this.props.label} Player`}

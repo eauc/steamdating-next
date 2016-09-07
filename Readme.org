@@ -2,6 +2,10 @@
 
 ** TODO
 
+- [ ] state validators :
+  - [ ] run only when path change ?
+  - [ ] run only in debug ?
+  - [ ] test all pages
 - [ ] players list filter list matching columns first but display all
 - [ ] setup appCache
 - [ ] tournament file save/load
