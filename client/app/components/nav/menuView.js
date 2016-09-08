@@ -7,6 +7,7 @@ import styles from 'app/helpers/styles';
 import { Icon } from 'app/components/misc/misc';
 import { NavLink } from 'app/components/nav/linkView';
 import { NavToggle } from 'app/components/nav/toggleView';
+import { DownloadButton } from 'app/components/nav/downloadButtonView';
 
 export const NavMenu = styles.decorator(React.createClass({
   displayName: 'NavMenu',
@@ -33,7 +34,10 @@ function navMenuRender() {
       <NavLink current_hash={this.state.current_hash}
                path="/about"
                onClick={this.toggleShow}>About</NavLink>
-      <NavToggle onToggle={this.toggleShow} />
+      <div className="actions">
+        <DownloadButton />
+        <NavToggle onToggle={this.toggleShow} />
+      </div>
     </div>
   );
 }

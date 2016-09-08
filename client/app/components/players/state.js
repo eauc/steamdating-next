@@ -21,7 +21,7 @@ export const player_schema = (players_names) => Joi.object({
     .label('Faction')
     .empty(''),
   lists: Joi.array()
-    .items(Joi.any())
+    .items(Joi.string())
     .label('Lists'),
   team: Joi.alternatives(null, Joi.string())
     .label('Team')
