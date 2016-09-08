@@ -6,9 +6,6 @@ import { dispatch } from 'app/services/state';
 import { registerInit } from 'app/services/init';
 
 export const STATE_STORAGE_KEY = 'STEAMDATING_APP.state';
-export const storage_state = {
-  refreshing: false
-};
 
 if(self._storageListener) {
   self.removeEventListener('storage', self._storageListener);
@@ -24,8 +21,10 @@ export function storageListener(event) {
   if(new_state) dispatch(['storage-refresh', new_state]);
 }
 
+let refreshing = true;
+
 export function storageInit(state) {
-  storage_state.refreshing = true;
+  refreshing = true;
   const stored_state = R.thread(STATE_STORAGE_KEY)(
     (key) => self.localStorage.getItem(key),
     R.jsonParse,
@@ -33,4 +32,19 @@ export function storageInit(state) {
   );
   log.storage('state-load', stored_state);
   return R.deepMerge([stored_state], state);
+}
+
+export function storageUpdate(state) {
+  if(refreshing) {
+    refreshing = false;
+    return;
+  }
+  log.storage('state-store', state);
+  self.localStorage
+    .setItem(STATE_STORAGE_KEY, R.jsonStringify(null, state));
+}
+
+export function storageRefreshHandler(state, [refresh]) {
+  refreshing = true;
+  return R.deepMerge([refresh], state);
 }
