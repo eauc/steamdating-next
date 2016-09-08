@@ -1,6 +1,7 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
+import log from 'app/helpers/log';
 import React from 'react';
 import styles from 'app/helpers/styles';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
@@ -21,6 +22,7 @@ export const FilterInput = styles.decorator(React.createClass({
 }));
 
 function filterInputRender() {
+  log.cycle('filterInput', this.state, this.props);
   const id = `${this.props.name}.filter`;
   return (
     <input id={id}
@@ -33,7 +35,7 @@ function filterInputRender() {
 }
 
 function filterInputGetSubscription() {
-  return filterSub(this.props.name);
+  return filterSub([this.props.name]);
 }
 
 function filterInputGetInitialState() {
