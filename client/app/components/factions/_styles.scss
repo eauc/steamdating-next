@@ -1,5 +1,8 @@
 &-FactionIcon {
-    margin: -0.5em 0.5em -0.5em 0;
+    margin: -0.5em 0;
     width: 2em;
     height: 2em;
+    @media(min-width: $tablet_break) {
+        margin-right: 0.5em;
+    }
 }

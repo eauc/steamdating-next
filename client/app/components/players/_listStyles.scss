@@ -47,4 +47,10 @@
             }
         }
     }
+
+    &Row {
+        &-faction {
+            white-space: nowrap;
+        }
+    }
 }

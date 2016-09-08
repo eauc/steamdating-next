@@ -33,7 +33,8 @@ function playersListRowRender() {
         : player[p]
     );
     return (
-      <td key={p}>
+      <td key={p}
+          className={p}>
         {icon}
         <span>{value}</span>
       </td>
