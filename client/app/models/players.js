@@ -12,6 +12,8 @@ const playersModel = {
 
 export default R.curryService(playersModel);
 
+const LIST_COLUMNS = ['name','origin','faction','lists'];
+
 function playersAdd(add, players) {
   return R.thread(players)(
     R.append(add),
@@ -24,13 +26,14 @@ function playersFilter(filter, players) {
   filter = filter.replace(/\s+/g, '|');
   const regex = new RegExp(filter, 'i');
   return R.thread(players)(
-    R.map((o) => [o, R.toPairs(R.pick(['name','origin','faction','lists'], o))]),
+    R.map((o) => [o, R.toPairs(R.pick(LIST_COLUMNS, o))]),
     R.map(([o, p]) => [o, R.filter(([_k_, v]) => regex.test(JSON.stringify(v)), p)]),
     R.reject(([_o_, p]) => R.isEmpty(p)),
     (matches) => ({ list: R.map(R.head, matches),
                     columns: R.thread(matches)(
                       R.chain(R.compose(R.map(R.head), R.nth(1))),
                       R.prepend('name'),
+                      R.flip(R.concat)(LIST_COLUMNS),
                       R.uniq
                     )
                   })
