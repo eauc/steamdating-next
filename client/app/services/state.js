@@ -105,7 +105,8 @@ function _dispatch([ resolve, reject, event, ...args]) {
       resolve();
       return null;
     }
-    if(!R.allPass(R.values(VALIDATORS))(new_state)) {
+    if(self.STEAMDATING_CONFIG.debug &&
+       !R.allPass(R.values(VALIDATORS))(new_state)) {
       if(event !== 'error-set') {
         stateDispatch(['error-set', 'Invalid state']);
       }
