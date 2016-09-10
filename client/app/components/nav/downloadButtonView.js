@@ -6,7 +6,7 @@ import styles from 'app/helpers/styles';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
 import subscriptionsMixin from 'app/mixins/subscriptions';
 import { Icon } from 'app/components/misc/misc';
-import { tournamentFileSub } from 'app/components/file/file';
+import { tournamentFileSub } from 'app/components/tournament/tournament';
 
 export const DownloadButton = styles.decorator(React.createClass({
   displayName: 'DownloadButton',

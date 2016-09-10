@@ -4,7 +4,8 @@ import R from 'app/helpers/ramda';
 
 const fileService = {
   generate: fileGenerate,
-  cleanup: fileCleanup
+  cleanup: fileCleanup,
+  readP: fileReadP
 };
 export default R.curryService(fileService);
 
@@ -20,4 +21,20 @@ function fileCleanup(url) {
   if(!R.isNil(url)) {
     self.URL.revokeObjectURL(url);
   }
+}
+
+function fileReadP(file) {
+  return new self.Promise((resolve, reject) => {
+    var reader = new self.FileReader();
+    reader.onload = (e) => {
+      resolve(R.jsonParse(e.target.result));
+    };
+    reader.onerror = () => {
+      reject(['Error reading file']);
+    };
+    reader.onabort = () => {
+      reject(['Abort reading file']);
+    };
+    reader.readAsText(file);
+  });
 }

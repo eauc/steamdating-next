@@ -21,7 +21,7 @@
         align-items: center;
         border: 0;
 
-        .sd-DownloadButton {
+        .sd-FileDownloadButton {
             @include button($color-primary, white, 0);
             height: 1.4em;
             width: 1.4em;

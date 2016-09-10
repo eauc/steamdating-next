@@ -3,8 +3,8 @@ import { beforeEach,
          it,
          spyOnService } from 'spec/client/helpers/helpers';
 
-import { storageRefreshHandler } from 'app/components/storage/handler';
-import { storageUpdate } from 'app/components/storage/sub';
+import { storageRefreshHandler,
+         storageUpdate } from 'app/components/storage/state';
 import { storageListener,
          storageInit,
          STATE_STORAGE_KEY } from 'app/components/storage/state';
@@ -94,7 +94,6 @@ describe('storageComponent', function() {
   }, function() {
     beforeEach(function() {
       spyOn(self.localStorage, 'setItem');
-      storageUpdate(this.state);
       storageUpdate(this.state);
     });
 

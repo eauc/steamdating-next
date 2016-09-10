@@ -1,0 +1,24 @@
+&-FilePage {
+    .sd-PageContent-insider {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        @media(min-width: $tablet_break) {
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-around;
+        }
+    }
+
+    .sd-TournamentNewButton,
+    .sd-FileDownloadButton,
+    .sd-FileOpenButton {
+        margin: 1em 1em 0 1em;
+
+        @media(min-width: $tablet_break) {
+            max-width: 8em;
+            flex-grow: 1;
+        }
+    }
+}

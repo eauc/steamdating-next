@@ -1,12 +1,16 @@
 @mixin button($color: white,
               $text: $color_text,
               $border_radius: $border_radius_default) {
+    display: block;
+    box-sizing: border-box;
     cursor: pointer;
     background-color: $color;
     color: $text;
     padding: $padding_default;
     border: 1px solid darken($color, 20%);
     border-radius: $border_radius;
+    text-align: center;
+    text-decoration: none;
 
     &:hover,
     &:focus {

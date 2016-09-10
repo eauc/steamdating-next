@@ -7,7 +7,7 @@ import styles from 'app/helpers/styles';
 import { Icon } from 'app/components/misc/misc';
 import { NavLink } from 'app/components/nav/linkView';
 import { NavToggle } from 'app/components/nav/toggleView';
-import { DownloadButton } from 'app/components/nav/downloadButtonView';
+import { TournamentSaveButton } from 'app/components/tournament/tournament';
 
 export const NavMenu = styles.decorator(React.createClass({
   displayName: 'NavMenu',
@@ -29,13 +29,16 @@ function navMenuRender() {
                path="/home"
                onClick={this.toggleShow}>Home</NavLink>
       <NavLink current_hash={this.state.current_hash}
+               path="/file"
+               onClick={this.toggleShow}>File</NavLink>
+      <NavLink current_hash={this.state.current_hash}
                path="/players"
                onClick={this.toggleShow}>Players</NavLink>
       <NavLink current_hash={this.state.current_hash}
                path="/about"
                onClick={this.toggleShow}>About</NavLink>
       <div className="actions">
-        <DownloadButton />
+        <TournamentSaveButton iconOnly="true" />
         <NavToggle onToggle={this.toggleShow} />
       </div>
     </div>

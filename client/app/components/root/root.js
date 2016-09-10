@@ -9,6 +9,7 @@ import { HomePage }from 'app/pages/home/view';
 import { PlayersListPage }from 'app/pages/players/listView';
 import { PlayersCreatePage }from 'app/pages/players/createView';
 import { PlayersEditPage }from 'app/pages/players/editView';
+import { FilePage } from 'app/pages/file/view';
 import { AboutPage } from 'app/pages/about/view';
 
 export const Root = React.createClass({
@@ -28,6 +29,7 @@ function rootRender() {
           <Route path="create" components={PlayersCreatePage} />
           <Route path="edit" components={PlayersEditPage} />
         </Route>
+        <Route path="file" component={FilePage} />
         <Route path="about" component={AboutPage} />
       </Route>
     </Router>
