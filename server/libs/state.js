@@ -7,8 +7,8 @@ module.exports = (app) => {
 
   app.expose(false, 'debug');
 
-  // app.expose({
-  //   client_id: process.env.AUTH0_CLIENT_ID || app.config.AUTH0.client_id,
-  //   domain: process.env.AUTH0_DOMAIN || app.config.AUTH0.domain
-  // }, 'auth0Api');
+  app.expose({
+    client_id: process.env.AUTH_CLIENT_ID || app.config.auth.client_id,
+    domain: process.env.AUTH_DOMAIN || app.config.auth.domain
+  }, 'auth');
 };

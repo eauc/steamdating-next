@@ -7,6 +7,7 @@ import styles from 'app/helpers/styles';
 import { Icon } from 'app/components/misc/misc';
 import { NavLink } from 'app/components/nav/linkView';
 import { NavToggle } from 'app/components/nav/toggleView';
+import { AuthToggleButton } from 'app/components/auth/auth';
 import { TournamentSaveButton } from 'app/components/tournament/tournament';
 
 export const NavMenu = styles.decorator(React.createClass({
@@ -38,6 +39,9 @@ function navMenuRender() {
                path="/about"
                onClick={this.toggleShow}>About</NavLink>
       <div className="actions">
+        <AuthToggleButton>
+          <Icon name="user" />
+        </AuthToggleButton>
         <TournamentSaveButton iconOnly="true" />
         <NavToggle onToggle={this.toggleShow} />
       </div>

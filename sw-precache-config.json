@@ -3,7 +3,8 @@
   "cacheId": "steamdating",
   "ignoreUrlParametersMatching": [ "/./" ],
   "dynamicUrlToDependencies": {
-    "/": ["client/dist/index.handlebars"]
+    "/": [ "client/dist/index.handlebars",
+           "server/config.production.js" ]
   },
   "staticFileGlobs": [
     "client/vendor/**/*.{css,min.css,ttf,woff,woff2}",

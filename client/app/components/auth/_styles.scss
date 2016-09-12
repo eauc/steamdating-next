@@ -1,0 +1,6 @@
+&-AuthRequired {
+    &-signout,
+    &-signin {
+        @include button;
+    }
+}

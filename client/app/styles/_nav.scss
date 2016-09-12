@@ -21,7 +21,8 @@
         align-items: center;
         border: 0;
 
-        .sd-FileDownloadButton {
+        .sd-FileDownloadButton,
+        .sd-AuthToggleButton {
             @include button($color-primary, white, 0);
             height: 1.4em;
             width: 1.4em;
@@ -30,6 +31,12 @@
             line-height: 1.4em;
             border: 0;
             text-align: center;
+        }
+        .sd-AuthToggleButton {
+            color: darken(white, 40%);
+        }
+        .sd-AuthToggleButton.sd-AuthToggleButton-active {
+            color: white;
         }
     }
     &Toggle {
