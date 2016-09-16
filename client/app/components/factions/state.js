@@ -19,6 +19,7 @@ const factions_schema = Joi.object().pattern(/.+/, faction_schema);
 
 registerInit('factions', R.tap(() => {
   httpService.getP({
+    url: '/data/factions.json',
     onSuccess: ['factions-set'],
     onError: ['toaster-set', { type: 'error',
                                message: 'factions load failed' }]

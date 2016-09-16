@@ -43,10 +43,12 @@ function offlineRegisterWorker() {
 
     function onUpdateFound() {
       installing = reg.installing;
+      console.log('Update found', reg);
       installing.addEventListener('statechange', onStateChange);
     }
 
     function onStateChange() {
+      console.log('State change', installing);
       switch(installing.state) {
       case 'installed':
         {
