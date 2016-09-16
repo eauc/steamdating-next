@@ -1,34 +1,32 @@
 export let __hotReload = true;
 
-import Joi from 'joi-browser';
-
 import { dispatch, registerHandler } from 'app/services/state';
 import path from 'app/helpers/middlewares/path';
 import stripv from 'app/helpers/middlewares/stripv';
 import validateArgs from 'app/helpers/middlewares/validateArgs';
-import { scope } from 'app/components/error/state';
+import { scope, toaster_schema } from 'app/components/toaster/state';
 
 const middlewares = [
   path(scope, null),
   stripv
 ];
 
-registerHandler('error-set', [
-  validateArgs([Joi.string()]),
+registerHandler('toaster-set', [
+  validateArgs(toaster_schema),
   middlewares
-], errorSetHandler);
+], toasterSetHandler);
 
-registerHandler('error-clear', middlewares, errorClearHandler);
+registerHandler('toaster-clear', middlewares, toasterClearHandler);
 
 let timeout;
 
-export function errorSetHandler(_state_, [msg]) {
+export function toasterSetHandler(_state_, [toaster]) {
   if(timeout) self.clearTimeout(timeout);
-  timeout = self.setTimeout(() => dispatch(['error-clear']), 1000);
-  return msg;
+  timeout = self.setTimeout(() => dispatch(['toaster-clear']), 1000);
+  return toaster;
 }
 
-export function errorClearHandler(_state_) {
+export function toasterClearHandler(_state_) {
   timeout = null;
   return null;
 }

@@ -3,7 +3,7 @@ export let __hotReload = true;
 import React from 'react';
 import pureRenderMixin from 'react-addons-pure-render-mixin';
 import styles from 'app/helpers/styles';
-import { ErrorToaster } from 'app/components/error/error';
+import { Toaster } from 'app/components/toaster/toaster';
 
 export const Page = styles.decorator(React.createClass({
   displayName: 'Page',
@@ -31,7 +31,7 @@ function pageContentRender() {
       <div className="insider">
         {this.props.children}
       </div>
-      <ErrorToaster />
+      <Toaster />
     </div>
   );
 }

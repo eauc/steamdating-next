@@ -21,7 +21,8 @@ export function tournamentOpenHandler(state, [file]) {
     R.ifElse(
       R.exists,
       (data) => dispatch(['tournament-set', data]),
-      () => dispatch(['error-set', 'Invalid file'])
+      () => dispatch(['toaster-set', { type: 'error',
+                                       message: 'Invalid file' }])
     )
   )(file);
   return state;

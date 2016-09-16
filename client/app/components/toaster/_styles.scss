@@ -1,0 +1,29 @@
+&-Toaster {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: $padding_default;
+    text-align: center;
+    color: $color_text_inverted;
+    font-weight: bold;
+
+    $toaster_opacity: 0.25;
+    &-success {
+        background-color: fade-out($color_accent, $toaster_opacity);
+    }
+    &-warning {
+        background-color: fade-out($color_warning, $toaster_opacity);
+    }
+    &-error {
+        background-color: fade-out($color_error, $toaster_opacity);
+    }
+    &-info {
+        background-color: fade-out($color_primary, $toaster_opacity);
+    }
+    &-show {
+        opacity: 1;
+    }
+}

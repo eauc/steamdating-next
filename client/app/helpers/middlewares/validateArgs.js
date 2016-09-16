@@ -12,7 +12,10 @@ export default R.curry(function validateArgs(args_schema, handler) {
     if(!validation.error) return handler(state, [event, ...args]);
 
     log.error(`Args validation error: ${validation.error.message}`, validation);
-    if(!event.startsWith('error')) dispatch(['error-set', 'Invalid arguments']);
+    if(!event.startsWith('error')) {
+      dispatch(['toaster-set', { type: 'error',
+                                 message: 'Invalid arguments' }]);
+    }
     return state;
   };
 });

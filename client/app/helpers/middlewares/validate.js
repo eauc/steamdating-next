@@ -1,7 +1,6 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import Joi from 'joi-browser';
 import log from 'app/helpers/log';
 import { dispatch } from 'app/services/state';
 
@@ -12,7 +11,10 @@ export default R.curry(function validate(schema, handler) {
     if(!validation.error) return new_state;
 
     log.error(`State validation error: ${validation.error.message}`, validation);
-    if(!event.startsWith('error')) dispatch(['error-set', 'Invalid state']);
+    if(!event.startsWith('error')) {
+      dispatch(['toaster-set', { type: 'error',
+                                 message: 'Invalid state' }]);
+    }
     return state;
   };
 });

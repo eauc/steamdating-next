@@ -1,8 +1,5 @@
 export let __hotReload = true;
 
-import R from 'app/helpers/ramda';
-import log from 'app/helpers/log';
-
 import React from 'react';
 import { PageMenu, PageMenuItem } from 'app/components/pageMenu/view';
 import { Page, PageContent } from 'app/components/page/view';
@@ -19,7 +16,7 @@ registerHandler('test', [
 });
 
 registerHandler('test-prompt', (state, [_event_, ...result]) => {
-  dispatch(['error-set', result.join(', ')]);
+  dispatch(['toaster-set', { type: 'info', message: result.join(', ') }]);
   return state;
 });
 
@@ -32,18 +29,18 @@ function homePageRender() {
     <Page>
       <PageMenu>
         <PageMenuItem onClick={() => {
-            dispatch(['error-set', 'Ouuups1!']);
+            dispatch(['toaster-set', { type: 'success', message: 'Ouuups1!' }]);
           }}>
-          Test Error
+          Test Toaster
         </PageMenuItem>
         <PageMenuItem onClick={() => {
-            dispatch(['error-set', 'Ouuups1!']);
-            dispatch(['error-set', 'Ouuups2!']);
-            dispatch(['error-set', 'Ouuups3!']);
-            dispatch(['error-set', 'Ouuups4!']);
-            dispatch(['error-set', 'Ouuups5!']);
+            dispatch(['toaster-set', { type: 'error', message: 'Ouuups1!' }]);
+            dispatch(['toaster-set', { type: 'info', message: 'Ouuups2!' }]);
+            dispatch(['toaster-set', { type: 'success', message: 'Ouuups3!' }]);
+            dispatch(['toaster-set', { type: 'warning', message: 'Ouuups4!' }]);
+            dispatch(['toaster-set', { type: 'error', message: 'Ouuups5!' }]);
           }}>
-          Test Error x5
+          Test Toaster x5
         </PageMenuItem>
         <PageMenuItem onClick={() => {
             dispatch(['test', 'Baaaaka', null, 1]);
