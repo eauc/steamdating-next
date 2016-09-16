@@ -1,6 +1,7 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
+import Joi from 'joi-browser';
 import log from 'app/helpers/log';
 import tasksQueueModel from 'app/models/tasksQueue.js';
 import cellModel from 'app/models/cell.js';
@@ -26,14 +27,20 @@ export function registerValidator(name, path, schema) {
     log.state(`overwriting validator "${name}" `);
   }
   VALIDATORS[name] = (state) => R.thread(state)(
+    R.spy('validator', name),
     R.path(path),
+    R.spy('validator', name),
     (scope) => schema.validate(scope),
+    R.spy('validator', name),
     ({error}) => {
       if(error) log.error(`Validator "${name}" rejected state`, state, path, error);
       return !error;
-    }
+    },
+    R.spy('validator', name)
   );
 }
+
+registerValidator('state', [], Joi.object());
 
 export function registerHandler(event, ...args) {
   if(R.prop(event, HANDLERS)) {

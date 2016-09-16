@@ -9,7 +9,8 @@ self.STEAMDATING_CONFIG.debug_flags = {
   init: 'log',
   sub: null, //'debug',
   state: 'info',
-  storage: 'warn'
+  storage: 'warn',
+  validator: null //'debug'
 };
 
 export default (function() {
