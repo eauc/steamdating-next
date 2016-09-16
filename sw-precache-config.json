@@ -7,6 +7,8 @@
            "server/config.production.js" ]
   },
   "staticFileGlobs": [
+    "client/config.js",
+    "client/lib/system.js",
     "client/vendor/**/*.{css,min.css,ttf,woff,woff2}",
     "client/dist/css/**.css",
     "client/dist/fonts/**",

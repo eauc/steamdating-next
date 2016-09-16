@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-jspm bundle-sfx app/app.js client/dist/js/app.js --minify
+jspm bundle-sfx app/app.js - auth0-lock client/dist/js/app.js --minify && \
+    jspm bundle auth0-lock client/dist/js/auth0.js --minify --inject
