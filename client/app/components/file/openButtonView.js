@@ -14,16 +14,18 @@ export const FileOpenButton = styles.decorator(React.createClass({
 }));
 
 function fileOpenButtonRender() {
+  const id = `fileOpen.${this.props.name}`;
   return (
     <div>
       <input className="input"
+             id={id}
              ref="input"
              type="file"
              onChange={this.onChange} />
-        <button className="button"
-                type="button">
-          {this.props.children}
-        </button>
+      <label className="button"
+             htmlFor={id}>
+        {this.props.children}
+      </label>
     </div>
   );
 }
@@ -35,5 +37,5 @@ function fileOpenButtonGetInitialState() {
 
 function fileOpenButtonOnChange(event) {
   dispatch([this.props.onOpen, event.target.files[0]]);
-  ReactDOM.findDOMNode(this.refs.input).blur();
+  ReactDOM.findDOMNode(this.refs.input).value = null;
 }

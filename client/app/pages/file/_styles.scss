@@ -3,22 +3,44 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
+        padding: 1em;
+    }
+    &-header {
+        padding: 0 0 1em 0;
+        border-bottom: $border_default;
+        margin: 0 0 1em 0;
+        text-align: center;
+    }
+    &-fileActions {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        margin-bottom: 1em;
 
-        @media(min-width: $tablet_break) {
-            flex-direction: row;
-            align-items: flex-start;
-            justify-content: space-around;
+        .sd-TournamentNewButton,
+        .sd-FileDownloadButton,
+        .sd-FileOpenButton {
+            flex-shrink: 0;
+            margin: 0 0 1em;
         }
     }
 
-    .sd-TournamentNewButton,
-    .sd-FileDownloadButton,
-    .sd-FileOpenButton {
-        margin: 1em 1em 0 1em;
+    @media(min-width: $tablet_break) {
+        &-header {
+            text-align: left;
+        }
+        &-fileActions {
+            flex-direction: row;
+            align-items: flex-start;
 
-        @media(min-width: $tablet_break) {
-            max-width: 8em;
-            flex-grow: 1;
+            .sd-TournamentNewButton,
+            .sd-FileDownloadButton,
+            .sd-FileOpenButton {
+                max-width: 8em;
+                flex-grow: 1;
+                margin: 0 1em 1em 1em;
+            }
         }
     }
 }

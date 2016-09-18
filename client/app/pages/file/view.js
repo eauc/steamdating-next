@@ -16,9 +16,12 @@ function filePageRender() {
   return (
     <Page>
       <PageContent>
-        <TournamentNewButton />
-        <TournamentOpenButton />
-        <TournamentSaveButton />
+        <h3 className="header">Files</h3>
+        <div className="fileActions">
+          <TournamentNewButton />
+          <TournamentOpenButton />
+          <TournamentSaveButton />
+        </div>
       </PageContent>
     </Page>
   );

@@ -4,7 +4,9 @@ import { beforeEach,
          spyOnService } from 'spec/client/helpers/helpers';
 
 import { tournamentOpenHandler,
-         tournamentSetHandler } from 'app/components/tournament/handler';
+         tournamentOpenSuccessHandler,
+         tournamentSetHandler,
+         tournamentSetConfirmHandler } from 'app/components/tournament/handler';
 
 import fileService from 'app/services/file';
 import stateService from 'app/services/state';
@@ -29,7 +31,7 @@ describe('tournamentComponent', function() {
     }, function() {
       it('should set tournament to read data', function() {
         expect(stateService.dispatch)
-          .toHaveBeenCalledWith(['tournament-set', 'data']);
+          .toHaveBeenCalledWith(['tournament-openSuccess', 'data']);
       });
     });
 
@@ -38,16 +40,51 @@ describe('tournamentComponent', function() {
     }, function() {
       it('should set error', function() {
         expect(stateService.dispatch)
-          .toHaveBeenCalledWith(['error-set', 'Invalid file']);
+          .toHaveBeenCalledWith(['toaster-set', {
+            type: 'error',
+            message: 'Invalid file'
+          }]);
       });
+    });
+  });
+
+  context('tournamentOpenSuccessHandler(<data>)', function() {
+    return tournamentOpenSuccessHandler(this.state, ['data']);
+  }, function() {
+    it('should notify file loaded', function() {
+      expect(stateService.dispatch)
+        .toHaveBeenCalledWith(['toaster-set', {
+          type: 'success',
+          message: 'File loaded'
+        }]);
+    });
+
+    it('should set tournament data', function() {
+      expect(stateService.dispatch)
+        .toHaveBeenCalledWith(['tournament-set', 'data']);
     });
   });
 
   context('tournamentSetHandler(<data>)', function() {
     return tournamentSetHandler(this.state, ['data']);
   }, function() {
-    it('should return <data>', function() {
-      expect(this.context).toEqual('data');
+    it('should prompt user for confirmation', function() {
+      expect(stateService.dispatch)
+        .toHaveBeenCalledWith([
+          'prompt-set',
+          { type: 'confirm',
+            msg: 'All previous data will be replaced. You sure ?',
+            onOk: ['tournament-setConfirm', 'data'] }
+        ]);
+    });
+  });
+
+  context('tournamentSetConfirmHandler(<data>)', function() {
+    return tournamentSetConfirmHandler(this.state, ['data']);
+  }, function() {
+    it('should set <data> as current tournament', function() {
+      expect(this.context)
+        .toBe('data');
     });
   });
 });

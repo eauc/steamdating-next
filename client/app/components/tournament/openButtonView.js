@@ -11,6 +11,7 @@ export const TournamentOpenButton = React.createClass({
 function openButtonRender() {
   return (
     <FileOpenButton
+       name="tournament"
        onOpen="tournament-open">
       <Icon name="folder-open-o" />
       <span> Open</span>

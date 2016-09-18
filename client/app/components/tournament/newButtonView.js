@@ -14,10 +14,7 @@ export const TournamentNewButton = styles.decorator(React.createClass({
 function newButtonRender() {
   return (
     <button type="button"
-            onClick={() => dispatch(['prompt-set',
-                                     { type: 'confirm',
-                                       msg: 'You sure ?',
-                                       onOk: ['tournament-set', {}] }])}>
+            onClick={() => dispatch(['tournament-set', {}])}>
       <Icon name="file-o" />
       <span> New</span>
     </button>

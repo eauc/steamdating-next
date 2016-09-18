@@ -3,3 +3,65 @@
         @include button;
     }
 }
+&-TournamentsList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &-item {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        padding: $padding_default;
+
+        &:hover .sd-TournamentsList-action {
+            display: block;
+        }
+    }
+    &-itemLabel {
+        flex-grow: 1;
+        flex-shrink: 1;
+        max-width: $pc-break;
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+    }
+    $action_size: 2.2em;
+    &-action {
+        @include button;
+        flex-shrink: 0;
+        width: $action_size;
+        height: $action_size;
+        border-radius: $action_size/2;
+        margin: (-$action_size/2) 0 (-$action_size/2) 0.5em;
+        display: none;
+    }
+    &-actionLabel {
+        display: none;
+    }
+    @media(min-width: $tablet_break) {
+        &-item {
+            padding: 1em;
+
+            &:hover .sd-TournamentsList-action {
+                opacity: 1;
+                pointer-events: all;
+            }
+        }
+        &-itemLabel {
+            flex-grow: 0;
+        }
+        &-action {
+            display: block;
+            opacity: 0;
+            pointer-events: none;
+            border-radius: $border_radius_default;
+            width: auto;
+            margin-left: 1em;
+        }
+        &-actionLabel {
+            display: inline;
+        }
+    }
+}
