@@ -1,11 +1,13 @@
 export let __hotReload = true;
 
 import React from 'react';
+import pureRenderMixin from 'react-addons-pure-render-mixin';
 import { Icon } from 'app/components/misc/misc';
 import { FileOpenButton } from 'app/components/file/file';
 
 export const TournamentOpenButton = React.createClass({
-  render: openButtonRender
+  render: openButtonRender,
+  mixins: [ pureRenderMixin ]
 });
 
 function openButtonRender() {

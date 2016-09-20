@@ -1,12 +1,14 @@
 export let __hotReload = true;
 
 import React from 'react';
+import pureRenderMixin from 'react-addons-pure-render-mixin';
 import styles from 'app/helpers/styles';
 import { dispatch } from 'app/services/state';
 import { Icon } from 'app/components/misc/misc';
 
 export const TournamentNewButton = styles.decorator(React.createClass({
   displayName: 'TournamentNewButton',
+  mixins: [ pureRenderMixin ],
   render: newButtonRender,
   getInitialState: newButtonGetInitialState
 }));

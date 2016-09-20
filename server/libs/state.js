@@ -11,4 +11,8 @@ module.exports = (app) => {
     client_id: process.env.AUTH_CLIENT_ID || app.config.auth.client_id,
     domain: process.env.AUTH_DOMAIN || app.config.auth.domain
   }, 'auth');
+
+  app.expose({
+    tournaments: app.config.apis.tournaments
+  }, 'apis');
 };

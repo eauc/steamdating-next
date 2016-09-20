@@ -5,7 +5,9 @@ import styles from 'app/helpers/styles';
 import { Page, PageContent } from 'app/components/page/view';
 import { TournamentNewButton,
          TournamentOpenButton,
-         TournamentSaveButton } from 'app/components/tournament/tournament';
+         TournamentSaveButton,
+         TournamentOnlineList
+       } from 'app/components/tournament/tournament';
 
 export const FilePage = styles.decorator(React.createClass({
   displayName: 'FilePage',
@@ -22,6 +24,8 @@ function filePageRender() {
           <TournamentOpenButton />
           <TournamentSaveButton />
         </div>
+        <h3 className="header">My Online Tournaments</h3>
+        <TournamentOnlineList />
       </PageContent>
     </Page>
   );
