@@ -17,7 +17,7 @@ const faction_schema = Joi.object({
 });
 const factions_schema = Joi.object().pattern(/.+/, faction_schema);
 
-registerInit('factions', R.tap(() => {
+registerInit('factions', [], R.tap(() => {
   httpService.getP({
     url: '/data/factions.json',
     onSuccess: ['factions-set'],

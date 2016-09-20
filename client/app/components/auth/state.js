@@ -15,7 +15,7 @@ export const auth_schema = Joi.object({
 
 let lock;
 
-registerInit('auth', authInit);
+registerInit('auth', [], authInit);
 registerValidator('auth', scope, auth_schema);
 
 function authInit(state) {

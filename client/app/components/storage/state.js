@@ -13,7 +13,7 @@ if(self._storageListener) {
 self._storageListener = storageListener;
 self.addEventListener('storage', storageListener);
 
-registerInit('storage', storageInit);
+registerInit('storage', [], storageInit);
 
 export function storageListener(event) {
   if(event.key !== STATE_STORAGE_KEY) return;
