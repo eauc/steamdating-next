@@ -1,6 +1,18 @@
 &-AuthRequired {
+    &-lock {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        @media(min-width: $tablet_break) {
+            align-items: center;
+        }
+    }
+
     &-signout,
     &-signin {
         @include button;
+        flex-shrink: 0;
+        margin-bottom: 1em;
     }
 }
