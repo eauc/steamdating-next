@@ -74,7 +74,8 @@ function errorListener({url, reject}, evt) {
 
 function dispatchSuccess({onSuccess}, data) {
   if(onSuccess) {
-    if(R.exists(data)) onSuccess = R.append(data, onSuccess);
+    if('Function' === R.type(onSuccess)) onSuccess = onSuccess(data);
+    else onSuccess = R.append(data, onSuccess);
     return dispatch(onSuccess);
   }
   return data;
