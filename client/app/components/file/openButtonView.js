@@ -3,11 +3,13 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import pureRenderMixin from 'react-addons-pure-render-mixin';
 import styles from 'app/helpers/styles';
 import { dispatch } from 'app/services/state';
 
 export const FileOpenButton = styles.decorator(React.createClass({
   displayName: 'FileOpenButton',
+  mixins: [ pureRenderMixin ],
   render: fileOpenButtonRender,
   getInitialState: fileOpenButtonGetInitialState,
   onChange: fileOpenButtonOnChange
