@@ -42,3 +42,12 @@ function appInit() {
   }
   dispatch(['init']);
 }
+
+if(self.STEAMDATING_CONFIG.debug) {
+  System.import('app/components/debug/debug')
+    .then(({DebugMain}) => {
+      ReactDOM.render((
+        <DebugMain />
+      ), document.querySelector('.sd-Debug'));
+    });
+}
