@@ -1,19 +1,16 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import React from 'react';
-import styles from 'app/helpers/styles';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
+import { React, createComponent } from 'app/helpers/react';
 import { dispatch } from 'app/services/state';
 import { Icon } from 'app/components/misc/misc';
 
-export const PlayersListHeader = styles.decorator(React.createClass({
+export const PlayersListHeader = createComponent({
   displayName: 'PlayersListHeader',
-  mixins: [ pureRenderMixin ],
   render: playersListHeaderRender,
   getInitialState: playersListHeaderGetInitialState,
   sortBy: playersListHeader
-}));
+});
 
 function playersListHeaderRender() {
   const name = this.props.name;

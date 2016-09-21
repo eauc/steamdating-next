@@ -1,14 +1,11 @@
 export let __hotReload = true;
 
-import React from 'react';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import styles from 'app/helpers/styles';
+import { React, createComponent } from 'app/helpers/react';
 
-export const NavLink = styles.decorator(React.createClass({
-  mixins: [ pureRenderMixin ],
+export const NavLink = createComponent({
   displayName: 'NavItem',
   render: navLinkRender
-}));
+});
 
 function navLinkRender() {
   const hash = `#${this.props.path}`;

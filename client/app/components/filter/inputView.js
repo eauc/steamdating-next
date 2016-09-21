@@ -2,16 +2,12 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import React from 'react';
-import styles from 'app/helpers/styles';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import subscriptionsMixin from 'app/mixins/subscriptions';
+import { React, createComponent } from 'app/helpers/react';
 import { dispatch } from 'app/services/state';
 import { filterSub } from 'app/components/filter/filter';
 
-export const FilterInput = styles.decorator(React.createClass({
+export const FilterInput = createComponent({
   displayName: 'FilterInput',
-  mixins: [ subscriptionsMixin, pureRenderMixin ],
   subscriptions: {
     filter: filterInputGetSubscription
   },
@@ -19,7 +15,7 @@ export const FilterInput = styles.decorator(React.createClass({
   getInitialState: filterInputGetInitialState,
   onFilterUpdate: filterInputOnUpdate,
   dispatchFilterUpdate: filterInputDispatchUpdate
-}));
+});
 
 function filterInputRender() {
   log.cycle('filterInput', this.state, this.props);

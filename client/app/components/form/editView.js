@@ -2,17 +2,13 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import styles from 'app/helpers/styles';
-import React from 'react';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import subscriptionsMixin from 'app/mixins/subscriptions';
+import { React, createComponent } from 'app/helpers/react';
 import { formSub } from 'app/components/form/sub';
 import { dispatch } from 'app/services/state';
 import { Icon } from 'app/components/misc/misc';
 
-export const FormEdit = styles.decorator(React.createClass({
+export const FormEdit = createComponent({
   displayName: 'FormEdit',
-  mixins: [ subscriptionsMixin, pureRenderMixin ],
   subscriptions: {
     form: formEditFormSubscription
   },
@@ -24,7 +20,7 @@ export const FormEdit = styles.decorator(React.createClass({
   getChildContext: formEditGetChildContext,
   render: formEditRender,
   onSubmit: formEditOnSubmit
-}));
+});
 
 function formEditFormSubscription() {
   return formSub([this.props.name, () => this.props.schema]);

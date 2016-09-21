@@ -1,15 +1,12 @@
 export let __hotReload = true;
 
-import React from 'react';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import styles from 'app/helpers/styles';
+import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
 
-export const NavToggle = styles.decorator(React.createClass({
-  mixins: [ pureRenderMixin ],
+export const NavToggle = createComponent({
   displayName: 'NavToggle',
   render: navToggleRender
-}));
+});
 
 function navToggleRender() {
   return (

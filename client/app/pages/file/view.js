@@ -1,7 +1,6 @@
 export let __hotReload = true;
 
-import React from 'react';
-import styles from 'app/helpers/styles';
+import { React, createComponent } from 'app/helpers/react';
 import { Page, PageContent } from 'app/components/page/view';
 import { TournamentNewButton,
          TournamentOpenButton,
@@ -9,10 +8,10 @@ import { TournamentNewButton,
          TournamentOnlineList
        } from 'app/components/tournament/tournament';
 
-export const FilePage = styles.decorator(React.createClass({
+export const FilePage = createComponent({
   displayName: 'FilePage',
   render: filePageRender
-}));
+});
 
 function filePageRender() {
   return (

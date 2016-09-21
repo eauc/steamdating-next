@@ -1,15 +1,12 @@
 export let __hotReload = true;
 
-import React from 'react';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import styles from 'app/helpers/styles';
+import { React, createComponent } from 'app/helpers/react';
 import { Toaster } from 'app/components/toaster/toaster';
 
-export const Page = styles.decorator(React.createClass({
+export const Page = createComponent({
   displayName: 'Page',
-  mixins: [ pureRenderMixin ],
   render: pageRender
-}));
+});
 
 function pageRender() {
   return (
@@ -19,11 +16,10 @@ function pageRender() {
   );
 }
 
-export const PageContent = styles.decorator(React.createClass({
+export const PageContent = createComponent({
   displayName: 'PageContent',
-  mixins: [ pureRenderMixin ],
   render: pageContentRender
-}));
+});
 
 function pageContentRender() {
   return (

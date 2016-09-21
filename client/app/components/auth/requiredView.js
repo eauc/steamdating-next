@@ -1,20 +1,15 @@
 export let __hotReload = true;
 
-import React from 'react';
-import styles from 'app/helpers/styles';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import subscriptionsMixin from 'app/mixins/subscriptions';
+import { React, createComponent } from 'app/helpers/react';
 import { dispatch} from 'app/services/state';
 import { authActiveSub } from 'app/components/auth/sub';
 import { Icon } from 'app/components/misc/misc';
 
-export const AuthRequired = styles.decorator(React.createClass({
+export const AuthRequired = createComponent({
   displayName: 'AuthRequired',
-  mixins: [ pureRenderMixin,
-            subscriptionsMixin ],
   subscriptions: { active: authActiveSub },
   render: authRequiredRender
-}));
+});
 
 function authRequiredRender() {
   return this.state.active

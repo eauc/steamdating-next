@@ -1,18 +1,15 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import React from 'react';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import styles from 'app/helpers/styles';
+import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
 
-export const PageMenu = styles.decorator(React.createClass({
+export const PageMenu = createComponent({
   displayName: 'PageMenu',
-  mixins: [ pureRenderMixin ],
   render: pageMenuRender,
   getInitialState: pageMenuGetInitialState,
   toggleShow: pageMenuToggleShow
-}));
+});
 
 function pageMenuRender() {
   return (
@@ -35,11 +32,10 @@ function pageMenuToggleShow() {
   this.setState({show: !this.state.show});
 }
 
-const PageMenuToggle = styles.decorator(React.createClass({
+const PageMenuToggle = createComponent({
   displayName: 'PageMenuToggle',
-  mixins: [ pureRenderMixin ],
   render: pageMenuToggleRender
-}));
+});
 
 function pageMenuToggleRender() {
   return (
@@ -49,11 +45,10 @@ function pageMenuToggleRender() {
   );
 }
 
-export const PageMenuItem = styles.decorator(React.createClass({
+export const PageMenuItem = createComponent({
   displayName: 'PageMenuItem',
-  mixins: [ pureRenderMixin ],
   render: pageMenuItemRender
-}));
+});
 
 function pageMenuItemRender() {
   return (

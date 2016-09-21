@@ -1,19 +1,15 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import React from 'react';
-import styles from 'app/helpers/styles';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import subscriptionsMixin from 'app/mixins/subscriptions';
+import { React, createComponent } from 'app/helpers/react';
 import { toasterSub } from 'app/components/toaster/sub';
 
-export const Toaster = styles.decorator(React.createClass({
+export const Toaster = createComponent({
   displayName: 'Toaster',
-  mixins: [ subscriptionsMixin, pureRenderMixin ],
   subscriptions: { toaster: toasterSub },
   getInitialState: toasterGetInitialState,
   render: toasterRender
-}));
+});
 
 function toasterGetInitialState() {
   return { toaster: null };

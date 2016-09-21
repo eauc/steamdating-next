@@ -1,24 +1,20 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import React from 'react';
-import styles from 'app/helpers/styles';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import subscriptionsMixin from 'app/mixins/subscriptions';
+import { React, createComponent } from 'app/helpers/react';
 import { dispatch } from 'app/services/state';
 import { promptSub } from 'app/components/prompt/sub';
 import { Icon } from 'app/components/misc/misc';
 
-export const Prompt = styles.decorator(React.createClass({
+export const Prompt = createComponent({
   displayName: 'Prompt',
-  mixins: [ subscriptionsMixin, pureRenderMixin ],
   subscriptions: { prompt: promptSub },
   getInitialState: promptGetInitialState,
   render: promptRender,
   onChange: promptOnChange,
   onOk: promptOnOk,
   onCancel: promptOnCancel
-}));
+});
 
 function promptGetInitialState() {
   return { prompt: null };

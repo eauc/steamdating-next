@@ -1,25 +1,22 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import React from 'react';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import styles from 'app/helpers/styles';
+import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
 import { NavLink } from 'app/components/nav/linkView';
 import { NavToggle } from 'app/components/nav/toggleView';
 import { AuthToggleButton } from 'app/components/auth/auth';
 import { TournamentSaveButton } from 'app/components/tournament/tournament';
 
-export const NavMenu = styles.decorator(React.createClass({
+export const NavMenu = createComponent({
   displayName: 'NavMenu',
-  mixins: [ pureRenderMixin ],
   render: navMenuRender,
   getInitialState: navMenuGetInitialState,
   updateState: navMenuUpdateState,
   toggleShow: navMenuToggleShow,
   componentWillMount: navMenuComponentWillMount,
   componentWillUnmount: navMenuComponentWillUnmount
-}));
+});
 
 function navMenuRender() {
   return (

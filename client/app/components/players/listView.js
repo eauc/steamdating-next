@@ -2,10 +2,7 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import React from 'react';
-import styles from 'app/helpers/styles';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import subscriptionsMixin from 'app/mixins/subscriptions';
+import { React, createComponent } from 'app/helpers/react';
 import { dispatch } from 'app/services/state';
 import { FilterInput } from 'app/components/filter/filter';
 import { sortSub } from 'app/components/sort/sort';
@@ -15,9 +12,8 @@ import { Icon } from 'app/components/misc/misc';
 import { PlayersListHeader } from 'app/components/players/listHeaderView';
 import { PlayersListRow } from 'app/components/players/listRowView';
 
-export const PlayersList = styles.decorator(React.createClass({
+export const PlayersList = createComponent({
   displayName: 'PlayersList',
-  mixins: [ subscriptionsMixin, pureRenderMixin ],
   subscriptions: {
     factions: factionsSub,
     players: playersListSub,
@@ -27,7 +23,7 @@ export const PlayersList = styles.decorator(React.createClass({
   getInitialState: playersListGetInitialState,
   onFilterUpdate: playersListOnFilterUpdate,
   dispatchFilterUpdate: playersListDispatchFilterUpdate
-}));
+});
 
 function playersListRender() {
   log.cycle('playersList render', this.state);

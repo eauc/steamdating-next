@@ -1,6 +1,6 @@
 export let __hotReload = true;
 
-import React from 'react';
+import { React, createComponent } from 'app/helpers/react';
 import history from 'app/helpers/history';
 import { PageMenu, PageMenuItem } from 'app/components/pageMenu/view';
 import { Page, PageContent } from 'app/components/page/view';
@@ -8,7 +8,7 @@ import { Icon } from 'app/components/misc/misc';
 import { PlayerEdit } from 'app/components/players/players';
 import { dispatch } from 'app/services/state';
 
-export const PlayersCreatePage = React.createClass({
+export const PlayersCreatePage = createComponent({
   render: playersCreatePageRender
 });
 

@@ -1,20 +1,17 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import React from 'react';
+import { React, createComponent } from 'app/helpers/react';
 import history from 'app/helpers/history';
-import styles from 'app/helpers/styles';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
 import { dispatch } from 'app/services/state';
 import { FactionIcon } from 'app/components/factions/factions';
 
-export const PlayersListRow = styles.decorator(React.createClass({
+export const PlayersListRow = createComponent({
   displayName: 'PlayersListRow',
-  mixins: [ pureRenderMixin ],
   render: playersListRowRender,
   getInitialState: playersListRowGetInitialState,
   edit: playersListRowEdit
-}));
+});
 
 function playersListRowRender() {
   const player = this.props.player;

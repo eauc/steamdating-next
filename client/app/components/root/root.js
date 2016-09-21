@@ -1,7 +1,6 @@
 export let __hotReload = true;
 
-import React from 'react';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
+import { React, createComponent } from 'app/helpers/react';
 import { Router, Route, IndexRedirect } from 'react-router';
 import history from 'app/helpers/history';
 
@@ -12,8 +11,7 @@ import { PlayersEditPage }from 'app/pages/players/editView';
 import { FilePage } from 'app/pages/file/view';
 import { AboutPage } from 'app/pages/about/view';
 
-export const Root = React.createClass({
-  mixins: [ pureRenderMixin ],
+export const Root = createComponent({
   render: rootRender
 });
 

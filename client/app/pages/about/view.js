@@ -1,9 +1,9 @@
 export let __hotReload = true;
 
-import React from 'react';
+import { React, createComponent } from 'app/helpers/react';
 import { Page, PageContent } from 'app/components/page/view';
 
-export const AboutPage = React.createClass({
+export const AboutPage = createComponent({
   render: aboutPageRender
 });
 

@@ -1,6 +1,6 @@
 export let __hotReload = true;
 
-import React from 'react';
+import { React, createComponent } from 'app/helpers/react';
 import { PageMenu, PageMenuItem } from 'app/components/pageMenu/view';
 import { Page, PageContent } from 'app/components/page/view';
 import { dispatch, registerHandler } from 'app/services/state';
@@ -20,7 +20,7 @@ registerHandler('test-prompt', (state, [_event_, ...result]) => {
   return state;
 });
 
-export const HomePage = React.createClass({
+export const HomePage = createComponent({
   render: homePageRender
 });
 

@@ -1,17 +1,14 @@
 export let __hotReload = true;
 
 import log from 'app/helpers/log';
-import React from 'react';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import subscriptionsMixin from 'app/mixins/subscriptions';
+import { React, createComponent } from 'app/helpers/react';
 import { FormEdit, FormInput } from 'app/components/form/form';
 import { player_schema } from 'app/components/players/state';
 import { factionsNamesSub } from 'app/components/factions/factions';
 import { playersEditCastersNamesSub,
          playersEditOtherNamesSub } from 'app/components/players/sub';
 
-export const PlayerEdit = React.createClass({
-  mixins: [ subscriptionsMixin, pureRenderMixin ],
+export const PlayerEdit = createComponent({
   subscriptions: {
     factions_names: factionsNamesSub,
     casters_names: playersEditCastersNamesSub,

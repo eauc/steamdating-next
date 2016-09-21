@@ -2,17 +2,13 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import styles from 'app/helpers/styles';
-import React from 'react';
+import { React, createComponent } from 'app/helpers/react';
 import ReactDOM from 'react-dom';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import subscriptionsMixin from 'app/mixins/subscriptions';
 import { dispatch } from 'app/services/state';
 import { formFieldSub, formErrorSub } from 'app/components/form/sub';
 
-export const FormInput = styles.decorator(React.createClass({
+export const FormInput = createComponent({
   displayName: 'FormInput',
-  mixins: [ subscriptionsMixin, pureRenderMixin ],
   subscriptions: {
     value: formInputValueSubscription,
     error: formInputErrorSubscription
@@ -26,7 +22,7 @@ export const FormInput = styles.decorator(React.createClass({
   componentDidMount: formInputComponentDidMount,
   update: formInputUpdate,
   dispatchUpdate: formInputDispatchUpdate
-}));
+});
 
 function formInputValueSubscription() {
   log.cycle('input valSub', this.context, this.path);

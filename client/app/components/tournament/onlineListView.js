@@ -1,18 +1,14 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import React from 'react';
-import pureRenderMixin from 'react-addons-pure-render-mixin';
-import subscriptionsMixin from 'app/mixins/subscriptions';
-import styles from 'app/helpers/styles';
+import { React, createComponent } from 'app/helpers/react';
 import { dispatch } from 'app/services/state';
 import { tournamentOnlineListSub } from 'app/components/tournament/sub';
 import { AuthRequired } from 'app/components/auth/auth';
 import { Icon } from 'app/components/misc/misc';
 
-export const TournamentOnlineList = React.createClass({
-  render: onlineListRender,
-  mixins: [ pureRenderMixin ]
+export const TournamentOnlineList = createComponent({
+  render: onlineListRender
 });
 
 function onlineListRender() {
@@ -23,14 +19,12 @@ function onlineListRender() {
   );
 }
 
-const TournamentsList = styles.decorator(React.createClass({
+const TournamentsList = createComponent({
   displayName: 'TournamentsList',
-  mixins: [ pureRenderMixin,
-            subscriptionsMixin ],
   subscriptions: { list: tournamentOnlineListSub },
   render: listRender,
   componentDidMount: listComponentDidMount
-}));
+});
 
 function listRender() {
   const items = R.map((t) => (
@@ -49,12 +43,11 @@ function listComponentDidMount() {
   dispatch(['tournament-onlineRefresh']);
 }
 
-const TournamentsListItem = styles.decorator(React.createClass({
+const TournamentsListItem = createComponent({
   displayName: 'TournamentsListItem',
-  mixins: [ pureRenderMixin ],
   render: itemRender,
   download: itemDownload
-}));
+});
 
 function itemRender() {
   const tournament = this.props.tournament;
