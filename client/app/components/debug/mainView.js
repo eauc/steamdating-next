@@ -2,6 +2,7 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import { React, createComponent } from 'app/helpers/react';
+import { DebugState } from 'app/components/debug/stateView';
 
 export const DebugMain = createComponent({
   displayName: 'DebugMain',
@@ -14,7 +15,7 @@ export const DebugMain = createComponent({
 
 function debugMainGetInitialState() {
   this.onKeyDown = R.bind(this.onKeyDown, this);
-  return { show: true };
+  return { show: false };
 }
 
 function debugMainRender() {
@@ -25,6 +26,11 @@ function debugMainRender() {
       <div className="title">
         Debug
       </div>
+      <div className="section">
+        State
+      </div>
+      <DebugState>
+      </DebugState>
     </div>
   );
 }

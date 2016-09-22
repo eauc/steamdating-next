@@ -1,28 +1,74 @@
-&-DebugMain {
+&-Debug {
     $debug_primary_color: #607D8B;
     $debug_darker_color: #455A64;
     $debug_lighter_color: #CFD8DC;
     $debug_text_color: white;
 
-    z-index: 10000;
-    position:fixed;
-    top: 0;
-    right: 0;
-    padding: 2px;
-    color: $debug_text_color;
-    background-color: $debug_primary_color;
-    opacity: 0;
-    pointer-events: none;
+    &Main {
+        z-index: 10000;
+        position:fixed;
+        top: 0;
+        right: 0;
+        max-height: 100vh;
+        max-width: 50vw;
+        overflow: auto;
+        color: $debug_text_color;
+        background-color: $debug_primary_color;
+        opacity: 0;
+        pointer-events: none;
 
-    &-show {
-        opacity: 1;
-        pointer-events: all;
+        &-show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        &-title {
+            font-weight: bold;
+            font-size: 120%;
+            margin: 2px;
+            padding: $padding_default;
+            background-color: $debug_darker_color;
+        }
+
+        &-section {
+            font-weight: bold;
+            margin: 2px;
+            padding: $padding_default;
+            background-color: $debug_darker_color;
+        }
     }
 
-    &-title {
-        font-weight: bold;
-        font-size: 120%;
-        padding: $padding_default;
-        background-color: $debug_darker_color;
+    &State {
+        border-collapse: collapse;
+
+        table {
+            border-collapse: collapse;
+            border: 0;
+        }
+
+        td {
+            vertical-align: top;
+            padding: 0 5px;
+        }
+
+        &Value {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
+
+        &Object,
+        &Value {
+            &-toggle {
+                cursor: pointer;
+            }
+
+            &-action {
+                border: 0;
+                color: white;
+                background-color: transparent;
+                cursor: pointer;
+            }
+        }
     }
 }
