@@ -8,6 +8,8 @@ import cellModel from 'app/models/cell.js';
 
 let TICK = 0;
 let STATE = {};
+let STATE_HISTORY = [];
+let STATE_LOG = [];
 const STATE_CELL = cellModel.from(() => STATE);
 STATE_CELL._name = 'STATE';
 let CELLS = [];
@@ -124,6 +126,9 @@ function _dispatch([ resolve, reject, event, ...args]) {
       return null;
     }
     STATE = new_state;
+    if(self.STEAMDATING_CONFIG.debug) {
+      STATE_HISTORY = R.append([event, args, STATE], STATE_HISTORY);
+    }
   }
   catch(e) {
     log.error(`xx error in event "${event}" handler`, e);
@@ -136,11 +141,77 @@ function _dispatch([ resolve, reject, event, ...args]) {
     .then(resolve);
 }
 
-export const stateDebug = {
-  cells: () => {
-    console.table(R.map(R.pick(['_name', '_args', '_tick', '_value']), CELLS));
-  },
-  current: () => {
-    return STATE;
-  }
-};
+function stateToHistoryLast() {
+  const [_event_, _args_, restore] = R.last(STATE_HISTORY);
+  STATE = restore;
+  log.state('<< restore STATE', STATE);
+  TICK = TICK + 1;
+  cellModel.resolveCells(TICK, CELLS);
+}
+
+export const stateDebug = {};
+
+if(self.STEAMDATING_CONFIG.debug) {
+  Object.assign(stateDebug, {
+    cells: () => {
+      console.table(R.map(R.pick(['_name', '_args', '_tick', '_value']), CELLS));
+    },
+    current: () => {
+      return STATE;
+    },
+    ll: () => {
+      console.table(R.map(([event, args]) => [
+        event, JSON.stringify(args)
+      ], STATE_HISTORY));
+    },
+    log: () => {
+      return STATE_LOG;
+    },
+    dropLog: (index) => {
+      STATE_LOG = R.dropIndex(index, STATE_LOG);
+      TICK = TICK + 1;
+      cellModel.resolveCells(TICK, CELLS);
+    },
+    replayLog: (index) => {
+      const [event, args] = STATE_LOG[index];
+      dispatch([event, ...args]);
+    },
+    history: () => {
+      return STATE_HISTORY;
+    },
+    dropHistory: (index) => {
+      STATE_HISTORY = R.dropIndex(index, STATE_HISTORY);
+      stateToHistoryLast();
+    },
+    replayHistory: (index) => {
+      const [event, args] = STATE_HISTORY[index];
+      dispatch([event, ...args]);
+    },
+    first: () => {
+      if(1 === R.length(STATE_HISTORY)) return;
+      STATE_LOG = R.concat(STATE_LOG, R.reverse(R.tail(STATE_HISTORY)));
+      STATE_HISTORY = [R.head(STATE_HISTORY)];
+      stateToHistoryLast();
+    },
+    back: () => {
+      if(1 === R.length(STATE_HISTORY)) return;
+      const last = R.last(STATE_HISTORY);
+      STATE_HISTORY = R.init(STATE_HISTORY);
+      STATE_LOG = R.append(last, STATE_LOG);
+      stateToHistoryLast();
+    },
+    redo: () => {
+      if(R.isEmpty(STATE_LOG)) return;
+      const last = R.last(STATE_LOG);
+      STATE_LOG = R.init(STATE_LOG);
+      STATE_HISTORY = R.append(last, STATE_HISTORY);
+      stateToHistoryLast();
+    },
+    last: () => {
+      if(R.isEmpty(STATE_LOG)) return;
+      STATE_HISTORY = R.concat(STATE_HISTORY, R.reverse(STATE_LOG));
+      STATE_LOG = [];
+      stateToHistoryLast();
+    }
+  });
+}

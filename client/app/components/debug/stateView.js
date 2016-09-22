@@ -1,12 +1,12 @@
 export let __hotReload = true;
 
 import { React, createComponent } from 'app/helpers/react';
-import { stateDebugSub } from 'app/components/debug/sub';
+import { debugStateSub } from 'app/components/debug/sub';
 import { DebugStateObject } from 'app/components/debug/stateObjectView';
 
 export const DebugState = createComponent({
   displayName: 'DebugState',
-  subscriptions: { appState: stateDebugSub },
+  subscriptions: { appState: debugStateSub },
   getInitialState: debugStateGetInitialState,
   render: debugStateRender
 });

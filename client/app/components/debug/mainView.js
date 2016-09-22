@@ -2,6 +2,7 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import { React, createComponent } from 'app/helpers/react';
+import { DebugHistory } from 'app/components/debug/historyView';
 import { DebugState } from 'app/components/debug/stateView';
 
 export const DebugMain = createComponent({
@@ -27,10 +28,13 @@ function debugMainRender() {
         Debug
       </div>
       <div className="section">
+        History
+      </div>
+      <DebugHistory />
+      <div className="section">
         State
       </div>
-      <DebugState>
-      </DebugState>
+      <DebugState />
     </div>
   );
 }

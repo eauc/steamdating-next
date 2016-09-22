@@ -27,7 +27,6 @@ function debugStateValueRender() {
                  ? this.props.value
                  : this.state.value
                 );
-  console.log('render', this.props.value, this.state.value, value);
   this.lastPropsValue = this.props.value;
   const type = ( R.type(this.props.value) === 'Number'
                  ? 'number'
