@@ -1,9 +1,11 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
+import { dispatch } from 'app/services/state';
+/* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
-import { dispatch } from 'app/services/state';
+/* eslint-enable no-unused-vars */
 
 export const DebugStateValue = createComponent({
   displayName: 'DebugStateValue',
@@ -11,7 +13,7 @@ export const DebugStateValue = createComponent({
   render: debugStateValueRender,
   onChange: debugStateValueOnChange,
   update: debugStateValueUpdate,
-  remove: debugStateValueRemove
+  remove: debugStateValueRemove,
 });
 
 function debugStateValueGetInitialState() {
@@ -47,9 +49,9 @@ function debugStateValueRender() {
   );
 }
 
-function debugStateValueOnChange(e) {
-  this.setState({ value: e.target.value });
-  console.log('change', this.props.value, this.state.value, e.target.value);
+function debugStateValueOnChange(event) {
+  this.setState({ value: event.target.value });
+  console.log('change', this.props.value, this.state.value, event.target.value);
   this.update();
 }
 

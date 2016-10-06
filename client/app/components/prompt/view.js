@@ -1,10 +1,12 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { React, createComponent } from 'app/helpers/react';
 import { dispatch } from 'app/services/state';
 import { promptSub } from 'app/components/prompt/sub';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
+/* eslint-enable no-unused-vars */
 
 export const Prompt = createComponent({
   displayName: 'Prompt',
@@ -13,7 +15,7 @@ export const Prompt = createComponent({
   render: promptRender,
   onChange: promptOnChange,
   onOk: promptOnOk,
-  onCancel: promptOnCancel
+  onCancel: promptOnCancel,
 });
 
 function promptGetInitialState() {
@@ -26,7 +28,7 @@ function promptRender() {
   const value = R.path(['prompt','value'], this.state);
   return (
     <div className={{
-           show: this.state.prompt
+           show: this.state.prompt,
          }}>
       <div className="mask">
         <div className="content">
@@ -34,10 +36,10 @@ function promptRender() {
             {msg}
           </div>
           <input className={{
-                   'value': true,
-                   'control-hide': type !== 'prompt'
+                   value: true,
+                   'control-hide': type !== 'prompt',
                  }}
-                 type={R.type(value) === 'Number' ? 'number': 'text'}
+                 type={R.type(value) === 'Number' ? 'number' : 'text'}
                  id="prompt.value"
                  name="prompt.value"
                  value={value}
@@ -50,7 +52,7 @@ function promptRender() {
             </button>
             <button className={{
                       'control-cancel': true,
-                      'control-hide': type === 'alert'
+                      'control-hide': type === 'alert',
                     }}
                     type="button"
                     onClick={this.onCancel}>
@@ -63,8 +65,8 @@ function promptRender() {
   );
 }
 
-function promptOnChange(e) {
-  dispatch(['prompt-update-value', e.target.value]);
+function promptOnChange(event) {
+  dispatch(['prompt-update-value', event.target.value]);
 }
 
 function promptOnOk() {

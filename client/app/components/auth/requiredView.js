@@ -1,14 +1,16 @@
 export let __hotReload = true;
 
-import { React, createComponent } from 'app/helpers/react';
-import { dispatch} from 'app/services/state';
+import { dispatch } from 'app/services/state';
 import { authActiveSub } from 'app/components/auth/sub';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
+/* eslint-enable no-unused-vars */
 
 export const AuthRequired = createComponent({
   displayName: 'AuthRequired',
   subscriptions: { active: authActiveSub },
-  render: authRequiredRender
+  render: authRequiredRender,
 });
 
 function authRequiredRender() {

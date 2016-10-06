@@ -1,15 +1,17 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { React, createComponent } from 'app/helpers/react';
-import ReactDOM from 'react-dom';
 import { dispatch } from 'app/services/state';
+import ReactDOM from 'react-dom';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
+/* eslint-enable no-unused-vars */
 
 export const FileOpenButton = createComponent({
   displayName: 'FileOpenButton',
   render: fileOpenButtonRender,
   getInitialState: fileOpenButtonGetInitialState,
-  onChange: fileOpenButtonOnChange
+  onChange: fileOpenButtonOnChange,
 });
 
 function fileOpenButtonRender() {

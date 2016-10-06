@@ -2,19 +2,21 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import { React, createComponent } from 'app/helpers/react';
 import { dispatch } from 'app/services/state';
 import { filterSub } from 'app/components/filter/filter';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
+/* eslint-enable no-unused-vars */
 
 export const FilterInput = createComponent({
   displayName: 'FilterInput',
   subscriptions: {
-    filter: filterInputGetSubscription
+    filter: filterInputGetSubscription,
   },
   render: filterInputRender,
   getInitialState: filterInputGetInitialState,
   onFilterUpdate: filterInputOnUpdate,
-  dispatchFilterUpdate: filterInputDispatchUpdate
+  dispatchFilterUpdate: filterInputDispatchUpdate,
 });
 
 function filterInputRender() {
@@ -36,13 +38,16 @@ function filterInputGetSubscription() {
 
 function filterInputGetInitialState() {
   this.onFilterUpdate = R.bind(this.onFilterUpdate, this);
-  this.dispatchFilterUpdate = R.debounce(500, R.bind(this.dispatchFilterUpdate, this));
+  this.dispatchFilterUpdate = R.debounce(
+    500,
+    R.bind(this.dispatchFilterUpdate, this)
+  );
   return { filter: '' };
 }
 
-function filterInputOnUpdate(e) {
-  this.setState({ filter: e.target.value });
-  this.dispatchFilterUpdate(e.target.value);
+function filterInputOnUpdate(event) {
+  this.setState({ filter: event.target.value });
+  this.dispatchFilterUpdate(event.target.value);
 }
 
 function filterInputDispatchUpdate(value) {

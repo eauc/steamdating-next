@@ -1,14 +1,16 @@
 export let __hotReload = true;
 
-import { React, createComponent } from 'app/helpers/react';
 import { tournamentFileSub } from 'app/components/tournament/sub';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
 import { FileDownloadButton } from 'app/components/file/file';
+/* eslint-enable no-unused-vars */
 
 export const TournamentSaveButton = createComponent({
   subscriptions: { url: tournamentFileSub },
   render: saveButtonRender,
-  getInitialState: saveButtonGetInitialState
+  getInitialState: saveButtonGetInitialState,
 });
 
 function saveButtonRender() {

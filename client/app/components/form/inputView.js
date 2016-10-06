@@ -11,17 +11,17 @@ export const FormInput = createComponent({
   displayName: 'FormInput',
   subscriptions: {
     value: formInputValueSubscription,
-    error: formInputErrorSubscription
+    error: formInputErrorSubscription,
   },
   contextTypes: {
     formView: React.PropTypes.object,
-    formName: React.PropTypes.string
+    formName: React.PropTypes.string,
   },
   render: formInputRender,
   getInitialState: formInputGetInitialState,
   componentDidMount: formInputComponentDidMount,
   update: formInputUpdate,
-  dispatchUpdate: formInputDispatchUpdate
+  dispatchUpdate: formInputDispatchUpdate,
 });
 
 function formInputValueSubscription() {
@@ -37,22 +37,22 @@ function formInputErrorSubscription() {
 function formInputRender() {
   log.cycle('input', this.props, this.state, this.context);
   const error = this.state.error;
-  const has_error = !R.isEmpty(error);
-  const has_value = ( !R.isNil(this.state.value) &&
-                      !R.isEmpty(this.state.value)
-                    );
-  const clear = this.state.pristine && !has_value;
-  const show_error = !clear && has_error;
-  const show_valid = !clear && !has_error;
+  const hasError = !R.isEmpty(error);
+  const hasValue = ( !R.isNil(this.state.value) &&
+                     !R.isEmpty(this.state.value)
+                   );
+  const clear = this.state.pristine && !hasValue;
+  const showError = !clear && hasError;
+  const showValid = !clear && !hasError;
   const className = {
-    'input': true,
+    input: true,
     'input-pristine': this.state.pristine,
-    'input-valid': show_valid,
-    'input-error': show_error
+    'input-valid': showValid,
+    'input-error': showError,
   };
-  const props = R.pick(['required','type','order','multiple'], this.props);
+  const props = R.pick(['required','type','order','multiple','placeholder'], this.props);
   let input;
-  if('textarea' === this.props.type) {
+  if ('textarea' === this.props.type) {
     input = (
       <textarea
          ref="input"
@@ -65,15 +65,19 @@ function formInputRender() {
          />
     );
   }
-  else if('select' === this.props.type) {
+  else if ('select' === this.props.type) {
     const options = R.thread(this.props.options)(
-      R.map((o) => (<option key={o} value={o}>{o}</option>)),
+      R.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      )),
       R.when(
         () => !this.props.multiple,
         R.prepend((<option key="null" value=""></option>))
       )
     );
-    input= (
+    input = (
       <select
          ref="input"
          id={this.path}
@@ -107,7 +111,7 @@ function formInputRender() {
       </label>
       {input}
       <p className="error-info">
-        {show_error ? error: ''}
+        {showError ? error : ''}
       </p>
     </div>
   );
@@ -119,29 +123,29 @@ function formInputGetInitialState() {
   this.dispatchUpdate = R.debounce(300, R.bind(this.dispatchUpdate, this));
   return {
     value: (this.props.multiple ? [] : null),
-    pristine: true
+    pristine: true,
   };
 }
 
 function formInputComponentDidMount() {
-  if(this.props.autofocus) {
+  if (this.props.autofocus) {
     self.setTimeout(() => {
       ReactDOM.findDOMNode(this.refs.input).focus();
     }, 100);
   }
 }
 
-function formInputUpdate(e) {
-  let value = e.target.value;
-  if(this.props.multiple) {
-    value = R.thread(e.target.options)(
+function formInputUpdate(event) {
+  let value = event.target.value;
+  if (this.props.multiple) {
+    value = R.thread(event.target.options)(
       R.filter(R.prop('selected')),
       R.map(R.prop('value'))
     );
   }
   this.setState({
     value,
-    pristine: false
+    pristine: false,
   });
   this.dispatchUpdate(value);
 }

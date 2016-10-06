@@ -1,13 +1,15 @@
 export let __hotReload = true;
 
-import { React, createComponent } from 'app/helpers/react';
 import { dispatch } from 'app/services/state';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
+/* eslint-enable no-unused-vars */
 
 export const TournamentNewButton = createComponent({
   displayName: 'TournamentNewButton',
   render: newButtonRender,
-  getInitialState: newButtonGetInitialState
+  getInitialState: newButtonGetInitialState,
 });
 
 function newButtonRender() {

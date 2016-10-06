@@ -1,15 +1,17 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { React, createComponent } from 'app/helpers/react';
 import { dispatch } from 'app/services/state';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
+/* eslint-enable no-unused-vars */
 
 export const PlayersListHeader = createComponent({
   displayName: 'PlayersListHeader',
   render: playersListHeaderRender,
   getInitialState: playersListHeaderGetInitialState,
-  sortBy: playersListHeader
+  sortBy: playersListHeader,
 });
 
 function playersListHeaderRender() {
@@ -20,8 +22,8 @@ function playersListHeaderRender() {
     <th onClick={this.sortBy}>
       <span>{label} </span>
       <span className={{
-              'icon': true,
-              'icon-show': this.props.sort.by === name
+              icon: true,
+              'icon-show': this.props.sort.by === name,
             }}>
         <Icon name={icon} />
       </span>
@@ -37,7 +39,7 @@ function playersListHeaderGetInitialState() {
 function playersListHeader() {
   const by = this.props.name;
   let reverse = this.props.sort.reverse;
-  if(by === this.props.sort.by) reverse = !reverse;
+  if (by === this.props.sort.by) reverse = !reverse;
   else reverse = false;
 
   dispatch(['sort-set', 'players', { reverse, by }]);

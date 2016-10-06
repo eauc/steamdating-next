@@ -2,18 +2,22 @@ export let __hotReload = true;
 
 self.STEAMDATING_CONFIG = self.STEAMDATING_CONFIG || {};
 // self.STEAMDATING_CONFIG.debug = true;
-self.STEAMDATING_CONFIG.debug_flags = {
-  cell: null, //'debug',
-  cycle: null, //'warn',
+self.STEAMDATING_CONFIG.debugFlags = {
+  // cell: 'debug',
+  cell: null,
+  // cycle: 'warn',
+  cycle: null,
   http: 'debug',
   init: 'log',
-  sub: null, //'debug',
+  // sub: 'debug',
+  sub: null,
   state: 'info',
   storage: 'warn',
-  validator: null //'debug'
+  // validator: 'debug',
+  validator: null,
 };
 
-export default (function() {
+export default (function () {
   let log = self.STEAMDATING_CONFIG.debug
         ? console.log.bind(console)
         : () => {};
@@ -29,11 +33,11 @@ export default (function() {
     : () => {};
   log.error = console.error.bind(console);
 
-  for(let flag in self.STEAMDATING_CONFIG.debug_flags) {
-    if(self.STEAMDATING_CONFIG.debug_flags.hasOwnProperty(flag)) {
-      log[flag] = ( self.STEAMDATING_CONFIG.debug &&
-                    self.STEAMDATING_CONFIG.debug_flags[flag] )
-        ? console[self.STEAMDATING_CONFIG.debug_flags[flag]].bind(console, `#${flag}`)
+  for (let flag in self.STEAMDATING_CONFIG.debugFlags) {
+    if (self.STEAMDATING_CONFIG.debugFlags.hasOwnProperty(flag)) {
+      log[flag] = (self.STEAMDATING_CONFIG.debug &&
+                   self.STEAMDATING_CONFIG.debugFlags[flag])
+        ? console[self.STEAMDATING_CONFIG.debugFlags[flag]].bind(console, `#${flag}`)
         : () => {};
     }
   }

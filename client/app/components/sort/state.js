@@ -5,10 +5,14 @@ import { registerValidator } from 'app/services/state';
 
 export const scope = ['sorts'];
 
-export const sort_schema = Joi.object({
+export const sortSchema = Joi.object({
   reverse: Joi.boolean().required(),
-  by: Joi.string().min(1).empty('').required()
+  by: Joi.string()
+    .min(1)
+    .empty('')
+    .required(),
 });
-const sorts_schema = Joi.object().pattern(/.+/, sort_schema);
 
-registerValidator('sort', scope, sorts_schema);
+const sortsSchema = Joi.object().pattern(/.+/, sortSchema);
+
+registerValidator('sort', scope, sortsSchema);

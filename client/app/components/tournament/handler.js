@@ -10,7 +10,7 @@ import { scope } from 'app/components/tournament/state';
 
 const middlewares = [
   path(scope.tournament, {}),
-  stripv
+  stripv,
 ];
 
 registerHandler('tournament-set',
@@ -34,12 +34,12 @@ registerHandler('tournament-onlineRefreshRequest',[
   stripv
 ], tournamentOnlineRefreshRequestHandler);
 registerHandler('tournament-onlineRefreshSuccess',[
-  path(scope.online_list, []),
-  stripv
+  path(scope.onlineList, []),
+  stripv,
 ], tournamentOnlineRefreshSuccessHandler);
 registerHandler('tournament-onlineGetUrlsSuccess',[
-  path(scope.online_urls, {}),
-  stripv
+  path(scope.onlineUrls, {}),
+  stripv,
 ], tournamentOnlineGetUrlsSuccessHandler);
 
 export function tournamentSetHandler(state, [data]) {
@@ -86,7 +86,7 @@ export function tournamentOnlineRefreshRequestHandler(state) {
   tournamentsApiService.getMineP({
     urls,
     authToken: R.path(['auth','token'], state),
-    onSuccess: ['tournament-onlineRefreshSuccess']
+    onSuccess: ['tournament-onlineRefreshSuccess'],
   });
   return R.assocPath(['online', 'list'], [], state);
 }
@@ -97,11 +97,11 @@ export function tournamentOnlineRefreshSuccessHandler(_state_, [list]) {
 
 function initOnlineUrlsP(state) {
   const urls = R.path(['online','urls'], state);
-  if(R.exists(urls)) {
+  if (R.exists(urls)) {
     return self.Promise.resolve(urls);
   }
   return tournamentsApiService.getUrlsP({
-    onSuccess: ['tournament-onlineGetUrlsSuccess']
+    onSuccess: ['tournament-onlineGetUrlsSuccess'],
   });
 }
 

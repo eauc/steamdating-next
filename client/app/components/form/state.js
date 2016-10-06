@@ -5,12 +5,12 @@ import { registerValidator } from 'app/services/state';
 
 export const scope = ['forms'];
 
-const error_schema = Joi.object();
-const form_schema = Joi.object({
+const errorSchema = Joi.object();
+const formSchema = Joi.object({
   edit: Joi.object(),
   base: Joi.object(),
-  error: Joi.alternatives().try(null, error_schema)
+  error: Joi.alternatives().try(null, errorSchema),
 });
-const forms_schema = Joi.object().pattern(/.+/, form_schema);
+const formsSchema = Joi.object().pattern(/.+/, formSchema);
 
-registerValidator('form', scope, forms_schema);
+registerValidator('form', scope, formsSchema);

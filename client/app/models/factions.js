@@ -4,7 +4,7 @@ import R from 'app/helpers/ramda';
 
 const factionsModel = {
   iconFor: factionsIconFor,
-  castersFor: factionsCasterFor
+  castersFor: factionsCasterFor,
 };
 export default R.curryService(factionsModel);
 

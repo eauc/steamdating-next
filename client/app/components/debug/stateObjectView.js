@@ -1,17 +1,19 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
+import { dispatch } from 'app/services/state';
+/* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
 import { DebugStateValue } from 'app/components/debug/stateValueView';
-import { dispatch } from 'app/services/state';
+/* eslint-enable no-unused-vars */
 
 export const DebugStateObject = createComponent({
   displayName: 'DebugStateObject',
   getInitialState: debugStateObjectGetInitialState,
   render: debugStateObjectRender,
   toggleShow: debugStateObjectToggleShow,
-  remove: debugStateObjectRemove
+  remove: debugStateObjectRemove,
 });
 
 function debugStateObjectGetInitialState() {
@@ -79,8 +81,8 @@ function debugStateObjectRemove() {
 
 function debugStateValue(path, name, value) {
   const type = R.type(value);
-  if('Object' === type ||
-     'Array' === type) {
+  if ('Object' === type ||
+      'Array' === type) {
     return (
       <DebugStateObject
          path={path}
@@ -89,9 +91,9 @@ function debugStateValue(path, name, value) {
       </DebugStateObject>
     );
   }
-  if('String' === type ||
-     'Number' === type ||
-     'Null' === type) {
+  if ('String' === type ||
+      'Number' === type ||
+      'Null' === type) {
     return (
       <DebugStateValue
          path={path}

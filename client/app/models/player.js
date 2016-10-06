@@ -3,7 +3,7 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 
 const playerModel = {
-  create: playerCreate
+  create: playerCreate,
 };
 
 export default R.curryService(playerModel);
@@ -16,7 +16,7 @@ function playerCreate(create) {
     lists: [],
     team: null,
     notes: null,
-    custom_field: 0,
-    droped: null
+    customField: 0,
+    droped: null,
   });
 }

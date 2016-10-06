@@ -1,12 +1,14 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
+/* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
 import { NavLink } from 'app/components/nav/linkView';
 import { NavToggle } from 'app/components/nav/toggleView';
 import { AuthToggleButton } from 'app/components/auth/auth';
 import { TournamentSaveButton } from 'app/components/tournament/tournament';
+/* eslint-enable no-unused-vars */
 
 export const NavMenu = createComponent({
   displayName: 'NavMenu',
@@ -15,24 +17,24 @@ export const NavMenu = createComponent({
   updateState: navMenuUpdateState,
   toggleShow: navMenuToggleShow,
   componentWillMount: navMenuComponentWillMount,
-  componentWillUnmount: navMenuComponentWillUnmount
+  componentWillUnmount: navMenuComponentWillUnmount,
 });
 
 function navMenuRender() {
   return (
     <div className={{
-           'show': this.state.show
+           show: this.state.show,
          }}>
-      <NavLink current_hash={this.state.current_hash}
+      <NavLink currentHash={this.state.currentHash}
                path="/home"
                onClick={this.toggleShow}>Home</NavLink>
-      <NavLink current_hash={this.state.current_hash}
+      <NavLink currentHash={this.state.currentHash}
                path="/file"
                onClick={this.toggleShow}>File</NavLink>
-      <NavLink current_hash={this.state.current_hash}
+      <NavLink currentHash={this.state.currentHash}
                path="/players"
                onClick={this.toggleShow}>Players</NavLink>
-      <NavLink current_hash={this.state.current_hash}
+      <NavLink currentHash={this.state.currentHash}
                path="/about"
                onClick={this.toggleShow}>About</NavLink>
       <div className="actions">
@@ -48,20 +50,20 @@ function navMenuRender() {
 
 function navMenuGetInitialState() {
   return {
-    current_hash: self.location.hash,
-    show: false
+    currentHash: self.location.hash,
+    show: false,
   };
 }
 
 function navMenuUpdateState() {
   this.setState({
-    current_hash: self.location.hash
+    currentHash: self.location.hash,
   });
 }
 
 function navMenuToggleShow() {
   this.setState({
-    show: !this.state.show
+    show: !this.state.show,
   });
 }
 

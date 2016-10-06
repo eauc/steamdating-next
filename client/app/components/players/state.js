@@ -5,10 +5,10 @@ import { registerValidator } from 'app/services/state';
 
 export const scope = ['tournament','players'];
 
-export const player_schema = (players_names) => Joi.object({
+export const playerSchema = (playersNames) => Joi.object({
   name: Joi.string()
     .min(1)
-    .invalid(players_names)
+    .invalid(playersNames)
     .insensitive()
     .label('Name')
     .required()
@@ -29,13 +29,13 @@ export const player_schema = (players_names) => Joi.object({
   notes: Joi.alternatives(null, Joi.string())
     .label('Notes')
     .empty(''),
-  custom_field: Joi.alternatives(null, Joi.number().integer())
+  customField: Joi.alternatives(null, Joi.number().integer())
     .label('Custom Field')
     .empty(''),
   droped: Joi.alternatives(Joi.number().integer(), null)
     .label('Droped')
-    .empty('')
+    .empty(''),
 });
-const players_schema = Joi.array().items(player_schema([]));
+const playersSchema = Joi.array().items(playerSchema([]));
 
-registerValidator('tournament-players', scope, players_schema);
+registerValidator('tournament-players', scope, playersSchema);

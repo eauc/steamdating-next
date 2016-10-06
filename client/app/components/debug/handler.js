@@ -5,13 +5,13 @@ import { registerHandler } from 'app/services/state';
 import stripv from 'app/helpers/middlewares/stripv';
 
 registerHandler('debug-set', [
-  stripv
-], function(state, [path, value]) {
+  stripv,
+], function debugSetHandler(state, [path, value]) {
   return R.updateIn(path, value, state);
 });
 
 registerHandler('debug-remove', [
-  stripv
-], function(state, [path]) {
+  stripv,
+], function debugRemoveHander(state, [path]) {
   return R.dissocIn(path, state);
 });

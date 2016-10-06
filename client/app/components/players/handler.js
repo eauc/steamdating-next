@@ -12,16 +12,16 @@ import playersModel from 'app/models/players';
 
 const middlewares = [
   path(scope, []),
-  stripv
+  stripv,
 ];
 
-registerHandler('players-create', middlewares, (state, [{edit}]) => {
+registerHandler('players-create', middlewares, (state, [{ edit }]) => {
   const player = playerModel.create(edit);
   history.goBack();
   return playersModel.add(player, state);
 });
 
-registerHandler('players-update', middlewares, (state, [{base, edit}]) => {
+registerHandler('players-update', middlewares, (state, [{ base, edit }]) => {
   history.goBack();
   return playersModel.update(base.name, edit, state);
 });

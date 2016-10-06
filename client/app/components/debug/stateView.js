@@ -1,14 +1,16 @@
 export let __hotReload = true;
 
-import { React, createComponent } from 'app/helpers/react';
 import { debugStateSub } from 'app/components/debug/sub';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
 import { DebugStateObject } from 'app/components/debug/stateObjectView';
+/* eslint-enable no-unused-vars */
 
 export const DebugState = createComponent({
   displayName: 'DebugState',
   subscriptions: { appState: debugStateSub },
   getInitialState: debugStateGetInitialState,
-  render: debugStateRender
+  render: debugStateRender,
 });
 
 function debugStateGetInitialState() {

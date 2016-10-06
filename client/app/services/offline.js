@@ -5,7 +5,7 @@ import { dispatch, registerHandler } from 'app/services/state';
 
 const offlineService = {
   unregisterWorker: offlineUnregisterWorker,
-  registerWorker: offlineRegisterWorker
+  registerWorker: offlineRegisterWorker,
 };
 
 export default offlineService;
@@ -15,7 +15,7 @@ function offlineUnregisterWorker() {
     () => navigator.serviceWorker
       .getRegistrations(),
     (registrations) => {
-      for(let registration of registrations) {
+      for (let registration of registrations) {
         console.info('Found worker', registration);
         registration.unregister();
       }
@@ -24,7 +24,7 @@ function offlineUnregisterWorker() {
 }
 
 function offlineRegisterWorker() {
-  if(!('serviceWorker' in navigator)) {
+  if (!('serviceWorker' in navigator)) {
     console.warn('Service worker is not available');
     return;
   }
@@ -33,12 +33,12 @@ function offlineRegisterWorker() {
     .register('/service-worker.js', { scope: '/' })
     .then(onRegistrationSuccess)
     .catch((error) => {
-      console.log('Registration failed with ' + error);
+      console.log(`Registration failed with ${error}`);
     });
 
   function onRegistrationSuccess(reg) {
     let installing;
-    console.log('Registration succeeded. Scope is ' + reg.scope);
+    console.log(`Registration succeeded. Scope is ${reg.scope}`);
     reg.addEventListener('updatefound', onUpdateFound);
 
     function onUpdateFound() {
@@ -49,10 +49,10 @@ function offlineRegisterWorker() {
 
     function onStateChange() {
       console.log('State change', installing);
-      switch(installing.state) {
+      switch (installing.state) {
       case 'installed':
         {
-          if(navigator.serviceWorker.controller) {
+          if (navigator.serviceWorker.controller) {
             dispatch(['prompt-set', { type: 'alert',
                                       msg: 'New version available !',
                                       onOk: ['offline-reload'] }]);

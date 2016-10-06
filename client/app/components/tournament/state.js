@@ -8,29 +8,39 @@ import { registerValidator } from 'app/services/state';
 export const scope = {
   tournament: ['tournament'],
   online: ['online'],
-  online_urls: ['online','urls'],
-  online_list: ['online','list']
+  onlineUrls: ['online','urls'],
+  onlineList: ['online','list'],
 };
 
-const tournament_schema = Joi.object();
-const online_urls_schema = Joi.object({
-  link: Joi.string().empty('').required(),
-  mine: Joi.string().empty('').required()
+const tournamentSchema = Joi.object();
+const onlineUrlsSchema = Joi.object({
+  link: Joi.string()
+    .empty('')
+    .required(),
+  mine: Joi.string()
+    .empty('')
+    .required(),
 });
-const online_tournament_schema = Joi.object({
+const onlineTournamentSchema = Joi.object({
   id: Joi.number().required(),
   date: Joi.date().required(),
-  name: Joi.string().empty('').required(),
-  link: Joi.string().empty('').required()
+  name: Joi.string()
+    .empty('')
+    .required(),
+  link: Joi.string()
+    .empty('')
+    .required(),
+  // eslint-disable-next-line camelcase
+  updated_at: Joi.date().required(),
 });
-const online_list_schema = Joi.array().items(online_tournament_schema);
-const online_schema = Joi.object({
-  urls: online_urls_schema,
-  list: online_list_schema
+const onlineListSchema = Joi.array().items(onlineTournamentSchema);
+const onlineSchema = Joi.object({
+  urls: onlineUrlsSchema,
+  list: onlineListSchema,
 });
 
-registerValidator('tournament', scope.tournament, tournament_schema);
-registerValidator('online', scope.online, online_schema);
+registerValidator('tournament', scope.tournament, tournamentSchema);
+registerValidator('online', scope.online, onlineSchema);
 
 registerInit('tournament-online', ['storage'], initTournamentOnline);
 

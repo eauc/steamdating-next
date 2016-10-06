@@ -9,21 +9,21 @@ import { registerValidator } from 'app/services/state';
 
 export const scope = ['factions'];
 
-const caster_schema = Joi.object().pattern(/.+/, Joi.string());
-const faction_schema = Joi.object({
+const casterSchema = Joi.object().pattern(/.+/, Joi.string());
+const factionSchema = Joi.object({
   icon: Joi.string(),
-  casters: caster_schema,
-  t3: Joi.string()
+  casters: casterSchema,
+  t3: Joi.string(),
 });
-const factions_schema = Joi.object().pattern(/.+/, faction_schema);
+const factionsSchema = Joi.object().pattern(/.+/, factionSchema);
 
 registerInit('factions', [], R.tap(() => {
   httpService.getP({
     url: '/data/factions.json',
     onSuccess: ['factions-set'],
     onError: ['toaster-set', { type: 'error',
-                               message: 'factions load failed' }]
+                               message: 'factions load failed' }],
   });
 }));
 
-registerValidator('factions', scope, factions_schema);
+registerValidator('factions', scope, factionsSchema);

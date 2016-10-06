@@ -13,38 +13,40 @@ function _deepMerge(sources, dst) {
 
 function _deepMergeObject(src, dst) {
   return R.reduce((acc, key) => {
-    let src_val = src[key];
-    if('Object' === R.type(acc[key]) &&
-       'Object' === R.type(src[key])) {
-      src_val = _deepMergeObject(src[key], acc[key]);
+    let srcVal = src[key];
+    if ('Object' === R.type(acc[key]) &&
+        'Object' === R.type(src[key])) {
+      srcVal = _deepMergeObject(src[key], acc[key]);
     }
-    if('Array' === R.type(acc[key]) &&
-       'Array' === R.type(src[key])) {
-      src_val = _deepMergeArray(src[key], acc[key]);
+    if ('Array' === R.type(acc[key]) &&
+        'Array' === R.type(src[key])) {
+      srcVal = _deepMergeArray(src[key], acc[key]);
     }
-    if(acc[key] === src_val) return acc;
-    return R.assoc(key, src_val, acc);
+    if (acc[key] === srcVal) return acc;
+    return R.assoc(key, srcVal, acc);
   }, dst, R.keys(src));
 }
 
 function _deepMergeArray(src, dst) {
-  if(dst.length > src.length) {
-    dst = R.take(src.length, dst);
+  let _dst = dst;
+  if (_dst.length > src.length) {
+    _dst = R.take(src.length, _dst);
   }
-  return R.addIndex(R.reduce)((acc, src_val, ind) => {
-    if('Object' === R.type(acc[ind]) &&
-       'Object' === R.type(src_val)) {
-      src_val = _deepMergeObject(src_val, acc[ind]);
+  return R.addIndex(R.reduce)((acc, srcVal, ind) => {
+    let _srcVal = srcVal;
+    if ('Object' === R.type(acc[ind]) &&
+        'Object' === R.type(_srcVal)) {
+      _srcVal = _deepMergeObject(_srcVal, acc[ind]);
     }
-    if('Array' === R.type(acc[ind]) &&
-       'Array' === R.type(src_val)) {
-      src_val = _deepMergeArray(src_val, acc[ind]);
+    if ('Array' === R.type(acc[ind]) &&
+        'Array' === R.type(_srcVal)) {
+      _srcVal = _deepMergeArray(_srcVal, acc[ind]);
     }
-    if(acc[ind] === src_val) return acc;
+    if (acc[ind] === _srcVal) return acc;
     return (
       ind < acc.length
-        ? R.update(ind, src_val, acc)
-        : R.append(src_val, acc)
+        ? R.update(ind, _srcVal, acc)
+        : R.append(_srcVal, acc)
     );
-  }, dst, src);
+  }, _dst, src);
 }

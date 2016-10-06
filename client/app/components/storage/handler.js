@@ -5,5 +5,5 @@ import stripv from 'app/helpers/middlewares/stripv';
 import { storageRefreshHandler } from 'app/components/storage/state';
 
 registerHandler('storage-refresh', [
-  stripv
+  stripv,
 ], storageRefreshHandler);

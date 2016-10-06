@@ -18,20 +18,20 @@ export const playersListSub = registerSubscription(
     .join(sortSub(['players', 'name']))
     .map(([{ list, columns }, sort]) => ({
       list: playersModel.sort(sort, list),
-      columns
+      columns,
     }))
 );
 
 export const playersEditOtherNamesSub = registerSubscription(
   'players-edit-other-names',
   (state) => {
-    const base_name = state
-            .map((s) => [R.path(['forms','player','base','name'], s)]);
-    const players_names = state
+    const baseName = state
+            .map((state) => [R.path(['forms','player','base','name'], state)]);
+    const playersNames = state
             .map(R.pathOr([], scope))
             .map(R.pluck('name'));
-    return base_name
-      .join(players_names)
+    return baseName
+      .join(playersNames)
       .map(R.apply(R.without));
   }
 );
@@ -39,9 +39,9 @@ export const playersEditOtherNamesSub = registerSubscription(
 export const playersEditCastersNamesSub = registerSubscription(
   'players-edit-casters-names',
   (state) => {
-    const faction_name = state
+    const factionName = state
             .map(R.pathOr('', ['forms','player','edit','faction']));
-    return faction_name
+    return factionName
       .join(factionsSub(state))
       .map(R.apply(factionsModel.castersFor));
   }

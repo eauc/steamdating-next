@@ -5,13 +5,13 @@ import log from 'app/helpers/log';
 import { dispatch } from 'app/services/state';
 
 export default R.curry(function validate(schema, handler) {
-  return function(state, [event, ...args]) {
-    const new_state = handler(state, [event, ...args]);
-    const validation = schema.validate(new_state, {abortEarly:false});
-    if(!validation.error) return new_state;
+  return function (state, [event, ...args]) {
+    const newState = handler(state, [event, ...args]);
+    const validation = schema.validate(newState, { abortEarly: false });
+    if (!validation.error) return newState;
 
     log.error(`State validation error: ${validation.error.message}`, validation);
-    if(!event.startsWith('error')) {
+    if (!event.startsWith('error')) {
       dispatch(['toaster-set', { type: 'error',
                                  message: 'Invalid state' }]);
     }

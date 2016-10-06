@@ -9,7 +9,7 @@ import { scope } from 'app/components/form/state';
 
 const middlewares = [
   path(scope, {}),
-  stripv
+  stripv,
 ];
 
 registerHandler('form-reset', middlewares, formResetHandler);
@@ -24,6 +24,6 @@ export function formResetHandler(state, [form, value]) {
 }
 
 export function formUpdateHandler(state, [field, value]) {
-  const [form, ...field_path] = R.split('.', field);
-  return R.assocPath([form, 'edit', ...field_path], value, state);
+  const [form, ...fieldPath] = R.split('.', field);
+  return R.assocPath([form, 'edit', ...fieldPath], value, state);
 }

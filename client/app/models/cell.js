@@ -5,46 +5,47 @@ import log from 'app/helpers/log';
 
 const cellModel = {
   from: cellFrom,
-  resolveCells
+  resolveCells,
 };
 
 export default cellModel;
 
 function cellFrom(source) {
-  if(R.type(source) !== 'Function') {
-    source = R.always(source);
+  let sourceFn = source;
+  if (R.type(sourceFn) !== 'Function') {
+    sourceFn = R.always(sourceFn);
   }
   return cellCreate({
-    _value: source(),
-    _source: { sample: source,
-               value: source,
-               resetTick: cellNoop
-             }
+    _value: sourceFn(),
+    _source: { sample: sourceFn,
+               value: sourceFn,
+               resetTick: cellNoop,
+             },
   });
 }
 
 function resolveCells(tick, cells) {
   return _resolveCells(tick, cells)
     .then(() => {
-      R.forEach((c) => c.resetTick(tick), cells);
+      R.forEach((cell) => cell.resetTick(tick), cells);
     });
 }
 
 function _resolveCells(tick, [cell, ...rest] = []) {
-  if(undefined === cell) return self.Promise.resolve();
+  if (undefined === cell) return self.Promise.resolve();
   return cell.sample(tick)
     .then(() => _resolveCells(tick, rest));
 }
 
-const null_source = {
+const nullSource = {
   value: R.always(undefined),
   sample: () => self.Promise.resolve(undefined),
-  resetTick: cellNoop
+  resetTick: cellNoop,
 };
 
 function cellCreate(props) {
   return Object.assign({
-    _source: null_source,
+    _source: nullSource,
     _value: undefined,
     _onChange: cellNoop,
     _sampleGetSource: cellDefaultSampleGetSource,
@@ -56,7 +57,7 @@ function cellCreate(props) {
     value: cellValue,
     changes: cellChanges,
     map: cellMap,
-    join: cellJoin
+    join: cellJoin,
   }, props);
 }
 
@@ -79,65 +80,69 @@ function cellDefaultResetSourceTick(tick) {
 function cellSampleSetValue(value) {
   // log.cell(this._name, this._args, 'sampleSetValue :',
   //          'value=', this._value,
-  //          'new_value=', this._new_value);
-  this._new_value = this._value;
-  if(undefined === value) return undefined;
+  //          'newValue=', this._newValue);
+  this._newValue = this._value;
+  if (undefined === value) return undefined;
   // log.cell(this._name, this._args, 'sampleSetValue :',
   //         'source has changed');
-  if(this._value === value) return undefined;
+  if (this._value === value) return undefined;
   // log.cell(this._name, this._args, 'sampleSetValue :',
   //         'value has changed');
-  this._new_value = value;
+  this._newValue = value;
   this._onChange(value);
   // log.cell(this._name, this._args, 'sampleSetValue :',
   //          'value=', this._value,
-  //          'new_value=', this._new_value);
+  //          'newValue=', this._newValue);
   return value;
 }
 
 function cellResetTick(tick) {
   // log.cell(this._name, this._args, 'resetTick :',
   //          'tick=', tick, '_tick=', this._tick,
-  //          'value=', this._value, 'new_value=', this._new_value);
-  if(this._tick === tick) return;
+  //          'value=', this._value, 'newValue=', this._newValue);
+  if (this._tick === tick) return;
   // log.cell(this._name, this._args, 'resetTick :',
   //          'tick has changed');
 
-  this._value = this._new_value;
-  this._new_value = undefined;
+  this._value = this._newValue;
+  this._newValue = undefined;
   this._tick = tick;
 
   this._resetSourceTick(tick);
   // log.cell(this._name, this._args, 'resetTick :',
   //          'tick=', tick, '_tick=', this._tick,
-  //          'value=', this._value, 'new_value=', this._new_value);
+  //          'value=', this._value, 'newValue=', this._newValue);
 }
 
 function cellSample(tick) {
   // log.cell(this._name, this._args, 'sample :',
   //          'tick=', tick, '_tick=', this._tick,
-  //          'value=', this._value, 'new_value=', this._new_value);
-  if(tick === this._tick) return self.Promise.resolve(this._value);
+  //          'value=', this._value, 'newValue=', this._newValue);
+  if (tick === this._tick) {
+    return self.Promise.resolve(this._value);
+  }
   // log.cell(this._name, this._args, 'sample :',
   //          'new tick',
   //          'previous_value=', this._value);
-  if(undefined !== this._new_value) return self.Promise.resolve(this._new_value);
+  if (undefined !== this._newValue) {
+    return self.Promise.resolve(this._newValue);
+  }
   // log.cell(this._name, this._args, 'sample :',
   //          'need to eval');
   return self.Promise
     .resolve(this._sampleGetSource(tick))
-    .then((v) => {
+    .then((value) => {
       // log.cell(this._name, this._args, 'sample :',
-      //          'source_value=', v);
-      return this._sampleTransform(v);
+      //          'source_value=', value);
+      return this._sampleTransform(value);
     })
-    .then((v) => {
+    .then((value) => {
       // log.cell(this._name, this._args, 'sample :',
       //          'transform_value=', v);
-      v = this._sampleSetValue(v);
+      const finalValue = this._sampleSetValue(value);
       log.cell(this._name, this._args, 'sample :',
-               'final_value=', v);
-      return v;
+               'final_value=', finalValue);
+      return finalValue;
     });
 }
 
@@ -154,7 +159,9 @@ function cellMap(fn) {
   return cellCreate({
     _value: fn(this.value()),
     _source: this,
-    _sampleTransform: (value) => ((undefined !== value) ? fn(value) : undefined)
+    _sampleTransform(value) {
+      return ((undefined !== value) ? fn(value) : undefined);
+    },
   });
 }
 
@@ -164,19 +171,19 @@ function cellJoin(other) {
     _source: [this, other],
     _sampleGetSource: (tick) => self.Promise.all([
       this.sample(tick),
-      other.sample(tick)
+      other.sample(tick),
     ]),
     _sampleTransform: cellJoinTransform,
-    _resetSourceTick: cellJoinResetSourceTick
+    _resetSourceTick: cellJoinResetSourceTick,
   });
 }
 
-function cellJoinTransform([this_value, other_value]) {
-  if(undefined === this_value &&
-     undefined === other_value) return undefined;
-  if(undefined === this_value) return [this._value[0], other_value];
-  if(undefined === other_value) return [this_value, this._value[1]];
-  return [this_value, other_value];
+function cellJoinTransform([thisValue, otherValue]) {
+  if (undefined === thisValue &&
+     undefined === otherValue) return undefined;
+  if (undefined === thisValue) return [this._value[0], otherValue];
+  if (undefined === otherValue) return [thisValue, this._value[1]];
+  return [thisValue, otherValue];
 }
 
 function cellJoinResetSourceTick(tick) {

@@ -5,13 +5,13 @@ import { registerValidator } from 'app/services/state';
 
 export const scope = ['toaster'];
 
-export const type_schema = Joi.string()
+export const typeSchema = Joi.string()
   .valid(['success', 'warning', 'error', 'info']);
-export const message_schema = Joi.string()
+export const messageSchema = Joi.string()
   .empty('');
-export const toaster_schema = Joi.alternatives(null, Joi.object({
-  type: type_schema.required(),
-  message: message_schema.required()
+export const toasterSchema = Joi.alternatives(null, Joi.object({
+  type: typeSchema.required(),
+  message: messageSchema.required(),
 }));
 
-registerValidator('toaster', scope, toaster_schema);
+registerValidator('toaster', scope, toasterSchema);

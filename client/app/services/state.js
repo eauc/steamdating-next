@@ -19,13 +19,13 @@ const VALIDATORS = {};
 const EVENT_QUEUE = tasksQueueModel.create();
 
 const stateService = {
-  dispatch: stateDispatch
+  dispatch: stateDispatch,
 };
 export default stateService;
 export const dispatch = (...args) => stateService.dispatch(...args);
 
 export function registerValidator(name, path, schema) {
-  if(R.prop(name, VALIDATORS)) {
+  if (R.prop(name, VALIDATORS)) {
     log.state(`overwriting validator "${name}" `);
   }
   VALIDATORS[name] = (state) => R.thread(state)(
@@ -34,8 +34,8 @@ export function registerValidator(name, path, schema) {
     R.spy('validator', name),
     (scope) => schema.validate(scope),
     R.spy('validator', name),
-    ({error}) => {
-      if(error) log.error(`Validator "${name}" rejected state`, state, path, error);
+    ({ error }) => {
+      if (error) log.error(`Validator "${name}" rejected state`, state, path, error);
       return !error;
     },
     R.spy('validator', name)
@@ -45,10 +45,10 @@ export function registerValidator(name, path, schema) {
 registerValidator('state', [], Joi.object());
 
 export function registerHandler(event, ...args) {
-  if(R.prop(event, HANDLERS)) {
+  if (R.prop(event, HANDLERS)) {
     log.state(`overwriting event "${event}" handler`);
   }
-  if(args.length === 1) {
+  if (args.length === 1) {
     const [handler] = args;
     HANDLERS[event] = handler;
   }
@@ -59,7 +59,7 @@ export function registerHandler(event, ...args) {
 }
 
 export function registerSubscription(view, subscription) {
-  if(R.prop(view, SUBSCRIPTIONS)) {
+  if (R.prop(view, SUBSCRIPTIONS)) {
     log.state(`overwriting view "${view}" subscription`);
   }
   SUBSCRIPTIONS[view] = subscription;
@@ -68,7 +68,7 @@ export function registerSubscription(view, subscription) {
 
 export function getPermanentSubscription(name, [sub, ...args]) {
   self._views = self._views || {};
-  if(self._views[name]) {
+  if (self._views[name]) {
     log.sub('permanentSub revoke', name);
     revokeView(self._views[name]);
   }
@@ -77,62 +77,62 @@ export function getPermanentSubscription(name, [sub, ...args]) {
 }
 
 const getSubscription = R.curry(function _getSubscription(view, args) {
-  if(R.isNil(R.prop(view, SUBSCRIPTIONS))) {
+  if (R.isNil(R.prop(view, SUBSCRIPTIONS))) {
     log.warn(`-- ignoring view "${view}" without subscription`);
     return cellModel.from(null);
   }
   const cell = SUBSCRIPTIONS[view](STATE_CELL, [view, ...args]);
   cell._name = view;
-  cell._args = JSON.stringify(R.map((a) => {
-    if('Function' === R.type(a)) return '##Fun';
-    if('Object' === R.type(a)) return '{Obj}';
-    return a;
+  cell._args = JSON.stringify(R.map((arg) => {
+    if ('Function' === R.type(arg)) return '##Fun';
+    if ('Object' === R.type(arg)) return '{Obj}';
+    return arg;
   }, args));
   CELLS = R.append(cell, CELLS);
   return cell;
 });
 
 export function revokeView(cell) {
-  CELLS = R.reject((c) => (c === cell), CELLS);
+  CELLS = R.reject((_cell) => (_cell === cell), CELLS);
 }
 
-function stateDispatch([ event, ...args]) {
+function stateDispatch([event, ...args]) {
   return tasksQueueModel
     .push([_dispatch, event, ...args], EVENT_QUEUE);
 }
 
-function _dispatch([ resolve, reject, event, ...args]) {
+function _dispatch([resolve, reject, event, ...args]) {
   log.state('>> dispatch', event, args);
-  if(R.isNil(R.prop(event, HANDLERS))) {
+  if (R.isNil(R.prop(event, HANDLERS))) {
     log.warn(`-- ignoring event "${event}" without handler`);
     reject('ignored');
     return null;
   }
   try {
-    const new_state = HANDLERS[event](STATE, [event, ...args]);
-    if(new_state === STATE) {
+    const newState = HANDLERS[event](STATE, [event, ...args]);
+    if (newState === STATE) {
       resolve();
       return null;
     }
-    if(self.STEAMDATING_CONFIG.debug &&
-       !R.allPass(R.values(VALIDATORS))(new_state)) {
-      if(event !== 'toaster-set') {
+    if (self.STEAMDATING_CONFIG.debug &&
+       !R.allPass(R.values(VALIDATORS))(newState)) {
+      if (event !== 'toaster-set') {
         stateDispatch(['toaster-set', {
           type: 'error',
-          message: 'Invalid state'
+          message: 'Invalid state',
         }]);
       }
       reject('invalid');
       return null;
     }
-    STATE = new_state;
-    if(self.STEAMDATING_CONFIG.debug) {
+    STATE = newState;
+    if (self.STEAMDATING_CONFIG.debug) {
       STATE_HISTORY = R.append([event, args, STATE], STATE_HISTORY);
     }
   }
-  catch(e) {
-    log.error(`xx error in event "${event}" handler`, e);
-    reject(e);
+  catch (error) {
+    log.error(`xx error in event "${event}" handler`, error);
+    reject(error);
     return null;
   }
   log.state('<< new STATE', STATE);
@@ -151,22 +151,18 @@ function stateToHistoryLast() {
 
 export const stateDebug = {};
 
-if(self.STEAMDATING_CONFIG.debug) {
+if (self.STEAMDATING_CONFIG.debug) {
   Object.assign(stateDebug, {
     cells: () => {
       console.table(R.map(R.pick(['_name', '_args', '_tick', '_value']), CELLS));
     },
-    current: () => {
-      return STATE;
-    },
+    current: () => STATE,
     ll: () => {
       console.table(R.map(([event, args]) => [
-        event, JSON.stringify(args)
+        event, JSON.stringify(args),
       ], STATE_HISTORY));
     },
-    log: () => {
-      return STATE_LOG;
-    },
+    log: () => STATE_LOG,
     dropLog: (index) => {
       STATE_LOG = R.dropIndex(index, STATE_LOG);
       TICK = TICK + 1;
@@ -176,9 +172,7 @@ if(self.STEAMDATING_CONFIG.debug) {
       const [event, args] = STATE_LOG[index];
       dispatch([event, ...args]);
     },
-    history: () => {
-      return STATE_HISTORY;
-    },
+    history: () => STATE_HISTORY,
     dropHistory: (index) => {
       STATE_HISTORY = R.dropIndex(index, STATE_HISTORY);
       stateToHistoryLast();
@@ -188,30 +182,30 @@ if(self.STEAMDATING_CONFIG.debug) {
       dispatch([event, ...args]);
     },
     first: () => {
-      if(1 === R.length(STATE_HISTORY)) return;
+      if (1 === R.length(STATE_HISTORY)) return;
       STATE_LOG = R.concat(STATE_LOG, R.reverse(R.tail(STATE_HISTORY)));
       STATE_HISTORY = [R.head(STATE_HISTORY)];
       stateToHistoryLast();
     },
     back: () => {
-      if(1 === R.length(STATE_HISTORY)) return;
+      if (1 === R.length(STATE_HISTORY)) return;
       const last = R.last(STATE_HISTORY);
       STATE_HISTORY = R.init(STATE_HISTORY);
       STATE_LOG = R.append(last, STATE_LOG);
       stateToHistoryLast();
     },
     redo: () => {
-      if(R.isEmpty(STATE_LOG)) return;
+      if (R.isEmpty(STATE_LOG)) return;
       const last = R.last(STATE_LOG);
       STATE_LOG = R.init(STATE_LOG);
       STATE_HISTORY = R.append(last, STATE_HISTORY);
       stateToHistoryLast();
     },
     last: () => {
-      if(R.isEmpty(STATE_LOG)) return;
+      if (R.isEmpty(STATE_LOG)) return;
       STATE_HISTORY = R.concat(STATE_HISTORY, R.reverse(STATE_LOG));
       STATE_LOG = [];
       stateToHistoryLast();
-    }
+    },
   });
 }

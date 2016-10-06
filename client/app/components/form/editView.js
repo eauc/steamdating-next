@@ -2,24 +2,26 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import { React, createComponent } from 'app/helpers/react';
 import { formSub } from 'app/components/form/sub';
 import { dispatch } from 'app/services/state';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
+/* eslint-enable no-unused-vars */
 
 export const FormEdit = createComponent({
   displayName: 'FormEdit',
   subscriptions: {
-    form: formEditFormSubscription
+    form: formEditFormSubscription,
   },
   childContextTypes: {
     formView: React.PropTypes.object,
-    formName: React.PropTypes.string
+    formName: React.PropTypes.string,
   },
   getInitialState: formEditGetInitialState,
   getChildContext: formEditGetChildContext,
   render: formEditRender,
-  onSubmit: formEditOnSubmit
+  onSubmit: formEditOnSubmit,
 });
 
 function formEditFormSubscription() {
@@ -37,8 +39,8 @@ function formEditRender() {
         </legend>
         {this.props.children}
         <button className={{
-                  'submit': true,
-                  'disabled': !!this.state.form.error
+                  submit: true,
+                  disabled: !!this.state.form.error,
                 }}
                 type="submit"
                 onClick={this.onSubmit}>
@@ -58,12 +60,12 @@ function formEditGetChildContext() {
   log.cycle('form.getChildContext', this.views.form, this.props.name);
   return {
     formView: this.views.form,
-    formName: this.props.name
+    formName: this.props.name,
   };
 }
 
-function formEditOnSubmit(e) {
-  e.preventDefault();
-  if(this.state.form.error) return;
+function formEditOnSubmit(event) {
+  event.preventDefault();
+  if (this.state.form.error) return;
   dispatch([this.props.onSubmit, this.state.form]);
 }

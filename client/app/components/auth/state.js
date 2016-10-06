@@ -2,21 +2,20 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import Joi from 'joi-browser';
-// import Auth0Lock from 'auth0-lock';
 import { dispatch,
          registerValidator } from 'app/services/state';
 import { registerInit } from 'app/services/init';
 
 export const scope = ['auth'];
-export const token_schema = Joi.alternatives(null, Joi.string());
-export const auth_schema = Joi.object({
-  token: token_schema
+export const tokenSchema = Joi.alternatives(null, Joi.string());
+export const authSchema = Joi.object({
+  token: tokenSchema,
 });
 
 let lock;
 
 registerInit('auth', [], authInit);
-registerValidator('auth', scope, auth_schema);
+registerValidator('auth', scope, authSchema);
 
 function authInit(state) {
   return R.assocPath(scope, { token: null }, state);
@@ -31,7 +30,7 @@ function onLogin(result) {
 }
 
 function getLock() {
-  if(!lock) {
+  if (!lock) {
     return initLock();
   }
   return self.Promise.resolve(lock);

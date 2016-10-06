@@ -7,27 +7,27 @@ const formModel = {
   validate: formValidate,
   isValid: formIsValid,
   fieldValue: formFieldValue,
-  fieldError: formFieldError
+  fieldError: formFieldError,
 };
 export default R.curryService(formModel);
 
 function formValidate(schema, { edit, base }) {
   log.sub('form edit', edit, schema);
   const validation = schema().validate(edit, { abortEarly: false });
-  const {error} = validation;
+  const { error } = validation;
   log.sub('form validation', validation);
-  if(error) {
+  if (error) {
     error.details = R.groupBy(R.prop('path'), error.details);
   }
-  return {edit, base, error};
+  return { edit, base, error };
 }
 
-function formIsValid({error}) {
+function formIsValid({ error }) {
   return !error;
 }
 
 function formFieldValue(path, form) {
-  return R.path(['edit', ...path], form);
+  return R.pathOr(null, ['edit', ...path], form);
 }
 
 function formFieldError(path, form) {

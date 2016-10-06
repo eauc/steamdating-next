@@ -8,8 +8,8 @@ import { scope } from 'app/components/filter/state';
 
 registerHandler(
   'filter-set',
-  [ path(scope, {}),
-    stripv
+  [path(scope, {}),
+   stripv,
   ], filterSetHandler
 );
 

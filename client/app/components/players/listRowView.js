@@ -1,37 +1,39 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { React, createComponent } from 'app/helpers/react';
 import history from 'app/helpers/history';
 import { dispatch } from 'app/services/state';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
 import { FactionIcon } from 'app/components/factions/factions';
+/* eslint-enable no-unused-vars */
 
 export const PlayersListRow = createComponent({
   displayName: 'PlayersListRow',
   render: playersListRowRender,
   getInitialState: playersListRowGetInitialState,
-  edit: playersListRowEdit
+  edit: playersListRowEdit,
 });
 
 function playersListRowRender() {
   const player = this.props.player;
-  const cells = R.map((p) => {
+  const cells = R.map((prop) => {
     let icon;
-    if(p==='faction') {
+    if (prop === 'faction') {
       icon = (
         <FactionIcon
-           faction={player[p]}
+           faction={player[prop]}
            factions={this.props.factions} />
       );
     }
     const value = (
-      'Array' === R.type(player[p])
-        ? player[p].join(', ')
-        : player[p]
+      'Array' === R.type(player[prop])
+        ? player[prop].join(', ')
+        : player[prop]
     );
     return (
-      <td key={p}
-          className={p}>
+      <td key={prop}
+          className={prop}>
         {icon}
         <span>{value}</span>
       </td>

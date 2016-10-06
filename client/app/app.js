@@ -5,22 +5,24 @@ self.R = R;
 import Joi from 'joi-browser';
 self.Joi = Joi;
 
+/* eslint-disable no-unused-vars */
 import React from 'react';
+import { NavMenu } from 'app/components/nav/nav';
+import { Root } from 'app/components/root/root';
+import { Prompt } from 'app/components/prompt/prompt';
+/* eslint-enable no-unused-vars */
 export * from 'app/helpers/react';
 import ReactDOM from 'react-dom';
 
 import log from 'app/helpers/log';
 import offlineService from 'app/services/offline';
-import { NavMenu } from 'app/components/nav/nav';
-import { Root } from 'app/components/root/root';
-import { Prompt } from 'app/components/prompt/prompt';
 import { dispatch, stateDebug } from 'app/services/state';
 export * from 'app/services/init';
 export * from 'app/components/storage/storage';
 
 self.STEAMDATING_APP = {
   init: appInit,
-  state: stateDebug
+  state: stateDebug,
 };
 
 ReactDOM.render((
@@ -37,7 +39,7 @@ ReactDOM.render((
 
 function appInit() {
   log('STEAMDATING APP init');
-  if(!self.STEAMDATING_CONFIG.debug) {
+  if (!self.STEAMDATING_CONFIG.debug) {
     offlineService.registerWorker();
   }
   dispatch(['init']);

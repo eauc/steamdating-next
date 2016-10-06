@@ -1,14 +1,18 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { React, createComponent } from 'app/helpers/react';
+import Joi from 'joi-browser';
 import { dispatch } from 'app/services/state';
 import { tournamentOnlineListSub } from 'app/components/tournament/sub';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
 import { AuthRequired } from 'app/components/auth/auth';
 import { Icon } from 'app/components/misc/misc';
+import { FormEdit, FormInput } from 'app/components/form/form';
+/* eslint-enable no-unused-vars */
 
 export const TournamentOnlineList = createComponent({
-  render: onlineListRender
+  render: onlineListRender,
 });
 
 function onlineListRender() {
@@ -19,18 +23,19 @@ function onlineListRender() {
   );
 }
 
+// eslint-disable-next-line no-unused-vars
 const TournamentsList = createComponent({
   displayName: 'TournamentsList',
   subscriptions: { list: tournamentOnlineListSub },
   render: listRender,
-  componentDidMount: listComponentDidMount
+  componentDidMount: listComponentDidMount,
 });
 
 function listRender() {
-  const items = R.map((t) => (
+  const items = R.map((item) => (
     <TournamentsListItem
-       key={t.id}
-       tournament={t} />
+       key={item.id}
+       tournament={item} />
   ), this.state.list);
   return (
     <ul>

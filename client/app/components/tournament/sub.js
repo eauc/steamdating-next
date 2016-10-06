@@ -10,7 +10,7 @@ export function tournamentFileSub() {
 }
 
 export const tournamentOnlineListSub = registerSubscription(
-  'tournament-online-list',
+  'tournament-onlineList',
   (state) => state
-    .map(R.pathOr([], scope.online_list))
+    .map(R.pathOr([], scope.onlineList))
 );

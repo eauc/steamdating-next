@@ -7,5 +7,5 @@ import { scope } from 'app/components/factions/state';
 
 registerHandler('factions-set', [
   path(scope, null),
-  stripv
+  stripv,
 ], (_state_, [data]) => data);

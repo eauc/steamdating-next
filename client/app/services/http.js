@@ -14,7 +14,7 @@ const httpService = {
 export default R.curryService(httpService);
 
 const DEFAULT_HEADERS = {
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json;charset=UTF-8',
 };
 const httpRequest$ = R.curry(httpRequest);
 const loadListener$ = R.curry(loadListener);
@@ -22,10 +22,10 @@ const errorListener$ = R.curry(errorListener);
 const dispatchSuccess$ = R.curry(dispatchSuccess);
 const dispatchError$ = R.curry(dispatchError);
 
-function getP({url, headers = {}, onSuccess, onError}) {
-  return new self.Promise(httpRequest$({method: 'GET', url, headers}))
-    .then(dispatchSuccess$({onSuccess}))
-    .catch(dispatchError$({onError}));
+function getP({ url, headers = {}, onSuccess, onError }) {
+  return new self.Promise(httpRequest$({ method: 'GET', url, headers }))
+    .then(dispatchSuccess$({ onSuccess }))
+    .catch(dispatchError$({ onError }));
 }
 
 function deleteP({url, headers = {}, onSuccess, onError}) {
@@ -34,11 +34,11 @@ function deleteP({url, headers = {}, onSuccess, onError}) {
     .catch(dispatchError$({onError}));
 }
 
-function httpRequest({url, headers, method}, resolve, reject) {
+function httpRequest({ url, headers, method }, resolve, reject) {
   const request = new XMLHttpRequest();
   request.addEventListener(
     'load',
-    loadListener$({url, headers, resolve, reject})
+    loadListener$({ url, headers, resolve, reject })
   );
   request.addEventListener(
     'error',
@@ -50,15 +50,15 @@ function httpRequest({url, headers, method}, resolve, reject) {
 }
 
 function setHeaders(request, headers) {
-  headers = Object.assign({}, DEFAULT_HEADERS, headers);
+  const headersWithDefaults = Object.assign({}, DEFAULT_HEADERS, headers);
   R.forEach((header) => {
-    request.setRequestHeader(header, headers[header]+'');
+    request.setRequestHeader(header, `${headersWithDefaults[header]}`);
   }, R.keys(headers));
 }
 
 function loadListener({ url, headers, resolve, reject }, evt) {
   const request = evt.currentTarget;
-  if(request.status >= 300) {
+  if (request.status >= 300) {
     const message = request.responseText || request.statusText;
     reject([`GET ${url}: ${message}`, request]);
     return;
@@ -68,20 +68,21 @@ function loadListener({ url, headers, resolve, reject }, evt) {
   resolve(data);
 }
 
-function errorListener({url, reject}, evt) {
+function errorListener({ url, reject }, evt) {
   reject([`GET ${url}: ${evt}`, evt]);
 }
 
-function dispatchSuccess({onSuccess}, data) {
-  if(onSuccess) {
-    if('Function' === R.type(onSuccess)) onSuccess = onSuccess(data);
-    else onSuccess = R.append(data, onSuccess);
-    return dispatch(onSuccess);
+function dispatchSuccess({ onSuccess }, data) {
+  if (onSuccess) {
+    let onSuccessEvent;
+    if ('Function' === R.type(onSuccess)) onSuccessEvent = onSuccess(data);
+    else onSuccessEvent = R.append(data, onSuccess);
+    return dispatch(onSuccessEvent);
   }
   return data;
 }
 
-function dispatchError({onError}, [message, payload]) {
+function dispatchError({ onError }, [message, payload]) {
   log.error(message, payload);
   let ret = onError
         ? dispatch(onError)

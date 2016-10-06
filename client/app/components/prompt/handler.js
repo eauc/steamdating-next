@@ -8,7 +8,7 @@ import { scope } from 'app/components/prompt/state';
 
 const middlewares = [
   path(scope, null),
-  stripv
+  stripv,
 ];
 
 registerHandler('prompt-set', middlewares, (_state_, [prompt]) => prompt);
@@ -25,7 +25,7 @@ export function promptUpdateValueHandler(state, [value]) {
 
 export function promptOkHandler(state) {
   let event = state.onOk;
-  if(state.type === 'prompt') {
+  if (state.type === 'prompt') {
     event = R.append(state.value, event);
   }
   dispatch(event);
@@ -33,6 +33,6 @@ export function promptOkHandler(state) {
 }
 
 export function promptCancelHandler(state) {
-  if(state.onCancel) dispatch(state.onCancel);
+  if (state.onCancel) dispatch(state.onCancel);
   return null;
 }

@@ -1,30 +1,32 @@
 export let __hotReload = true;
 
 import log from 'app/helpers/log';
-import { React, createComponent } from 'app/helpers/react';
-import { FormEdit, FormInput } from 'app/components/form/form';
-import { player_schema } from 'app/components/players/state';
 import { factionsNamesSub } from 'app/components/factions/factions';
+import { playerSchema } from 'app/components/players/state';
 import { playersEditCastersNamesSub,
          playersEditOtherNamesSub } from 'app/components/players/sub';
+/* eslint-disable no-unused-vars */
+import { React, createComponent } from 'app/helpers/react';
+import { FormEdit, FormInput } from 'app/components/form/form';
+/* eslint-enable no-unused-vars */
 
 export const PlayerEdit = createComponent({
   subscriptions: {
-    factions_names: factionsNamesSub,
-    casters_names: playersEditCastersNamesSub,
-    players_names: playersEditOtherNamesSub
+    factionsNames: factionsNamesSub,
+    castersNames: playersEditCastersNamesSub,
+    playersNames: playersEditOtherNamesSub,
   },
   render: playerEditRender,
-  getInitialState: playerEditGetInitialState
+  getInitialState: playerEditGetInitialState,
 });
 
 function playerEditRender() {
   log.cycle('playerEdit render', this.state);
-  const form_schema = player_schema(this.state.players_names);
+  const formSchema = playerSchema(this.state.playersNames);
   return (
     <FormEdit name="player"
               label={`${this.props.label} Player`}
-              schema={form_schema}
+              schema={formSchema}
               onSubmit={this.props.onSubmit}>
       <FormInput name="name"
                  label="Name"
@@ -39,12 +41,12 @@ function playerEditRender() {
       <FormInput name="faction"
                  label="Faction"
                  type="select"
-                 options={this.state.factions_names}
+                 options={this.state.factionsNames}
                  order="3" />
       <FormInput name="lists"
                  label="Lists"
                  type="select"
-                 options={this.state.casters_names}
+                 options={this.state.castersNames}
                  multiple="multiple"
                  order="4" />
       <FormInput name="notes"
@@ -57,7 +59,8 @@ function playerEditRender() {
 
 function playerEditGetInitialState() {
   return {
-    factions: {},
-    players_names: []
+    castersNames: {},
+    factionsNames: {},
+    playersNames: [],
   };
 }

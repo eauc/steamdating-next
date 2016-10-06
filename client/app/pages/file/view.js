@@ -1,16 +1,18 @@
 export let __hotReload = true;
 
+/* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { Page, PageContent } from 'app/components/page/view';
 import { TournamentNewButton,
          TournamentOpenButton,
          TournamentSaveButton,
-         TournamentOnlineList
+         TournamentOnlineList,
        } from 'app/components/tournament/tournament';
+/* eslint-enable no-unused-vars */
 
 export const FilePage = createComponent({
   displayName: 'FilePage',
-  render: filePageRender
+  render: filePageRender,
 });
 
 function filePageRender() {

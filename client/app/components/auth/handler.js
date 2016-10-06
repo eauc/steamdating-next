@@ -5,18 +5,18 @@ import { registerHandler } from 'app/services/state';
 import path from 'app/helpers/middlewares/path';
 import stripv from 'app/helpers/middlewares/stripv';
 import validateArgs from 'app/helpers/middlewares/validateArgs';
-import { scope, token_schema, authLogin } from 'app/components/auth/state';
+import { scope, tokenSchema, authLogin } from 'app/components/auth/state';
 
 const middlewares = [
   path(scope, {}),
-  stripv
+  stripv,
 ];
 
 registerHandler('auth-signin', middlewares, authSigninHandler);
 registerHandler('auth-signout', middlewares, authSignoutHandler);
 registerHandler('auth-setToken', [
   middlewares,
-  validateArgs(token_schema)
+  validateArgs(tokenSchema),
 ], authSetTokenHandler);
 
 export function authSigninHandler(state) {

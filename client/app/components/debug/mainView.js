@@ -1,9 +1,11 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
+/* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { DebugHistory } from 'app/components/debug/historyView';
 import { DebugState } from 'app/components/debug/stateView';
+/* eslint-enable no-unused-vars */
 
 export const DebugMain = createComponent({
   displayName: 'DebugMain',
@@ -11,7 +13,7 @@ export const DebugMain = createComponent({
   render: debugMainRender,
   componentDidMount: debugMainDidMount,
   componentWillUnmount: debugMainWillUnmount,
-  onKeyDown: debugMainOnKeyDown
+  onKeyDown: debugMainOnKeyDown,
 });
 
 function debugMainGetInitialState() {
@@ -22,7 +24,7 @@ function debugMainGetInitialState() {
 function debugMainRender() {
   return (
     <div className={{
-           'show': this.state.show
+           show: this.state.show,
          }}>
       <div className="title">
         Debug
@@ -47,10 +49,10 @@ function debugMainWillUnmount() {
   self.document.removeEventListener('keydown', this.onKeyDown);
 }
 
-function debugMainOnKeyDown(e) {
-  if(!e.altKey ||
-     !e.ctrlKey ||
-     e.key !== 'd') {
+function debugMainOnKeyDown(event) {
+  if (!event.altKey ||
+      !event.ctrlKey ||
+      event.key !== 'd') {
     return;
   }
   this.setState({ show: !this.state.show });

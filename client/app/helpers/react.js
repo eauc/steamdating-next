@@ -10,25 +10,26 @@ export const React = _React;
 export function createComponent(desc) {
   let mixins = R.defaultTo([], desc.mixins);
   mixins = R.append(pureRenderMixin, mixins);
-  if(desc.subscriptions) {
+  if (desc.subscriptions) {
     mixins = R.append(subscriptionsMixin, mixins);
   }
+  // eslint-disable-next-line no-param-reassign
   desc.mixins = mixins;
   let component = _React.createClass(desc);
-  if(desc.displayName) {
+  if (desc.displayName) {
     component = styles.decorator(component);
   }
   return component;
 }
 
-if(self.STEAMDATING_CONFIG.debug) {
+if (self.STEAMDATING_CONFIG.debug) {
   System.import('react-addons-perf')
     .then((ReactPerf) => {
       self.ReactPerf = ReactPerf;
     });
 
   System.import('why-did-you-update')
-    .then(({whyDidYouUpdate}) => {
+    .then(({ whyDidYouUpdate }) => {
       whyDidYouUpdate(_React);
     });
 }

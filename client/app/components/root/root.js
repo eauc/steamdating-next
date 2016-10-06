@@ -1,18 +1,20 @@
 export let __hotReload = true;
 
+/* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { Router, Route, IndexRedirect } from 'react-router';
+/* eslint-enable no-unused-vars */
 import history from 'app/helpers/history';
 
-import { HomePage }from 'app/pages/home/view';
-import { PlayersListPage }from 'app/pages/players/listView';
-import { PlayersCreatePage }from 'app/pages/players/createView';
-import { PlayersEditPage }from 'app/pages/players/editView';
+import { HomePage } from 'app/pages/home/view';
+import { PlayersListPage } from 'app/pages/players/listView';
+import { PlayersCreatePage } from 'app/pages/players/createView';
+import { PlayersEditPage } from 'app/pages/players/editView';
 import { FilePage } from 'app/pages/file/view';
 import { AboutPage } from 'app/pages/about/view';
 
 export const Root = createComponent({
-  render: rootRender
+  render: rootRender,
 });
 
 function rootRender() {

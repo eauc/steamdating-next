@@ -7,7 +7,7 @@ import { revokeView } from 'app/services/state';
 const subscriptionsMixin = {
   componentWillMount: subscriptionsWillMount,
   componentWillUnmount: subscriptionsWillUnmount,
-  getSubscriptions: subscriptionsGet
+  getSubscriptions: subscriptionsGet,
 };
 
 export default subscriptionsMixin;
@@ -32,9 +32,9 @@ function subscriptionsWillUnmount() {
 function subscriptionsGet() {
   this.views = R.reduce((mem, view) => {
     let sub = this.subscriptions[view];
-    if(R.type(sub) === 'Function') sub = [sub];
+    if (R.type(sub) === 'Function') sub = [sub];
 
-    const [ getView, ...args] = sub;
+    const [getView, ...args] = sub;
     return R.assoc(
       view,
       getView.apply(this, [args]).changes((value) => {
