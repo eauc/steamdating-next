@@ -4,6 +4,7 @@ import R from 'app/helpers/ramda';
 import { registerHandler } from 'app/services/state';
 import path from 'app/helpers/middlewares/path';
 import stripv from 'app/helpers/middlewares/stripv';
+import tap from 'app/helpers/middlewares/tap';
 import validateArgs from 'app/helpers/middlewares/validateArgs';
 import { scope, tokenSchema, authLogin } from 'app/components/auth/state';
 
@@ -12,16 +13,18 @@ const middlewares = [
   stripv,
 ];
 
-registerHandler('auth-signin', middlewares, authSigninHandler);
+registerHandler('auth-signin', [
+  middlewares,
+  tap,
+], authSigninHandler);
 registerHandler('auth-signout', middlewares, authSignoutHandler);
 registerHandler('auth-setToken', [
   middlewares,
   validateArgs(tokenSchema),
 ], authSetTokenHandler);
 
-export function authSigninHandler(state) {
+export function authSigninHandler() {
   authLogin();
-  return state;
 }
 
 export function authSignoutHandler(state) {

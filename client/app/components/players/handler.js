@@ -5,6 +5,7 @@ import { dispatch, registerHandler } from 'app/services/state';
 import history from 'app/helpers/history';
 import path from 'app/helpers/middlewares/path';
 import stripv from 'app/helpers/middlewares/stripv';
+import tap from 'app/helpers/middlewares/tap';
 
 import { scope } from 'app/components/players/state';
 import playerModel from 'app/models/player';
@@ -26,9 +27,8 @@ registerHandler('players-update', middlewares, (state, [{ base, edit }]) => {
   return playersModel.update(base.name, edit, state);
 });
 
-registerHandler('players-remove-current-edit', (state) => {
+registerHandler('players-remove-current-edit', [tap], (state) => {
   dispatch(['players-remove', R.pathOr({}, ['forms', 'player', 'base'], state)]);
-  return state;
 });
 
 registerHandler('players-remove', middlewares, (state, [player]) => {

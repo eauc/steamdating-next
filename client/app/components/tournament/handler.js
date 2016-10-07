@@ -6,6 +6,7 @@ import fileService from 'app/services/file';
 import tournamentsApiService from 'app/services/apis/tournaments';
 import path from 'app/helpers/middlewares/path';
 import stripv from 'app/helpers/middlewares/stripv';
+import tap from 'app/helpers/middlewares/tap';
 import { scope } from 'app/components/tournament/state';
 
 const middlewares = [
@@ -14,24 +15,26 @@ const middlewares = [
 ];
 
 registerHandler('tournament-set',
-                middlewares,
+                [middlewares, tap],
                 tournamentSetHandler);
 registerHandler('tournament-setConfirm',
                 middlewares,
                 tournamentSetConfirmHandler);
 
 registerHandler('tournament-open',
-                middlewares,
+                [middlewares, tap],
                 tournamentOpenHandler);
 registerHandler('tournament-openSuccess',
                 middlewares,
                 tournamentOpenSuccessHandler);
 
 registerHandler('tournament-onlineRefresh',[
-  stripv
+  stripv,
+  tap,
 ], tournamentOnlineRefreshHandler);
 registerHandler('tournament-onlineRefreshRequest',[
-  stripv
+  stripv,
+  tap,
 ], tournamentOnlineRefreshRequestHandler);
 registerHandler('tournament-onlineRefreshSuccess',[
   path(scope.onlineList, []),
@@ -42,19 +45,18 @@ registerHandler('tournament-onlineGetUrlsSuccess',[
   stripv,
 ], tournamentOnlineGetUrlsSuccessHandler);
 
-export function tournamentSetHandler(state, [data]) {
+export function tournamentSetHandler(_state_, [data]) {
   dispatch(['prompt-set',
             { type: 'confirm',
               msg: 'All previous data will be replaced. You sure ?',
               onOk: ['tournament-setConfirm', data] }]);
-  return state;
 }
 
 export function tournamentSetConfirmHandler(_state_, [data]) {
   return data;
 }
 
-export function tournamentOpenHandler(state, [file]) {
+export function tournamentOpenHandler(_state_, [file]) {
   R.pipeP(
     fileService.readP,
     R.ifElse(
@@ -64,7 +66,6 @@ export function tournamentOpenHandler(state, [file]) {
                                        message: 'Invalid file' }])
     )
   )(file);
-  return state;
 }
 
 export function tournamentOpenSuccessHandler(state, [data]) {
@@ -78,7 +79,6 @@ export function tournamentOnlineRefreshHandler(state) {
     initOnlineUrlsP,
     () => dispatch(['tournament-onlineRefreshRequest'])
   )(state);
-  return state;
 }
 
 export function tournamentOnlineRefreshRequestHandler(state) {
