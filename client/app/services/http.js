@@ -5,10 +5,10 @@ import log from 'app/helpers/log';
 import { dispatch } from 'app/services/state';
 
 const httpService = {
-  getP: getP,
-  // postP: postP,
-  // putP: putP,
-  deleteP: deleteP
+  getP: httpGetP,
+  postP: httpPostP,
+  putP: httpPutP,
+  deleteP: httpDeleteP,
 };
 
 export default R.curryService(httpService);
@@ -22,19 +22,31 @@ const errorListener$ = R.curry(errorListener);
 const dispatchSuccess$ = R.curry(dispatchSuccess);
 const dispatchError$ = R.curry(dispatchError);
 
-function getP({ url, headers = {}, onSuccess, onError }) {
+function httpGetP({ url, headers = {}, onSuccess, onError }) {
   return new self.Promise(httpRequest$({ method: 'GET', url, headers }))
     .then(dispatchSuccess$({ onSuccess }))
     .catch(dispatchError$({ onError }));
 }
 
-function deleteP({url, headers = {}, onSuccess, onError}) {
-  return new self.Promise(httpRequest$({method: 'DELETE', url, headers}))
-    .then(dispatchSuccess$({onSuccess}))
-    .catch(dispatchError$({onError}));
+function httpPostP({ url, headers = {}, data, onSuccess, onError }) {
+  return new self.Promise(httpRequest$({ method: 'POST', url, headers, data }))
+    .then(dispatchSuccess$({ onSuccess }))
+    .catch(dispatchError$({ onError }));
 }
 
-function httpRequest({ url, headers, method }, resolve, reject) {
+function httpPutP({ url, headers = {}, data, onSuccess, onError }) {
+  return new self.Promise(httpRequest$({ method: 'PUT', url, headers, data }))
+    .then(dispatchSuccess$({ onSuccess }))
+    .catch(dispatchError$({ onError }));
+}
+
+function httpDeleteP({ url, headers = {}, onSuccess, onError }) {
+  return new self.Promise(httpRequest$({ method: 'DELETE', url, headers }))
+    .then(dispatchSuccess$({ onSuccess }))
+    .catch(dispatchError$({ onError }));
+}
+
+function httpRequest({ url, headers, method, data = null }, resolve, reject) {
   const request = new XMLHttpRequest();
   request.addEventListener(
     'load',
@@ -46,7 +58,12 @@ function httpRequest({ url, headers, method }, resolve, reject) {
   );
   request.open(method, url, true);
   setHeaders(request, headers);
-  request.send();
+  if (R.exists(data)) {
+    request.send(R.jsonStringify(null, data));
+  }
+  else {
+    request.send();
+  }
 }
 
 function setHeaders(request, headers) {
@@ -89,41 +106,3 @@ function dispatchError({ onError }, [message, payload]) {
         : dispatch(['toaster-set', { type: 'error', message }]);
   return ret.then(() => self.Promise.reject(message));
 }
-
-// function postP(url, data, {headers} = {}) {
-//   return R.threadP(data)(
-//     (data) => JSON.stringify(data),
-//     (body) => ({
-//       method: 'POST',
-//       headers: Object.assign({}, DEFAULT_HEADERS, headers),
-//       body: body
-//     }),
-//     (options) => self.fetch(url, options),
-//     checkStatus,
-//     (response) => response.json()
-//   ).catch(catchError$(url));
-// }
-
-// function putP(url, data, {headers} = {}) {
-//   return R.threadP(data)(
-//     (data) => JSON.stringify(data),
-//     (body) => ({
-//       method: 'PUT',
-//       headers: Object.assign({}, DEFAULT_HEADERS, headers),
-//       body: body
-//     }),
-//     (options) => self.fetch(url, options),
-//     checkStatus
-//   ).catch(catchError$(url));
-// }
-
-// function deleteP(url, {headers} = {}) {
-//   return R.threadP()(
-//     () => ({
-//       method: 'DELETE',
-//       headers: Object.assign({}, DEFAULT_HEADERS, headers)
-//     }),
-//     (options) => self.fetch(url, options),
-//     checkStatus
-//   ).catch(catchError$(url));
-// }

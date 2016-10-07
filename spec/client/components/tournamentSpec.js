@@ -1,3 +1,4 @@
+/* eslint-disable prefer-arrow-callback */
 import { beforeEach,
          context,
          it,
@@ -10,160 +11,223 @@ import { tournamentOpenHandler,
          tournamentOnlineGetUrlsSuccessHandler,
          tournamentOnlineRefreshHandler,
          tournamentOnlineRefreshRequestHandler,
-         tournamentOnlineRefreshSuccessHandler } from 'app/components/tournament/handler';
+         tournamentOnlineRefreshSuccessHandler,
+         tournamentOnlineSaveHandler,
+         tournamentOnlineSaveSuccessHandler,
+       } from 'app/components/tournament/handler';
 
 import fileService from 'app/services/file';
 import stateService from 'app/services/state';
 import tournamentsApiService from 'app/services/apis/tournaments';
 
-describe('tournamentComponent', function() {
-  beforeEach(function() {
+describe('tournamentComponent', function () {
+  beforeEach(function () {
     this.state = {};
     spyOnService(fileService, 'file');
     spyOnService(stateService, 'state');
     spyOnService(tournamentsApiService, 'tournamentsApi');
   });
 
-  context('tournamentOpenHandler(<file>)', function() {
+  context('tournamentOpenHandler(<file>)', function () {
     return tournamentOpenHandler(this.state, ['file']);
-  }, function() {
-    it('should try to read <file>', function() {
+  }, function () {
+    it('should try to read <file>', function () {
       expect(fileService.readP)
         .toHaveBeenCalledWith('file');
     });
 
-    context('when file read succeeds', function() {
+    context('when file read succeeds', function () {
       fileService.readP.resolveWith('data');
-    }, function() {
-      it('should set tournament to read data', function() {
+    }, function () {
+      it('should set tournament to read data', function () {
         expect(stateService.dispatch)
           .toHaveBeenCalledWith(['tournament-openSuccess', 'data']);
       });
     });
 
-    context('when file read fails', function() {
+    context('when file read fails', function () {
       fileService.readP.resolveWith(undefined);
-    }, function() {
-      it('should set error', function() {
+    }, function () {
+      it('should set error', function () {
         expect(stateService.dispatch)
           .toHaveBeenCalledWith(['toaster-set', {
             type: 'error',
-            message: 'Invalid file'
+            message: 'Invalid file',
           }]);
       });
     });
   });
 
-  context('tournamentOpenSuccessHandler(<data>)', function() {
+  context('tournamentOpenSuccessHandler(<data>)', function () {
     return tournamentOpenSuccessHandler(this.state, ['data']);
-  }, function() {
-    it('should notify file loaded', function() {
+  }, function () {
+    it('should notify file loaded', function () {
       expect(stateService.dispatch)
         .toHaveBeenCalledWith(['toaster-set', {
           type: 'success',
-          message: 'File loaded'
+          message: 'File loaded',
         }]);
     });
 
-    it('should set tournament data', function() {
+    it('should set tournament data', function () {
       expect(stateService.dispatch)
         .toHaveBeenCalledWith(['tournament-set', 'data']);
     });
   });
 
-  context('tournamentSetHandler(<data>)', function() {
+  context('tournamentSetHandler(<data>)', function () {
     return tournamentSetHandler(this.state, ['data']);
-  }, function() {
-    it('should prompt user for confirmation', function() {
+  }, function () {
+    it('should prompt user for confirmation', function () {
       expect(stateService.dispatch)
         .toHaveBeenCalledWith([
           'prompt-set',
           { type: 'confirm',
             msg: 'All previous data will be replaced. You sure ?',
-            onOk: ['tournament-setConfirm', 'data'] }
+            onOk: ['tournament-setConfirm', 'data'] },
         ]);
     });
   });
 
-  context('tournamentSetConfirmHandler(<data>)', function() {
+  context('tournamentSetConfirmHandler(<data>)', function () {
     return tournamentSetConfirmHandler(this.state, ['data']);
-  }, function() {
-    it('should set <data> as current tournament', function() {
+  }, function () {
+    it('should set <data> as current tournament', function () {
       expect(this.context)
         .toBe('data');
     });
   });
 
-  context('tournamentOnlineGetUrlsSuccessHandler(<urls>)', function() {
+  context('tournamentOnlineGetUrlsSuccessHandler(<urls>)', function () {
     return tournamentOnlineGetUrlsSuccessHandler(this.state, ['urls']);
-  }, function() {
-    it('should set <urls> in current state', function() {
+  }, function () {
+    it('should set <urls> in current state', function () {
       expect(this.context)
         .toBe('urls');
     });
   });
 
-  context('tournamentOnlineRefreshHandler()', function() {
+  context('tournamentOnlineRefreshHandler()', function () {
     return tournamentOnlineRefreshHandler(this.state);
-  }, function() {
-    context('when online urls are not initialized', function() {
+  }, function () {
+    context('when online urls are not initialized', function () {
       this.state.online = { urls: null };
-    }, function() {
-      it('should get the urls', function() {
+    }, function () {
+      it('should get the urls', function () {
         expect(tournamentsApiService.getUrlsP)
           .toHaveBeenCalledWith({
-            onSuccess: ['tournament-onlineGetUrlsSuccess']
+            onSuccess: ['tournament-onlineGetUrlsSuccess'],
           });
       });
     });
 
-    context('when online urls are initialized', function() {
+    context('when online urls are initialized', function () {
       this.state.online = { urls: 'urls' };
-    }, function() {
-      it('should not get the urls agains', function() {
+    }, function () {
+      it('should not get the urls agains', function () {
         expect(tournamentsApiService.getUrlsP)
           .not.toHaveBeenCalled();
       });
     });
 
-    it('should dispatch refreshRequest event', function() {
+    it('should dispatch refreshRequest event', function () {
       expect(stateService.dispatch)
         .toHaveBeenCalledWith(['tournament-onlineRefreshRequest']);
     });
   });
 
-  context('tournamentOnlineRefreshRequestHandler()', function() {
+  context('tournamentOnlineRefreshRequestHandler()', function () {
     return tournamentOnlineRefreshRequestHandler(this.state);
-  }, function() {
-    beforeEach(function() {
+  }, function () {
+    beforeEach(function () {
       this.state.online = {
         urls: 'urls',
-        list: ['list']
+        list: ['list'],
       };
       this.state.auth = { token: 'token' };
     });
 
-    it('should get online list for current user', function() {
+    it('should get online list for current user', function () {
       expect(tournamentsApiService.getMineP)
         .toHaveBeenCalledWith({
           urls: 'urls',
           authToken: 'token',
-          onSuccess: ['tournament-onlineRefreshSuccess']
+          onSuccess: ['tournament-onlineRefreshSuccess'],
         });
-    });
-
-    it('should clear online list', function() {
-      expect(this.context.online.list)
-        .toEqual([]);
     });
   });
 
-  context('tournamentOnlineRefreshSuccessHandler(<list>)', function() {
-    return tournamentOnlineRefreshSuccessHandler(this.state, ['list']);
-  }, function() {
-    it('should set <list> in current state', function() {
+  context('tournamentOnlineRefreshSuccessHandler(<list>)', function () {
+    return tournamentOnlineRefreshSuccessHandler(this.state, [this.newList]);
+  }, function () {
+    beforeEach(function () {
+      this.state = ['tournament1', 'tournament2'];
+      this.newList = ['tournament1','tournament3','tournament4'];
+    });
+
+    it('should update <list> in current state', function () {
       expect(this.context)
-        .toBe('list');
+        .toEqual(this.newList);
+    });
+  });
+
+  context('tournamentOnlineSaveHandler(<data>)', function () {
+    return tournamentOnlineSaveHandler(this.state, [this.form]);
+  }, function () {
+    beforeEach(function () {
+      this.state = {
+        auth: { token: 'token' },
+        online: { urls: 'urls' },
+        tournament: { players: ['players'] },
+      };
+      this.form = {
+        edit: { name: 'name',
+                date: 'date',
+              },
+      };
+    });
+
+    it('should save current tournament on server', function () {
+      expect(tournamentsApiService.saveP)
+        .toHaveBeenCalledWith({
+          urls: 'urls',
+          authToken: 'token',
+          tournament: { players: ['players'],
+                        online: { name: 'name', date: 'date' },
+                      },
+          onSuccess: ['tournament-onlineSaveSuccess'],
+        });
+    });
+  });
+
+  context('tournamentOnlineSaveSuccessHandler(<data>)', function () {
+    return tournamentOnlineSaveSuccessHandler(this.state, [this.data]);
+  }, function () {
+    beforeEach(function () {
+      this.data = {
+        name: 'name',
+        date: 'date',
+        id: 'id',
+        updated_at: 'updated_at',
+      };
+    });
+
+    it('should display save success toaster', function () {
+      expect(stateService.dispatch)
+        .toHaveBeenCalledWith(['toaster-set', {
+          type: 'success',
+          message: 'Tournament saved on server',
+        }]);
+    });
+
+    it('should refresh online tournaments list', function () {
+      expect(stateService.dispatch)
+        .toHaveBeenCalledWith(['tournament-onlineRefresh']);
+    });
+
+    it('should update <state>\'s online info from <data>', function () {
+      expect(this.context)
+        .toEqual({ online: this.data });
     });
   });
 });

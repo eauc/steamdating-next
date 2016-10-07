@@ -1,75 +1,62 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import Joi from 'joi-browser';
 import { dispatch } from 'app/services/state';
 import { tournamentOnlineListSub } from 'app/components/tournament/sub';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { AuthRequired } from 'app/components/auth/auth';
-import { Icon } from 'app/components/misc/misc';
-import { FormEdit, FormInput } from 'app/components/form/form';
+import { TournamentOnlineListItem } from 'app/components/tournament/onlineListItemView';
 /* eslint-enable no-unused-vars */
 
 export const TournamentOnlineList = createComponent({
-  render: onlineListRender,
+  render: listRender,
 });
 
-function onlineListRender() {
+function listRender() {
   return (
     <AuthRequired>
-      <TournamentsList />
+      <ListContent />
     </AuthRequired>
   );
 }
 
 // eslint-disable-next-line no-unused-vars
-const TournamentsList = createComponent({
-  displayName: 'TournamentsList',
+const ListContent = createComponent({
+  displayName: 'TournamentOnlineList',
   subscriptions: { list: tournamentOnlineListSub },
-  render: listRender,
-  componentDidMount: listComponentDidMount,
+  render: listContentRender,
+  componentDidMount: listContentDidMount,
 });
 
-function listRender() {
+function listContentRender() {
   const items = R.map((item) => (
-    <TournamentsListItem
+    <TournamentOnlineListItem
        key={item.id}
        tournament={item} />
   ), this.state.list);
   return (
-    <ul>
-      {items}
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>
+            Date
+          </th>
+          <th>
+            Name
+          </th>
+          <th>
+            Last Updated At
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {items}
+      </tbody>
+    </table>
   );
 }
 
-function listComponentDidMount() {
+function listContentDidMount() {
   dispatch(['tournament-onlineRefresh']);
-}
-
-const TournamentsListItem = createComponent({
-  displayName: 'TournamentsListItem',
-  render: itemRender,
-  download: itemDownload
-});
-
-function itemRender() {
-  const tournament = this.props.tournament;
-  return (
-    <li className="item">
-      <span className="itemLabel">
-        {tournament.date} - {tournament.name}
-      </span>
-      <button className="action"
-              onClick={() => this.download(tournament)}>
-        <Icon name="download" />
-        <span className="actionLabel"> Download</span>
-      </button>
-    </li>
-  );
-}
-
-function itemDownload(tournament) {
-  dispatch(['tournament-onlineDownload', tournament]);
 }

@@ -17,7 +17,7 @@ registerInit('storage', [], storageInit);
 
 export function storageListener(event) {
   if (event.key !== STATE_STORAGE_KEY) return;
-  const newState = R.jsonParse(event.new_value);
+  const newState = R.jsonParse(event.newValue);
   if (newState) dispatch(['storage-refresh', newState]);
 }
 

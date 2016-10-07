@@ -44,6 +44,13 @@ registerHandler('tournament-onlineGetUrlsSuccess',[
   path(scope.onlineUrls, {}),
   stripv,
 ], tournamentOnlineGetUrlsSuccessHandler);
+registerHandler('tournament-onlineSave',[
+  stripv,
+  tap,
+], tournamentOnlineSaveHandler);
+registerHandler('tournament-onlineSaveSuccess',
+                middlewares,
+                tournamentOnlineSaveSuccessHandler);
 
 export function tournamentSetHandler(_state_, [data]) {
   dispatch(['prompt-set',
@@ -88,11 +95,10 @@ export function tournamentOnlineRefreshRequestHandler(state) {
     authToken: R.path(['auth','token'], state),
     onSuccess: ['tournament-onlineRefreshSuccess'],
   });
-  return R.assocPath(['online', 'list'], [], state);
 }
 
-export function tournamentOnlineRefreshSuccessHandler(_state_, [list]) {
-  return list;
+export function tournamentOnlineRefreshSuccessHandler(state, [list]) {
+  return R.deepMergeArray(list, state);
 }
 
 function initOnlineUrlsP(state) {
@@ -109,3 +115,27 @@ export function tournamentOnlineGetUrlsSuccessHandler(_state_, [urls]) {
   return urls;
 }
 
+export function tournamentOnlineSaveHandler(state, [form]) {
+  const tournament = R.thread(state)(
+    R.assocPath([...scope.onlineInfo, 'name'], R.path(['edit','name'], form)),
+    R.assocPath([...scope.onlineInfo, 'date'], R.path(['edit','date'], form)),
+    R.path(scope.tournament)
+  );
+  tournamentsApiService.saveP({
+    urls: R.path(['online','urls'], state),
+    authToken: R.path(['auth','token'], state),
+    tournament,
+    onSuccess: ['tournament-onlineSaveSuccess'],
+  });
+}
+
+export function tournamentOnlineSaveSuccessHandler(state, [data]) {
+  dispatch(['toaster-set', { type: 'success',
+                             message: 'Tournament saved on server' }]);
+  dispatch(['tournament-onlineRefresh']);
+  return R.assoc(
+    'online',
+    R.pick(['name', 'date', 'id', 'updated_at'], data),
+    state
+  );
+}

@@ -5,7 +5,8 @@ import httpService from 'app/services/http';
 
 const tournamentsApiService = {
   getUrlsP: tournamentsApiGetUrlsP,
-  getMineP: tournamentsApiGetMineP
+  getMineP: tournamentsApiGetMineP,
+  saveP: tournamentsApiSaveP,
 };
 
 export default R.curryService(tournamentsApiService);
@@ -29,4 +30,35 @@ function tournamentsApiGetMineP({ authToken, onSuccess, urls }) {
     onError: ['toaster-set', { type: 'error',
                                message: 'Error loading tournaments from server' }],
   });
+}
+
+function tournamentsApiSaveP({ authToken, onSuccess, tournament, urls }) {
+  const data = R.thread(tournament)(
+    R.prop('online'),
+    R.pick(['name', 'date']),
+    R.assoc('data', R.jsonStringify(null, tournament))
+  );
+  const config = {
+    headers: { Authorization: `Bearer ${authToken}` },
+    data,
+    onSuccess: (result) => [...onSuccess, R.thread(result)(
+      R.propOr({}, 'data'),
+      R.assoc('id', R.prop('link', result))
+    )],
+    onError: ['toaster-set', { type: 'error',
+                               message: 'Error saving tournament on server' }],
+  };
+  const id = R.path(['online','id'], tournament);
+  if (id) {
+    return httpService.putP({
+      ...config,
+      url: `${TOURNAMENTS_API}${id}`,
+    });
+  }
+  else {
+    return httpService.postP({
+      ...config,
+      url: `${TOURNAMENTS_API}${R.prop('mine', urls)}`,
+    });
+  }
 }

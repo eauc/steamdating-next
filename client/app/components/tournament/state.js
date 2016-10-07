@@ -7,6 +7,7 @@ import { registerValidator } from 'app/services/state';
 
 export const scope = {
   tournament: ['tournament'],
+  onlineInfo: ['tournament','online'],
   online: ['online'],
   onlineUrls: ['online','urls'],
   onlineList: ['online','list'],
@@ -34,6 +35,12 @@ const onlineTournamentSchema = Joi.object({
   updated_at: Joi.date().required(),
 });
 const onlineListSchema = Joi.array().items(onlineTournamentSchema);
+export const onlineSaveFormSchema = Joi.object({
+  name: Joi.string()
+    .empty('')
+    .required(),
+  date: Joi.date().required(),
+});
 const onlineSchema = Joi.object({
   urls: onlineUrlsSchema,
   list: onlineListSchema,
