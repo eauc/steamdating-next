@@ -7,6 +7,12 @@
   - [X] run only in debug ?
   - [X] test all pages
 - [X] players list filter list matching columns first but display all
-- [ ] tournament file save/load
+- [X] tournament file save/load
+- [ ] tournament online
+  - [ ] save
+  - [ ] download
+- [ ] page router
+- [ ] tests cell/etc...
+- [ ] setup nightwatch/cucumber
 - [ ] pairing/steps trace
 - [ ] setup appCache

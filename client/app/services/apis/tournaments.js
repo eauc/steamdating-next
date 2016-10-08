@@ -6,6 +6,7 @@ import httpService from 'app/services/http';
 const tournamentsApiService = {
   getUrlsP: tournamentsApiGetUrlsP,
   getMineP: tournamentsApiGetMineP,
+  loadP: tournamentsApiLoadP,
   saveP: tournamentsApiSaveP,
 };
 
@@ -32,6 +33,25 @@ function tournamentsApiGetMineP({ authToken, onSuccess, urls }) {
   });
 }
 
+function tournamentsApiLoadP({ authToken, onSuccess, tournament }) {
+  return httpService.getP({
+    url: `${TOURNAMENTS_API}${R.prop('link', tournament)}`,
+    headers: { Authorization: `Bearer ${authToken}` },
+    onSuccess: (result) => [...onSuccess, R.thread(result)(
+      R.propOr({}, 'data'),
+      R.assoc('id', R.prop('link', result)),
+      (data) => R.thread(data)(
+        R.prop('data'),
+        R.jsonParse,
+        R.defaultTo({}),
+        R.assoc('online', R.pick(['name', 'date', 'id', 'updated_at'], data))
+      )
+    )],
+    onError: ['toaster-set', { type: 'error',
+                               message: 'Error loading tournament from server' }],
+  });
+}
+
 function tournamentsApiSaveP({ authToken, onSuccess, tournament, urls }) {
   const data = R.thread(tournament)(
     R.prop('online'),
@@ -43,7 +63,12 @@ function tournamentsApiSaveP({ authToken, onSuccess, tournament, urls }) {
     data,
     onSuccess: (result) => [...onSuccess, R.thread(result)(
       R.propOr({}, 'data'),
-      R.assoc('id', R.prop('link', result))
+      R.assoc('id', R.prop('link', result)),
+      (data) => R.assoc(
+        'online',
+        R.pick(['name', 'date', 'id', 'updated_at'], data),
+        tournament
+      )
     )],
     onError: ['toaster-set', { type: 'error',
                                message: 'Error saving tournament on server' }],

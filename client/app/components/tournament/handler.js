@@ -51,6 +51,14 @@ registerHandler('tournament-onlineSave',[
 registerHandler('tournament-onlineSaveSuccess',
                 middlewares,
                 tournamentOnlineSaveSuccessHandler);
+registerHandler('tournament-onlineDownload',[
+  stripv,
+  tap,
+], tournamentOnlineDownloadHandler);
+registerHandler('tournament-onlineDownloadSuccess', [
+  middlewares,
+  tap,
+], tournamentOnlineDownloadSuccessHandler);
 
 export function tournamentSetHandler(_state_, [data]) {
   dispatch(['prompt-set',
@@ -129,13 +137,22 @@ export function tournamentOnlineSaveHandler(state, [form]) {
   });
 }
 
-export function tournamentOnlineSaveSuccessHandler(state, [data]) {
+export function tournamentOnlineSaveSuccessHandler(_state_, [tournament]) {
   dispatch(['toaster-set', { type: 'success',
-                             message: 'Tournament saved on server' }]);
+                             message: 'Tournament saved online' }]);
   dispatch(['tournament-onlineRefresh']);
-  return R.assoc(
-    'online',
-    R.pick(['name', 'date', 'id', 'updated_at'], data),
-    state
-  );
+  return tournament;
+}
+
+export function tournamentOnlineDownloadHandler(state, [tournament]) {
+  tournamentsApiService.loadP({
+    tournament,
+    authToken: R.path(['auth','token'], state),
+    onSuccess: ['tournament-onlineDownloadSuccess'],
+  });
+}
+
+export function tournamentOnlineDownloadSuccessHandler(_state_, [tournament]) {
+  dispatch(['toaster-set', { type: 'success', message: 'Tournament loaded' }]);
+  dispatch(['tournament-set', tournament]);
 }

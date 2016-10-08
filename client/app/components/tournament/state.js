@@ -3,7 +3,11 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import Joi from 'joi-browser';
 import { registerInit } from 'app/services/init';
-import { registerValidator } from 'app/services/state';
+import { dispatch,
+         registerSubscription,
+         getPermanentSubscription,
+         registerValidator,
+       } from 'app/services/state';
 
 export const scope = {
   tournament: ['tournament'],
@@ -48,9 +52,23 @@ const onlineSchema = Joi.object({
 
 registerValidator('tournament', scope.tournament, tournamentSchema);
 registerValidator('online', scope.online, onlineSchema);
-
+const tournamentOnlineResetSaveFormSub = registerSubscription(
+  'tournament-onlineResetSetForm',
+  (state) => {
+    const defaut = {};
+    return state
+      .map(R.pathOr(defaut, scope.onlineInfo))
+      .map((info) => {
+        dispatch(['form-reset', 'tournament_onlineSave', R.pick(['name','date'], info)]);
+      });
+  }
+);
 registerInit('tournament-online', ['storage'], initTournamentOnline);
 
 function initTournamentOnline(state) {
+  getPermanentSubscription(
+    'tournament-onlineInfo',
+    [tournamentOnlineResetSaveFormSub]
+  );
   return R.assoc('online', {}, state);
 }

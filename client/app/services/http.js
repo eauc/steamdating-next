@@ -50,7 +50,7 @@ function httpRequest({ url, headers, method, data = null }, resolve, reject) {
   const request = new XMLHttpRequest();
   request.addEventListener(
     'load',
-    loadListener$({ url, headers, resolve, reject })
+    loadListener$({ method, url, headers, resolve, reject })
   );
   request.addEventListener(
     'error',
@@ -69,11 +69,12 @@ function httpRequest({ url, headers, method, data = null }, resolve, reject) {
 function setHeaders(request, headers) {
   const headersWithDefaults = Object.assign({}, DEFAULT_HEADERS, headers);
   R.forEach((header) => {
+    // log.http('request header', header, headersWithDefaults[header]);
     request.setRequestHeader(header, `${headersWithDefaults[header]}`);
-  }, R.keys(headers));
+  }, R.keys(headersWithDefaults));
 }
 
-function loadListener({ url, headers, resolve, reject }, evt) {
+function loadListener({ method, url, headers, resolve, reject }, evt) {
   const request = evt.currentTarget;
   if (request.status >= 300) {
     const message = request.responseText || request.statusText;
@@ -81,7 +82,7 @@ function loadListener({ url, headers, resolve, reject }, evt) {
     return;
   }
   const data = R.jsonParse(request.responseText);
-  log.http(`GET ${url}`, headers, data);
+  log.http(`${method} ${url}`, request, headers, data);
   resolve(data);
 }
 
@@ -99,7 +100,8 @@ function dispatchSuccess({ onSuccess }, data) {
   return data;
 }
 
-function dispatchError({ onError }, [message, payload]) {
+function dispatchError({ onError }, error) {
+  const [message, payload] = R.type(error) === 'Error' ? [error.message] : error;
   log.error(message, payload);
   let ret = onError
         ? dispatch(onError)

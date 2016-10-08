@@ -3,65 +3,61 @@
         @include button;
     }
 }
-&-TournamentsList {
-    margin: 0;
-    padding: 0;
-    list-style: none;
 
-    &-item {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        padding: $padding_default;
+&-TournamentOnlineList {
+    @mixin lastUpdate {
+        color: $color_text_muted;
+        font-size: 80%;
+        font-style: italic;
+    }
 
-        &:hover .sd-TournamentsList-action {
-            display: block;
+    &-lastUpdate {
+        @include lastUpdate;
+    }
+
+    &Item {
+        $line_spacing: 0.6em;
+        $download_size: 2.2em;
+
+        td {
+            padding: $line_spacing/2 1em $line_spacing/2 0;
+        }
+
+        &-download {
+            @include button(white, $color_text, $download_size/2);
+            height: $download_size;
+            width: $download_size;
+        }
+
+        &-downloadLabel {
+            display: none;
+        }
+
+        &-lastUpdate {
+            @include lastUpdate;
         }
     }
-    &-itemLabel {
-        flex-grow: 1;
-        flex-shrink: 1;
-        max-width: $pc-break;
-        white-space: nowrap;
-        overflow-x: hidden;
-        text-overflow: ellipsis;
+    @media(max-width: $tablet_break) {
+        &-lastUpdate {
+            display: none;
+        }
+
+        &Item {
+            &-lastUpdate {
+                display: none;
+            }
+        }
     }
-    /* $action_size: 2.2em; */
-    /* &-action { */
-    /*     @include button; */
-    /*     flex-shrink: 0; */
-    /*     width: $action_size; */
-    /*     height: $action_size; */
-    /*     border-radius: $action_size/2; */
-    /*     margin: (-$action_size/2) 0 (-$action_size/2) 0.5em; */
-    /*     display: none; */
-    /* } */
-    /* &-actionLabel { */
-    /*     display: none; */
-    /* } */
     @media(min-width: $tablet_break) {
-        &-item {
-            padding: 1em;
+        &Item {
+            &-download {
+                border-radius: $border_radius_default;
+                width: auto;
+            }
 
-            /* &:hover .sd-TournamentsList-action { */
-            /*     opacity: 1; */
-            /*     pointer-events: all; */
-            /* } */
+            &-downloadLabel {
+                display: initial;
+            }
         }
-        &-itemLabel {
-            flex-grow: 0;
-        }
-        /* &-action { */
-        /*     display: block; */
-        /*     opacity: 0; */
-        /*     pointer-events: none; */
-        /*     border-radius: $border_radius_default; */
-        /*     width: auto; */
-        /*     margin-left: 1em; */
-        /* } */
-        /* &-actionLabel { */
-        /*     display: inline; */
-        /* } */
     }
 }

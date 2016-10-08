@@ -14,6 +14,8 @@ import { tournamentOpenHandler,
          tournamentOnlineRefreshSuccessHandler,
          tournamentOnlineSaveHandler,
          tournamentOnlineSaveSuccessHandler,
+         tournamentOnlineDownloadHandler,
+         tournamentOnlineDownloadSuccessHandler,
        } from 'app/components/tournament/handler';
 
 import fileService from 'app/services/file';
@@ -171,7 +173,7 @@ describe('tournamentComponent', function () {
     });
   });
 
-  context('tournamentOnlineSaveHandler(<data>)', function () {
+  context('tournamentOnlineSaveHandler(<form>)', function () {
     return tournamentOnlineSaveHandler(this.state, [this.form]);
   }, function () {
     beforeEach(function () {
@@ -200,23 +202,14 @@ describe('tournamentComponent', function () {
     });
   });
 
-  context('tournamentOnlineSaveSuccessHandler(<data>)', function () {
-    return tournamentOnlineSaveSuccessHandler(this.state, [this.data]);
+  context('tournamentOnlineSaveSuccessHandler(<tournament>)', function () {
+    return tournamentOnlineSaveSuccessHandler(this.state, ['tournament']);
   }, function () {
-    beforeEach(function () {
-      this.data = {
-        name: 'name',
-        date: 'date',
-        id: 'id',
-        updated_at: 'updated_at',
-      };
-    });
-
     it('should display save success toaster', function () {
       expect(stateService.dispatch)
         .toHaveBeenCalledWith(['toaster-set', {
           type: 'success',
-          message: 'Tournament saved on server',
+          message: 'Tournament saved online',
         }]);
     });
 
@@ -225,9 +218,45 @@ describe('tournamentComponent', function () {
         .toHaveBeenCalledWith(['tournament-onlineRefresh']);
     });
 
-    it('should update <state>\'s online info from <data>', function () {
+    it('should update <state>\'s tournament', function () {
       expect(this.context)
-        .toEqual({ online: this.data });
+        .toBe('tournament');
+    });
+  });
+
+  context('tournamentOnlineDownloadHandler(<tournament>)', function () {
+    return tournamentOnlineDownloadHandler(this.state, ['tournament']);
+  }, function () {
+    beforeEach(function () {
+      this.state = {
+        auth: { token: 'token' },
+      };
+    });
+
+    it('should load tournament from server', function () {
+      expect(tournamentsApiService.loadP)
+        .toHaveBeenCalledWith({
+          authToken: 'token',
+          tournament: 'tournament',
+          onSuccess: ['tournament-onlineDownloadSuccess'],
+        });
+    });
+  });
+
+  context('tournamentOnlineDownloadSuccessHandler(<tournament>)', function () {
+    return tournamentOnlineDownloadSuccessHandler(this.state, ['tournament']);
+  }, function () {
+    it('should display save success toaster', function () {
+      expect(stateService.dispatch)
+        .toHaveBeenCalledWith(['toaster-set', {
+          type: 'success',
+          message: 'Tournament loaded',
+        }]);
+    });
+
+    it('should set local tournament', function () {
+      expect(stateService.dispatch)
+        .toHaveBeenCalledWith(['tournament-set', 'tournament']);
     });
   });
 });

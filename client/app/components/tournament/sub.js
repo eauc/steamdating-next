@@ -1,9 +1,7 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { dispatch,
-         registerSubscription,
-         getPermanentSubscription } from 'app/services/state';
+import { registerSubscription } from 'app/services/state';
 import { fileSub } from 'app/components/file/file';
 import { scope } from 'app/components/tournament/state';
 
@@ -16,17 +14,3 @@ export const tournamentOnlineListSub = registerSubscription(
   (state) => state
     .map(R.pathOr([], scope.onlineList))
 );
-
-export const tournamentOnlineResetSaveFormSub = registerSubscription(
-  'tournament-onlineResetSetForm',
-  (state) => {
-    const defaut = {};
-    return state
-      .map(R.pathOr(defaut, scope.onlineInfo))
-      .map((info) => {
-        dispatch(['form-reset', 'tournament_onlineSave', R.pick(['name','date'], info)]);
-      });
-  }
-);
-
-getPermanentSubscription('tournament-onlineInfo', [tournamentOnlineResetSaveFormSub]);

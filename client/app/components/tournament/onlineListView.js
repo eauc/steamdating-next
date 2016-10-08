@@ -39,13 +39,14 @@ function listContentRender() {
     <table>
       <thead>
         <tr>
+          <th></th>
           <th>
             Date
           </th>
           <th>
             Name
           </th>
-          <th>
+          <th className="lastUpdate">
             Last Updated At
           </th>
         </tr>

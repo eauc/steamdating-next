@@ -147,7 +147,10 @@ function cellSample(tick) {
 }
 
 function cellValue() {
-  return this._value;
+  return ( undefined !== this._newValue
+           ? this._newValue
+           : this._value
+         );
 }
 
 function cellChanges(fn) {

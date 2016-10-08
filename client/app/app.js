@@ -45,9 +45,15 @@ function appInit() {
   dispatch(['init']);
 }
 
-if(self.STEAMDATING_CONFIG.debug) {
+// eslint-disable-next-line no-unused-vars
+// import { DebugMain } from 'app/components/debug/debug';
+// ReactDOM.render((
+//   <DebugMain />
+// ), document.querySelector('.sd-Debug'));
+if (self.STEAMDATING_CONFIG.debug) {
   System.import('app/components/debug/debug')
-    .then(({DebugMain}) => {
+  // eslint-disable-next-line no-unused-vars
+    .then(({ DebugMain }) => {
       ReactDOM.render((
         <DebugMain />
       ), document.querySelector('.sd-Debug'));

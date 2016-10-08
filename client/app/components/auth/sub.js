@@ -7,6 +7,6 @@ import { scope } from 'app/components/auth/state';
 export const authActiveSub = registerSubscription(
   'auth-active',
   (state) => state
-    .map(R.path([...scope, 'token']))
+    .map(R.pathOr(null, [...scope, 'token']))
     .map(R.exists)
 );
