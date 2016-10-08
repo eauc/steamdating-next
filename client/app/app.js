@@ -8,7 +8,7 @@ self.Joi = Joi;
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { NavMenu } from 'app/components/nav/nav';
-import { Root } from 'app/components/root/root';
+import { PageRoot } from 'app/components/page/page';
 import { Prompt } from 'app/components/prompt/prompt';
 /* eslint-enable no-unused-vars */
 export * from 'app/helpers/react';
@@ -30,7 +30,7 @@ ReactDOM.render((
 ), document.querySelector('.sd-NavMenu-container'));
 
 ReactDOM.render((
-  <Root />
+  <PageRoot />
 ), document.querySelector('.sd-Page-container'));
 
 ReactDOM.render((

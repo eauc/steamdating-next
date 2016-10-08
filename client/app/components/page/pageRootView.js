@@ -13,7 +13,7 @@ import { PlayersEditPage } from 'app/pages/players/editView';
 import { FilePage } from 'app/pages/file/view';
 import { AboutPage } from 'app/pages/about/view';
 
-export const Root = createComponent({
+export const PageRoot = createComponent({
   render: rootRender,
 });
 

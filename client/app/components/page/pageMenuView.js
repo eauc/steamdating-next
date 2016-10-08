@@ -3,7 +3,8 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
-import { Icon } from 'app/components/misc/misc';
+import { PageMenuItem } from 'app/components/page/pageMenuItemView';
+import { PageMenuToggle } from 'app/components/page/pageMenuToggleView';
 /* eslint-enable no-unused-vars */
 
 export const PageMenu = createComponent({
@@ -32,32 +33,4 @@ function pageMenuGetInitialState() {
 
 function pageMenuToggleShow() {
   this.setState({ show: !this.state.show });
-}
-
-// eslint-disable-next-line no-unused-vars
-const PageMenuToggle = createComponent({
-  displayName: 'PageMenuToggle',
-  render: pageMenuToggleRender,
-});
-
-function pageMenuToggleRender() {
-  return (
-    <button onClick={this.props.onToggle}>
-      <Icon name={this.props.show ? 'chevron-down' : 'chevron-up'} />
-    </button>
-  );
-}
-
-export const PageMenuItem = createComponent({
-  displayName: 'PageMenuItem',
-  render: pageMenuItemRender,
-});
-
-function pageMenuItemRender() {
-  return (
-    <a href={this.props.href}
-       onClick={this.props.onClick}>
-      {this.props.children}
-    </a>
-  );
 }

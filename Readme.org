@@ -16,3 +16,4 @@
 - [ ] setup nightwatch/cucumber
 - [ ] pairing/steps trace
 - [ ] setup appCache
+- [ ] bind actions middleware

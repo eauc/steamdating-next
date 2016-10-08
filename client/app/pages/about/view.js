@@ -2,7 +2,7 @@ export let __hotReload = true;
 
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
-import { Page, PageContent } from 'app/components/page/view';
+import { Page, PageContent } from 'app/components/page/page';
 /* eslint-enable no-unused-vars */
 
 export const AboutPage = createComponent({

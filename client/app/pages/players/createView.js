@@ -3,8 +3,11 @@ export let __hotReload = true;
 import history from 'app/helpers/history';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
-import { PageMenu, PageMenuItem } from 'app/components/pageMenu/view';
-import { Page, PageContent } from 'app/components/page/view';
+import { Page,
+         PageContent,
+         PageMenu,
+         PageMenuItem,
+       } from 'app/components/page/page';
 import { Icon } from 'app/components/misc/misc';
 import { PlayerEdit } from 'app/components/players/players';
 import { dispatch } from 'app/services/state';
@@ -12,6 +15,7 @@ import { dispatch } from 'app/services/state';
 
 export const PlayersCreatePage = createComponent({
   render: playersCreatePageRender,
+  doCreate: playersCreateDoCreate,
 });
 
 function playersCreatePageRender() {
@@ -25,8 +29,13 @@ function playersCreatePageRender() {
       </PageMenu>
       <PageContent>
         <PlayerEdit label="Create"
-                    onSubmit="players-create" />
+                    onSubmit={this.doCreate} />
       </PageContent>
     </Page>
   );
+}
+
+function playersCreateDoCreate(form) {
+  dispatch(['players-create', form])
+    .then(() => history.goBack());
 }

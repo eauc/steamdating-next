@@ -6,8 +6,11 @@ import validateArgs from 'app/helpers/middlewares/validateArgs';
 import Joi from 'joi-browser';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
-import { PageMenu, PageMenuItem } from 'app/components/pageMenu/view';
-import { Page, PageContent } from 'app/components/page/view';
+import { Page,
+         PageContent,
+         PageMenu,
+         PageMenuItem,
+       } from 'app/components/page/page';
 /* eslint-enable no-unused-vars */
 
 registerHandler('test', [

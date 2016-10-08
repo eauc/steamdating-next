@@ -67,5 +67,10 @@ function formEditGetChildContext() {
 function formEditOnSubmit(event) {
   event.preventDefault();
   if (this.state.form.error) return;
-  dispatch([this.props.onSubmit, this.state.form]);
+  if (R.type(this.props.onSubmit) === 'Function') {
+    this.props.onSubmit(this.state.form);
+  }
+  else {
+    dispatch([this.props.onSubmit, this.state.form]);
+  }
 }
