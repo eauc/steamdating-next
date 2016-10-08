@@ -12,7 +12,7 @@ export const PlayersListRow = createComponent({
   displayName: 'PlayersListRow',
   render: playersListRowRender,
   getInitialState: playersListRowGetInitialState,
-  edit: playersListRowEdit,
+  doEdit: playersListRowDoEdit,
 });
 
 function playersListRowRender() {
@@ -40,18 +40,17 @@ function playersListRowRender() {
     );
   }, this.props.columns);
   return (
-    <tr onClick={this.edit}>
+    <tr onClick={this.doEdit}>
       {cells}
     </tr>
   );
 }
 
 function playersListRowGetInitialState() {
-  this.edit = R.bind(this.edit, this);
   return {};
 }
 
-function playersListRowEdit() {
+function playersListRowDoEdit() {
   dispatch(['form-reset', 'player', this.props.player])
     .then(() => {
       history.push('/players/edit');

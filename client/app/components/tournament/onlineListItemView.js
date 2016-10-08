@@ -11,11 +11,10 @@ export const TournamentOnlineListItem = createComponent({
   displayName: 'TournamentOnlineListItem',
   getInitialState: itemGetInitialState,
   render: itemRender,
-  download: itemDownload,
+  doDownload: itemDoDownload,
 });
 
 function itemGetInitialState() {
-  this.download = R.bind(this.download, this);
   return {};
 }
 
@@ -25,7 +24,7 @@ function itemRender() {
     <tr>
       <td>
         <button className="download"
-                onClick={this.download}>
+                onClick={this.doDownload}>
           <Icon name="download" />
           <span className="downloadLabel"> Download</span>
         </button>
@@ -43,6 +42,6 @@ function itemRender() {
   );
 }
 
-function itemDownload() {
+function itemDoDownload() {
   dispatch(['tournament-onlineDownload', this.props.tournament]);
 }

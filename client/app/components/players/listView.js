@@ -2,7 +2,6 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import { dispatch } from 'app/services/state';
 import { sortSub } from 'app/components/sort/sort';
 import { factionsSub } from 'app/components/factions/factions';
 import { playersListSub } from 'app/components/players/sub';
@@ -23,8 +22,6 @@ export const PlayersList = createComponent({
   },
   render: playersListRender,
   getInitialState: playersListGetInitialState,
-  onFilterUpdate: playersListOnFilterUpdate,
-  dispatchFilterUpdate: playersListDispatchFilterUpdate,
 });
 
 function playersListRender() {
@@ -63,19 +60,5 @@ function playersListRender() {
 }
 
 function playersListGetInitialState() {
-  this.onFilterUpdate = R.bind(this.onFilterUpdate, this);
-  this.dispatchFilterUpdate = R.debounce(
-    500,
-    R.bind(this.dispatchFilterUpdate, this)
-  );
   return { players: [] };
-}
-
-function playersListOnFilterUpdate(event) {
-  this.setState({ filter: event.target.value });
-  this.dispatchFilterUpdate(event.target.value);
-}
-
-function playersListDispatchFilterUpdate(value) {
-  dispatch(['filter-set', 'players', value]);
 }

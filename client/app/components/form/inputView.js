@@ -20,7 +20,7 @@ export const FormInput = createComponent({
   render: formInputRender,
   getInitialState: formInputGetInitialState,
   componentDidMount: formInputComponentDidMount,
-  update: formInputUpdate,
+  doUpdate: formInputDoUpdate,
   dispatchUpdate: formInputDispatchUpdate,
 });
 
@@ -60,7 +60,7 @@ function formInputRender() {
          className={className}
          name={this.props.name}
          value={this.state.value || ''}
-         onChange={this.update}
+         onChange={this.doUpdate}
          {...props}
          />
     );
@@ -84,7 +84,7 @@ function formInputRender() {
          className={className}
          name={this.props.name}
          value={this.state.value}
-         onChange={this.update}
+         onChange={this.doUpdate}
          {...props}>
         {options}
       </select>
@@ -98,7 +98,7 @@ function formInputRender() {
          className={className}
          name={this.props.name}
          value={this.state.value || ''}
-         onChange={this.update}
+         onChange={this.doUpdate}
          {...props}
          />
     );
@@ -119,7 +119,6 @@ function formInputRender() {
 
 function formInputGetInitialState() {
   this.path = `${this.context.formName}.${this.props.name}`;
-  this.update = R.bind(this.update, this);
   this.dispatchUpdate = R.debounce(300, R.bind(this.dispatchUpdate, this));
   return {
     value: (this.props.multiple ? [] : null),
@@ -135,7 +134,7 @@ function formInputComponentDidMount() {
   }
 }
 
-function formInputUpdate(event) {
+function formInputDoUpdate(event) {
   let value = event.target.value;
   if (this.props.multiple) {
     value = R.thread(event.target.options)(

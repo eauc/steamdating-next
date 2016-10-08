@@ -1,6 +1,5 @@
 export let __hotReload = true;
 
-import R from 'app/helpers/ramda';
 import { dispatch } from 'app/services/state';
 import ReactDOM from 'react-dom';
 /* eslint-disable no-unused-vars */
@@ -11,7 +10,7 @@ export const FileOpenButton = createComponent({
   displayName: 'FileOpenButton',
   render: fileOpenButtonRender,
   getInitialState: fileOpenButtonGetInitialState,
-  onChange: fileOpenButtonOnChange,
+  doChange: fileOpenButtonDoChange,
 });
 
 function fileOpenButtonRender() {
@@ -22,7 +21,7 @@ function fileOpenButtonRender() {
              id={id}
              ref="input"
              type="file"
-             onChange={this.onChange} />
+             onChange={this.doChange} />
       <label className="button"
              htmlFor={id}>
         {this.props.children}
@@ -32,11 +31,10 @@ function fileOpenButtonRender() {
 }
 
 function fileOpenButtonGetInitialState() {
-  this.onChange = R.bind(this.onChange, this);
   return {};
 }
 
-function fileOpenButtonOnChange(event) {
+function fileOpenButtonDoChange(event) {
   dispatch([this.props.onOpen, event.target.files[0]]);
   ReactDOM.findDOMNode(this.refs.input).value = null;
 }

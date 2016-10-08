@@ -15,7 +15,7 @@ export const FilterInput = createComponent({
   },
   render: filterInputRender,
   getInitialState: filterInputGetInitialState,
-  onFilterUpdate: filterInputOnUpdate,
+  doFilterUpdate: filterInputDoUpdate,
   dispatchFilterUpdate: filterInputDispatchUpdate,
 });
 
@@ -27,7 +27,7 @@ function filterInputRender() {
            name={id}
            type="text"
            value={this.state.filter}
-           onChange={this.onFilterUpdate}
+           onChange={this.doFilterUpdate}
            placeholder="Filter" />
   );
 }
@@ -37,7 +37,6 @@ function filterInputGetSubscription() {
 }
 
 function filterInputGetInitialState() {
-  this.onFilterUpdate = R.bind(this.onFilterUpdate, this);
   this.dispatchFilterUpdate = R.debounce(
     500,
     R.bind(this.dispatchFilterUpdate, this)
@@ -45,7 +44,7 @@ function filterInputGetInitialState() {
   return { filter: '' };
 }
 
-function filterInputOnUpdate(event) {
+function filterInputDoUpdate(event) {
   this.setState({ filter: event.target.value });
   this.dispatchFilterUpdate(event.target.value);
 }

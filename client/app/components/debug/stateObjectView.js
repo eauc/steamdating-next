@@ -12,13 +12,11 @@ export const DebugStateObject = createComponent({
   displayName: 'DebugStateObject',
   getInitialState: debugStateObjectGetInitialState,
   render: debugStateObjectRender,
-  toggleShow: debugStateObjectToggleShow,
-  remove: debugStateObjectRemove,
+  doToggleShow: debugStateObjectDoToggleShow,
+  doRemove: debugStateObjectDoRemove,
 });
 
 function debugStateObjectGetInitialState() {
-  this.toggleShow = R.bind(this.toggleShow, this);
-  this.remove = R.bind(this.remove, this);
   this.path = R.reject(R.isNil, [...this.props.path, this.props.name]);
   return { show: false };
 }
@@ -50,11 +48,11 @@ function debugStateObjectRender() {
     ? (
       <span>
         <button className="action"
-                onClick={this.toggleShow}>
+                onClick={this.doToggleShow}>
           <Icon name="level-up" />
         </button>
         <button className="action"
-                onClick={this.remove}>
+                onClick={this.doRemove}>
           <Icon name="trash" />
         </button>
         <table>
@@ -65,17 +63,17 @@ function debugStateObjectRender() {
       </span>
     ) : (
       <span className="toggle"
-            onClick={this.toggleShow}>
+            onClick={this.doToggleShow}>
         {placeholder}
       </span>
     );
 }
 
-function debugStateObjectToggleShow() {
+function debugStateObjectDoToggleShow() {
   this.setState({ show: !this.state.show });
 }
 
-function debugStateObjectRemove() {
+function debugStateObjectDoRemove() {
   dispatch(['debug-remove', this.path]);
 }
 

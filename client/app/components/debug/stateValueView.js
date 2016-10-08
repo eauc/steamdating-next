@@ -11,15 +11,13 @@ export const DebugStateValue = createComponent({
   displayName: 'DebugStateValue',
   getInitialState: debugStateValueGetInitialState,
   render: debugStateValueRender,
-  onChange: debugStateValueOnChange,
+  doChange: debugStateValueDoChange,
+  doRemove: debugStateValueDoRemove,
   update: debugStateValueUpdate,
-  remove: debugStateValueRemove,
 });
 
 function debugStateValueGetInitialState() {
-  this.onChange = R.bind(this.onChange, this);
   this.update = R.debounce(250, R.bind(this.update, this));
-  this.remove = R.bind(this.remove, this);
   this.path = R.reject(R.isNil, [...this.props.path, this.props.name]);
   return { value: this.props.value };
 }
@@ -37,19 +35,19 @@ function debugStateValueRender() {
   return (
     <span>
       <button className="action"
-              onClick={this.remove}>
+              onClick={this.doRemove}>
         <Icon name="trash" />
       </button>
       <input
          type={type}
          value={R.defaultTo('', value)}
-         onChange={this.onChange}
+         onChange={this.doChange}
          />
     </span>
   );
 }
 
-function debugStateValueOnChange(event) {
+function debugStateValueDoChange(event) {
   this.setState({ value: event.target.value });
   console.log('change', this.props.value, this.state.value, event.target.value);
   this.update();
@@ -60,6 +58,6 @@ function debugStateValueUpdate() {
   dispatch(['debug-set', this.path, this.state.value]);
 }
 
-function debugStateValueRemove() {
+function debugStateValueDoRemove() {
   dispatch(['debug-remove', this.path]);
 }

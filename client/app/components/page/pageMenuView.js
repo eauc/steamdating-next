@@ -1,6 +1,5 @@
 export let __hotReload = true;
 
-import R from 'app/helpers/ramda';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { PageMenuItem } from 'app/components/page/pageMenuItemView';
@@ -11,7 +10,7 @@ export const PageMenu = createComponent({
   displayName: 'PageMenu',
   render: pageMenuRender,
   getInitialState: pageMenuGetInitialState,
-  toggleShow: pageMenuToggleShow,
+  doToggleShow: pageMenuDoToggleShow,
 });
 
 function pageMenuRender() {
@@ -20,17 +19,16 @@ function pageMenuRender() {
            show: this.state.show,
          }}>
       {this.props.children}
-      <PageMenuToggle onToggle={this.toggleShow}
+      <PageMenuToggle onToggle={this.doToggleShow}
                       show={this.state.show} />
     </div>
   );
 }
 
 function pageMenuGetInitialState() {
-  this.toggleShow = R.bind(this.toggleShow, this);
   return { show: false };
 }
 
-function pageMenuToggleShow() {
+function pageMenuDoToggleShow() {
   this.setState({ show: !this.state.show });
 }

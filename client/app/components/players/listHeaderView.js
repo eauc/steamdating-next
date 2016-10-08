@@ -11,7 +11,7 @@ export const PlayersListHeader = createComponent({
   displayName: 'PlayersListHeader',
   render: playersListHeaderRender,
   getInitialState: playersListHeaderGetInitialState,
-  sortBy: playersListHeader,
+  doSortBy: playersListDoSortBy,
 });
 
 function playersListHeaderRender() {
@@ -19,7 +19,7 @@ function playersListHeaderRender() {
   const label = this.props.label || R.capitalize(name);
   const icon = `chevron-${this.props.sort.reverse ? 'up' : 'down'}`;
   return (
-    <th onClick={this.sortBy}>
+    <th onClick={this.doSortBy}>
       <span>{label} </span>
       <span className={{
               icon: true,
@@ -32,11 +32,10 @@ function playersListHeaderRender() {
 }
 
 function playersListHeaderGetInitialState() {
-  this.sortBy = R.bind(this.sortBy, this);
   return {};
 }
 
-function playersListHeader() {
+function playersListDoSortBy() {
   const by = this.props.name;
   let reverse = this.props.sort.reverse;
   if (by === this.props.sort.by) reverse = !reverse;

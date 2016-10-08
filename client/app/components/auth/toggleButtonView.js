@@ -1,6 +1,5 @@
 export let __hotReload = true;
 
-import R from 'app/helpers/ramda';
 import { dispatch } from 'app/services/state';
 import { authActiveSub } from 'app/components/auth/sub';
 /* eslint-disable no-unused-vars */
@@ -12,7 +11,7 @@ export const AuthToggleButton = createComponent({
   subscriptions: { active: authActiveSub },
   render: authToggleButtonRender,
   getInitialState: authToggleButtonGetInitialState,
-  toggle: authToggleButtonToggle,
+  doToggle: authToggleButtonDoToggle,
 });
 
 function authToggleButtonRender() {
@@ -20,18 +19,17 @@ function authToggleButtonRender() {
     <button className={{
               active: this.state.active,
             }}
-            onClick={this.toggle}>
+            onClick={this.doToggle}>
       {this.props.children}
     </button>
   );
 }
 
 function authToggleButtonGetInitialState() {
-  this.toggle = R.bind(this.toggle, this);
   return {};
 }
 
-function authToggleButtonToggle() {
+function authToggleButtonDoToggle() {
   if (this.state.active) {
     dispatch(['auth-signout']);
   }

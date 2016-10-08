@@ -1,6 +1,5 @@
 export let __hotReload = true;
 
-import R from 'app/helpers/ramda';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { DebugHistory } from 'app/components/debug/historyView';
@@ -13,11 +12,10 @@ export const DebugMain = createComponent({
   render: debugMainRender,
   componentDidMount: debugMainDidMount,
   componentWillUnmount: debugMainWillUnmount,
-  onKeyDown: debugMainOnKeyDown,
+  doKeyDown: debugMainDoKeyDown,
 });
 
 function debugMainGetInitialState() {
-  this.onKeyDown = R.bind(this.onKeyDown, this);
   return { show: false };
 }
 
@@ -42,14 +40,14 @@ function debugMainRender() {
 }
 
 function debugMainDidMount() {
-  self.document.addEventListener('keydown', this.onKeyDown);
+  self.document.addEventListener('keydown', this.doKeyDown);
 }
 
 function debugMainWillUnmount() {
-  self.document.removeEventListener('keydown', this.onKeyDown);
+  self.document.removeEventListener('keydown', this.doKeyDown);
 }
 
-function debugMainOnKeyDown(event) {
+function debugMainDoKeyDown(event) {
   if (!event.altKey ||
       !event.ctrlKey ||
       event.key !== 'd') {

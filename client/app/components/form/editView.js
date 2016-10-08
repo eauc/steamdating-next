@@ -21,7 +21,7 @@ export const FormEdit = createComponent({
   getInitialState: formEditGetInitialState,
   getChildContext: formEditGetChildContext,
   render: formEditRender,
-  onSubmit: formEditOnSubmit,
+  doSubmit: formEditDoSubmit,
 });
 
 function formEditFormSubscription() {
@@ -32,7 +32,7 @@ function formEditRender() {
   log.cycle('form render', this.props, this.state);
   return (
     <form noValidate
-          onSubmit={this.onSubmit}>
+          onSubmit={this.doSubmit}>
       <fieldset className="group">
         <legend className="legend">
           {this.props.label}
@@ -43,7 +43,7 @@ function formEditRender() {
                   disabled: !!this.state.form.error,
                 }}
                 type="submit"
-                onClick={this.onSubmit}>
+                onClick={this.doSubmit}>
           <Icon name="check" />
         </button>
       </fieldset>
@@ -52,7 +52,6 @@ function formEditRender() {
 }
 
 function formEditGetInitialState() {
-  this.onSubmit = R.bind(this.onSubmit, this);
   return {};
 }
 
@@ -64,7 +63,7 @@ function formEditGetChildContext() {
   };
 }
 
-function formEditOnSubmit(event) {
+function formEditDoSubmit(event) {
   event.preventDefault();
   if (this.state.form.error) return;
   if (R.type(this.props.onSubmit) === 'Function') {
