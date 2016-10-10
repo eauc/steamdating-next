@@ -1,18 +1,18 @@
 export let __hotReload = true;
 
-import R from 'app/helpers/ramda';
-import { registerHandler } from 'app/services/state';
 import path from 'app/helpers/middlewares/path';
 import stripv from 'app/helpers/middlewares/stripv';
+import { registerHandler } from 'app/services/state';
+import filterModel from 'app/models/filter';
 import { scope } from 'app/components/filter/state';
+
+const middlewares = [
+  path(scope, {}),
+  stripv,
+];
 
 registerHandler(
   'filter-set',
-  [path(scope, {}),
-   stripv,
-  ], filterSetHandler
+  middlewares,
+  (state, [name, value]) => filterModel.set(name, value, state)
 );
-
-export function filterSetHandler(state, [name, value]) {
-  return R.assoc(name, value, state);
-}

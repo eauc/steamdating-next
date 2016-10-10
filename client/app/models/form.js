@@ -4,12 +4,21 @@ import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
 
 const formModel = {
+  create: formCreate,
   validate: formValidate,
   isValid: formIsValid,
+  updateFieldValue: formUpdateFieldValue,
   fieldValue: formFieldValue,
   fieldError: formFieldError,
 };
 export default R.curryService(formModel);
+
+function formCreate(value) {
+  return {
+    base: value,
+    edit: value,
+  };
+}
 
 function formValidate(schema, { edit, base }) {
   log.sub('form edit', edit, schema);
@@ -24,6 +33,10 @@ function formValidate(schema, { edit, base }) {
 
 function formIsValid({ error }) {
   return !error;
+}
+
+function formUpdateFieldValue(fieldPath, value, form) {
+  return R.assocPath(['edit', ...fieldPath], value, form);
 }
 
 function formFieldValue(path, form) {

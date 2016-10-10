@@ -2,8 +2,9 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import { formSub } from 'app/components/form/sub';
 import { dispatch } from 'app/services/state';
+import { formSub } from 'app/components/form/sub';
+import formModel from 'app/models/form';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
@@ -29,7 +30,7 @@ function formEditFormSubscription() {
 }
 
 function formEditRender() {
-  log.cycle('form render', this.props, this.state);
+  log.cycle('formEdit render', this.props, this.state);
   return (
     <form noValidate
           onSubmit={this.doSubmit}>
@@ -40,7 +41,7 @@ function formEditRender() {
         {this.props.children}
         <button className={{
                   submit: true,
-                  disabled: !!this.state.form.error,
+                  disabled: !formModel.isValid(this.state.form),
                 }}
                 type="submit"
                 onClick={this.doSubmit}>

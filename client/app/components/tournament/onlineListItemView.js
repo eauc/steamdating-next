@@ -1,6 +1,5 @@
 export let __hotReload = true;
 
-import R from 'app/helpers/ramda';
 import { dispatch } from 'app/services/state';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';

@@ -2,7 +2,6 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import Joi from 'joi-browser';
-
 import httpService from 'app/services/http';
 import { registerInit } from 'app/services/init';
 import { registerValidator } from 'app/services/state';

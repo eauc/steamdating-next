@@ -10,7 +10,7 @@ describe('formModel', function () {
     return formModel.validate(this.schema, this.form);
   }, function () {
     beforeEach(function () {
-      this.form = { edit: 'edit', base: 'base' };
+      this.form = formModel.create('edit');
       this._schema = jasmine.createSpyObj('schema', ['validate']);
       this._schema.validate
         .and.callFake(() => this.validation);
@@ -27,8 +27,8 @@ describe('formModel', function () {
       this.validation = { error: null };
     }, function () {
       it('should return valid form', function () {
-        expect(this.context)
-          .toEqual({ edit: 'edit', base: 'base', error: null });
+        expect(formModel.isValid(this.context))
+          .toBe(true);
       });
     });
 
@@ -39,45 +39,38 @@ describe('formModel', function () {
         { path: 'field2', message: 'error2' },
       ] } };
     }, function () {
-      it('should return form with formated errors', function () {
-        expect(this.context)
-          .toEqual({ edit: 'edit', base: 'base', error: {
-            details: { field1: [{ path: 'field1', message: 'error11' },
-                                { path: 'field1', message: 'error12' }],
-                       field2: [{ path: 'field2', message: 'error2' }],
-                     },
-          } });
+      it('should return invalid form', function () {
+        expect(formModel.isValid(this.context))
+          .toBe(false);
+      });
+
+      it('should set fields errors', function () {
+        expect(formModel.fieldError('field1', this.context))
+          .toBe('error11');
+        expect(formModel.fieldError('field2', this.context))
+          .toBe('error2');
       });
     });
   });
 
-  describe('isValid()', function () {
-    example(function (exple, desc) {
-      it(`should check whether <form> has error, ${desc}`, function () {
-        expect(formModel.isValid(exple.form))
-          .toBe(exple.isValid);
-      });
-    }, [
-      ['form'         , 'isValid'],
-      [{}             , true     ],
-      [{ error:null } , true     ],
-      [{ error: {} }  , false    ],
-    ]);
-  });
-
-  describe('formFieldValue(<field_path>)', function () {
+  context('fieldValue(<field_path>)', function () {
+    return formModel.fieldValue(this.field, this.form);
+  }, function () {
     beforeEach(function () {
-      this.form = {
-        edit: { field1: 'value1',
-                field2: 'value2',
-              },
-      };
+      this.form = formModel.create({
+        field1: 'value1',
+        field2: 'value2',
+      });
     });
 
     example(function (exple, desc) {
-      it(`should extract <field> value, ${desc}`, function () {
-        expect(formModel.fieldValue(exple.field, this.form))
-          .toBe(exple.value);
+      context(desc, function () {
+        this.field = exple.field;
+      }, function () {
+        it('should extract <field> value', function () {
+          expect(this.context)
+            .toBe(exple.value);
+        });
       });
     }, [
       ['field'     , 'value' ],
@@ -87,28 +80,30 @@ describe('formModel', function () {
     ]);
   });
 
-  describe('formFieldValue(<field_path>)', function () {
+  context('updateFieldValue(<field_path>, <value>)', function () {
+    return formModel.updateFieldValue(this.field, 'value', this.form);
+  }, function () {
     beforeEach(function () {
-      this.form = {
-        error: { details: { field1: [{ message: 'error1' }],
-                            field2: [{ message: 'error2' }],
-                            field3: [],
-                          },
-               },
-      };
+      this.form = formModel.create({
+        field1: 'value1',
+        field2: 'value2',
+      });
     });
 
     example(function (exple, desc) {
-      it(`should extract <field> error or "", ${desc}`, function () {
-        expect(formModel.fieldError(exple.field, this.form))
-          .toBe(exple.error);
+      context(desc, function () {
+        this.field = exple.field;
+      }, function () {
+        it('should update <field>\'s value', function () {
+          expect(formModel.fieldValue(this.field, this.context))
+            .toBe('value');
+        });
       });
     }, [
-      ['field'   , 'error' ],
-      ['field1'  , 'error1'],
-      ['field2'  , 'error2'],
-      ['field3'  , ''      ],
-      ['unknown' , ''      ],
+      ['field'     , 'value' ],
+      [['field1']  , 'value1'],
+      [['field2']  , 'value2'],
+      [['unknown'] , null    ],
     ]);
   });
 });

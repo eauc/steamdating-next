@@ -2,18 +2,8 @@
 
 ** TODO
 
-- [X] state validators :
-  # - [ ] run only when path change ?
-  - [X] run only in debug ?
-  - [X] test all pages
-- [X] players list filter list matching columns first but display all
-- [X] tournament file save/load
-- [X] tournament online
-  - [X] save
-  - [X] download
-- [X] page router
 - [ ] tests cell/etc...
 - [ ] setup nightwatch/cucumber
 - [ ] pairing/steps trace
 - [ ] setup appCache
-- [X] bind actions middleware
+- [ ] replace Joi with ajv/jsonSchema ?

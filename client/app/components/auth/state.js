@@ -5,6 +5,7 @@ import Joi from 'joi-browser';
 import { dispatch,
          registerValidator } from 'app/services/state';
 import { registerInit } from 'app/services/init';
+import authModel from 'app/models/auth';
 
 export const scope = ['auth'];
 export const tokenSchema = Joi.alternatives(null, Joi.string());
@@ -18,7 +19,7 @@ registerInit('auth', [], authInit);
 registerValidator('auth', scope, authSchema);
 
 function authInit(state) {
-  return R.assocPath(scope, { token: null }, state);
+  return R.assocPath(scope, authModel.create(), state);
 }
 
 export function authLogin() {
