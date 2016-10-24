@@ -10,7 +10,7 @@ const filterModel = {
 export default R.curryService(filterModel);
 
 function filterGet(name, filter) {
-  return R.prop(name, filter);
+  return R.propOr('', name, filter);
 }
 
 function filterSet(name, value, filter) {

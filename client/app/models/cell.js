@@ -6,9 +6,14 @@ import log from 'app/helpers/log';
 const cellModel = {
   from: cellFrom,
   resolveCells,
+  dump: cellDump,
 };
 
 export default cellModel;
+
+function cellDump(cell) {
+  return R.pick(['_name', '_args', '_tick', '_value'], cell);
+}
 
 function cellFrom(source) {
   let sourceFn = source;
