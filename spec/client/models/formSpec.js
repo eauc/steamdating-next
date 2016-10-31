@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 import { context,
          example,
          it } from 'spec/client/helpers/helpers';

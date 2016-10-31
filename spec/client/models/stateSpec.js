@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 import R from 'app/helpers/ramda';
 import { beforeEach,
          context,

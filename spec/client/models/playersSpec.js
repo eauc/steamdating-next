@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 import { example } from 'spec/client/helpers/helpers';
 
 import playersModel from 'app/models/players';
