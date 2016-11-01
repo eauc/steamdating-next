@@ -67,7 +67,7 @@ function _dispatch([resolve, reject, event, ...args]) {
     })
     .then((newContext) => {
       if (newContext === CONTEXT) {
-        return null;
+        return CONTEXT;
       }
       // update CONTEXT is necessary
       // for STATE_CELL to be resolved correctly

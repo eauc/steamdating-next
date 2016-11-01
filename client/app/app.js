@@ -39,7 +39,8 @@ ReactDOM.render((
 
 function appInit() {
   log('STEAMDATING APP init');
-  if (!self.STEAMDATING_CONFIG.debug) {
+  if (!self.STEAMDATING_CONFIG.debug &&
+      !self.STEAMDATING_CONFIG.test) {
     offlineService.registerWorker();
   }
   dispatch(['init']);

@@ -2,8 +2,11 @@
 
 ** TODO
 
-- [ ] tests cell/etc...
-- [ ] setup nightwatch/cucumber
+- [X] tests cell/etc...
+- [X] setup nightwatch/cucumber
+- [ ] features creation/filtre players
+- [ ] features files
+- [ ] features online ?
 - [ ] pairing/steps trace
 - [ ] setup appCache
 - [ ] replace Joi with ajv/jsonSchema ?
