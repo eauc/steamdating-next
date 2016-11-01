@@ -106,7 +106,7 @@ function formInputRender() {
   return (
     <div>
       <label className="label"
-             htmlFor={this.id}>
+             htmlFor={this.path}>
         {this.props.label}
       </label>
       {input}

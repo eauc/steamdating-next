@@ -32,7 +32,8 @@
       },
       "desiredCapabilities": {
         "browserName": "firefox",
-        "marionette": true
+        "_comment": "disable marionnette, bug with selects on FF",
+        "marionette": false
       }
     },
 

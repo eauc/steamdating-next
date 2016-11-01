@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "players": [
+    {
+      "droped": null,
+      "customField": 0,
+      "notes": null,
+      "team": null,
+      "lists": [
+        "Absylonia1",
+        "Bethayne1"
+      ],
+      "faction": "Everblight",
+      "origin": "lyon",
+      "name": "toto"
+    },
+    {
+      "droped": null,
+      "customField": 0,
+      "notes": null,
+      "team": null,
+      "lists": [
+        "Amon1",
+        "Feora1"
+      ],
+      "faction": "Menoth",
+      "origin": "dijon",
+      "name": "titi"
+    },
+    {
+      "droped": null,
+      "customField": 0,
+      "notes": null,
+      "team": null,
+      "lists": [
+        "Bartolo1",
+        "Cyphon1"
+      ],
+      "faction": "Mercenaries",
+      "origin": "aubagne",
+      "name": "tutu"
+    }
+  ]
+}

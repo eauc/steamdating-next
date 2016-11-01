@@ -25,7 +25,7 @@ registerHandler(
     const [form, ...fieldPath] = R.split('.', formFieldName);
     return R.over(
       R.lensProp(form),
-      formModel.updateFieldValue(fieldPath, value),
+      formModel.updateFieldValue$(fieldPath, value),
       state
     );
   }

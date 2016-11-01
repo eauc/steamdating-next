@@ -6,6 +6,7 @@ module.exports = {
       doCancel() {
         this.section.prompt
           .click('@cancelButton');
+        return this;
       },
       doChangeValue(value) {
         this.section.prompt
@@ -21,6 +22,7 @@ module.exports = {
       doOk() {
         this.section.prompt
           .click('@okButton');
+        return this;
       },
       expectAlert(message) {
         this.expect.section('@prompt')
@@ -29,6 +31,7 @@ module.exports = {
           .expect.element('@okButton').to.be.visible;
         this.section.prompt
           .expect.element('@cancelButton').not.to.be.visible;
+        return this;
       },
       expectConfirm(message) {
         this.expect.section('@prompt')
@@ -37,6 +40,7 @@ module.exports = {
           .expect.element('@okButton').to.be.visible;
         this.section.prompt
           .expect.element('@cancelButton').to.be.present;
+        return this;
       },
       expectPrompt(message, value) {
         this.expect.section('@prompt')
@@ -47,10 +51,12 @@ module.exports = {
           .expect.element('@okButton').to.be.visible;
         this.section.prompt
           .expect.element('@cancelButton').to.be.present;
+        return this;
       },
       expectNoPresent() {
         this.expect.section('@prompt')
           .not.to.be.visible;
+        return this;
       },
     },
   ],
@@ -63,11 +69,11 @@ module.exports = {
           locateStrategy: 'tag name',
         },
         okButton: {
-          selector: '//button[contains(text(), \'Ok\')]',
+          selector: './/button[contains(text(), \'Ok\')]',
           locateStrategy: 'xpath',
         },
         cancelButton: {
-          selector: '//button[contains(text(), \'No\')]',
+          selector: './/button[contains(text(), \'No\')]',
           locateStrategy: 'xpath',
         },
       },

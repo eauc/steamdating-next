@@ -7,7 +7,8 @@ module.exports = {
           .useXpath();
         this
           .section.navigation
-          .click(`//*[contains(text(),\'${page}\')]`);
+          .click(`.//*[contains(text(),'${page}')]`);
+        return this;
       },
     },
   ],
