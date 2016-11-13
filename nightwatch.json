@@ -24,6 +24,7 @@
       "selenium_port"  : 4444,
       "selenium_host"  : "localhost",
       "silent": true,
+      "use_xpath": true,
       "screenshots" : {
         "enabled" : true,
         "on_failure": true,

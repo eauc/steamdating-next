@@ -38,7 +38,7 @@ function filterInputGetSubscription() {
 
 function filterInputGetInitialState() {
   this.dispatchFilterUpdate = R.debounce(
-    500,
+    200,
     R.bind(this.dispatchFilterUpdate, this)
   );
   return { filter: '' };

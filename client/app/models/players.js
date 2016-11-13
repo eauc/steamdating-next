@@ -22,7 +22,9 @@ function playersAdd(add, players) {
 }
 
 function playersFilter(filterInput, players) {
-  let filter = R.isEmpty(filterInput) ? '.*' : filterInput;
+  let filter = R.isNil(filterInput) || R.isEmpty(filterInput)
+        ? '.*'
+        : filterInput;
   filter = filter.replace(/\s+/g, '|');
   const regex = new RegExp(filter, 'i');
   return R.thread(players)(
@@ -32,14 +34,15 @@ function playersFilter(filterInput, players) {
       R.filter(([_key_, value]) => regex.test(JSON.stringify(value)), pairs),
     ]),
     R.reject(([_player_, pairs]) => R.isEmpty(pairs)),
-    (matches) => ({ list: R.map(R.head, matches),
-                    columns: R.thread(matches)(
-                      R.chain(R.compose(R.map(R.head), R.nth(1))),
-                      R.prepend('name'),
-                      R.flip(R.concat)(LIST_COLUMNS),
-                      R.uniq
-                    ),
-                  })
+    (matches) => ({
+      list: R.map(R.head, matches),
+      columns: R.thread(matches)(
+        R.chain(R.compose(R.map(R.head), R.nth(1))),
+        R.prepend('name'),
+        R.flip(R.concat)(LIST_COLUMNS),
+        R.uniq
+      ),
+    })
   );
 }
 

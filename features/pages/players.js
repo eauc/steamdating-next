@@ -6,6 +6,7 @@ module.exports = {
       visit() {
         this.api.page.nav()
           .visitPage('Players');
+        this.doResetFilter();
         return this;
       },
       doCreatePlayer(player) {
@@ -16,12 +17,23 @@ module.exports = {
       },
       doDeletePlayer(name) {
         this.section.pageContent
-          .click(`.//*[contains(text(), "${name}")]`);
-        this.section.pageContent
+          .click(`.//*[contains(text(), "${name}")]`)
           .click('@deletePlayer');
         this.api.page.prompt()
           .doOk();
         this.deletedPlayerName = name;
+        return this;
+      },
+      doFilterWith(filter) {
+        this.section.pageContent
+          .clearValue('@playersListFilter')
+          .setValue('@playersListFilter', filter);
+        this.filterValue = filter;
+        this.api.pause(500);
+      },
+      doInvertSort() {
+        this.section.pageContent
+          .click(`//*[contains(text(), "${this.sortBy}")]`);
         return this;
       },
       doUpdatePlayer(current, updateTo) {
@@ -55,9 +67,22 @@ module.exports = {
         this.api.pause(500);
         return this;
       },
+      doResetFilter() {
+        this.section.pageContent
+          .clearValue('@playersListFilter')
+          .setValue('@playersListFilter', '.');
+        this.api.pause(200);
+      },
       doStartCreatePlayer() {
         this.section.pageContent
           .click('@createPlayer');
+        return this;
+      },
+      doSortBy(by) {
+        this.section.pageContent
+          .click('//*[contains(text(), "Name")]')
+          .click(`//*[contains(text(), "${by}")]`);
+        this.sortBy = by;
         return this;
       },
       doTryToCreatePlayer(player) {
@@ -98,6 +123,21 @@ module.exports = {
           .expectInput('Notes', { value: player.notes, inputTag: 'textarea' });
         return this;
       },
+      expectPlayersListWithHeaders({ headers, players }) {
+        const headersRegex = R.join('\\s+', headers);
+        const playersRegex = R.join('\\s+', R.map(R.join('\\s+'), players));
+        const listRegex = new RegExp(`^\\s*${headersRegex}\\s+${playersRegex}\\s*$`, 'i');
+        this.section.pageContent
+          .expect.element('@playersList').text
+          .to.match(listRegex);
+      },
+      expectPlayersList(players) {
+        const playersRegex = R.join('\\s+', R.map(R.join('\\s+'), players));
+        const listRegex = new RegExp(`^\\s*${playersRegex}\\s*$`, 'i');
+        this.section.pageContent
+          .expect.element('@playersListBody').text
+          .to.match(listRegex);
+      },
     },
   ],
   sections: {
@@ -111,6 +151,18 @@ module.exports = {
         },
         deletePlayer: {
           selector: './/*[contains(text(),\'Delete Player\')]',
+          locateStrategy: 'xpath',
+        },
+        playersList: {
+          selector: './/table[.//th[.//*[contains(text(),\'Name\')]]]',
+          locateStrategy: 'xpath',
+        },
+        playersListBody: {
+          selector: './/table[.//th[.//*[contains(text(),\'Name\')]]]/tbody',
+          locateStrategy: 'xpath',
+        },
+        playersListFilter: {
+          selector: './/input[@placeholder="Filter"]',
           locateStrategy: 'xpath',
         },
       },

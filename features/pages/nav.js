@@ -3,8 +3,7 @@ module.exports = {
     {
       visitPage(page) {
         this.api
-          .url(this.api.launchUrl)
-          .useXpath();
+          .url(this.api.launchUrl);
         this
           .section.navigation
           .click(`.//*[contains(text(),'${page}')]`);
