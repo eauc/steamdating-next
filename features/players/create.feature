@@ -8,7 +8,7 @@ Feature: Players Create
   Scenario: Create Valid Player
     Given I open Players page
     When I create a valid Player
-    Then I see the new Player in the Players list
+    Then I see the created Player in the Players list
 
   Scenario: Player name is unique
     Given some Players have been defined

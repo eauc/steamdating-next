@@ -1,15 +1,5 @@
 const R = require('ramda');
 
-const CONST = {
-  dummyPlayer: {
-    name: 'Toto',
-    origin: 'Lyon',
-    faction: 'Everblight',
-    lists: ['Fyanna2', 'Absylonia1'],
-    notes: 'Notes sur le joueur',
-  },
-};
-
 module.exports = {
   commands: [
     {
@@ -18,21 +8,33 @@ module.exports = {
           .visitPage('Players');
         return this;
       },
-      doStartCreatePlayer() {
-        this.section.pageContent
-          .click('@createPlayer');
-        return this;
-      },
-      doCreateDummyPlayer() {
-        return this.doCreatePlayer(CONST.dummyPlayer);
-      },
       doCreatePlayer(player) {
         this.doTryToCreatePlayer(player);
         this.api.page.form().doSubmit();
+        this.createdPlayer = player;
         return this;
       },
-      doTryToCreatePlayer(player) {
-        this.doStartCreatePlayer();
+      doDeletePlayer(name) {
+        this.section.pageContent
+          .click(`.//*[contains(text(), "${name}")]`);
+        this.section.pageContent
+          .click('@deletePlayer');
+        this.api.page.prompt()
+          .doOk();
+        this.deletedPlayerName = name;
+        return this;
+      },
+      doUpdatePlayer(current, updateTo) {
+        this.section.pageContent
+          .click(`.//*[contains(text(), "${current.name}")]`);
+        this.expectPlayerEditForm(current);
+        this.doFillPlayerForm(updateTo);
+        this.api.page.form().doSubmit();
+        this.updatedPlayer = updateTo;
+        this.updatedPlayerPreviousName = current.name;
+        return this;
+      },
+      doFillPlayerForm(player) {
         const form = this.api.page.form();
         if (!R.isNil(player.name)) {
           form.doSetInputValue('Name', player.name);
@@ -48,13 +50,26 @@ module.exports = {
           this.api.pause(500);
         }
         if (!R.isNil(player.lists)) {
-          form.doSelectMultipleValues('Lists', CONST.dummyPlayer.lists);
+          form.doSelectMultipleValues('Lists', player.lists);
         }
         this.api.pause(500);
         return this;
       },
-      expectDummyPlayerInList() {
-        return this.expectPlayerInList(CONST.dummyPlayer);
+      doStartCreatePlayer() {
+        this.section.pageContent
+          .click('@createPlayer');
+        return this;
+      },
+      doTryToCreatePlayer(player) {
+        this.doStartCreatePlayer();
+        this.doFillPlayerForm(player);
+        return this;
+      },
+      expectCreatedPlayerInList() {
+        return this.expectPlayerInList(this.createdPlayer);
+      },
+      expectUpdatedPlayerInList() {
+        return this.expectPlayerInList(this.updatedPlayer);
       },
       expectPlayerInList(player) {
         const values = R.flatten(R.values(R.omit(['notes'], player)));
@@ -63,13 +78,24 @@ module.exports = {
         this.expect.element(lineSelector).to.be.visible;
         return this;
       },
-      expectPlayerEditForm() {
+      expectDeletedPlayerNotInList() {
+        return this.expectPlayerNotInList(this.deletedPlayerName);
+      },
+      expectUpdatedPlayerPreviousStateNotInList() {
+        return this.expectPlayerNotInList(this.updatedPlayerPreviousName);
+      },
+      expectPlayerNotInList(name) {
+        this.expect.element(`//*[contains(text(), "${name}")]`)
+          .not.to.be.present;
+        return this;
+      },
+      expectPlayerEditForm(player = {}) {
         this.api.page.form()
-          .expectInput('Name')
-          .expectInput('Origin')
-          .expectInput('Faction', { inputTag: 'select' })
-          .expectInput('Lists', { inputTag: 'select' })
-          .expectInput('Notes', { inputTag: 'textarea' });
+          .expectInput('Name', { value: player.name })
+          .expectInput('Origin', { value: player.origin })
+          .expectInput('Faction', { value: player.factions, inputTag: 'select' })
+          .expectInput('Lists', { value: player.lists, inputTag: 'select' })
+          .expectInput('Notes', { value: player.notes, inputTag: 'textarea' });
         return this;
       },
     },
@@ -81,6 +107,10 @@ module.exports = {
       elements: {
         createPlayer: {
           selector: './/*[contains(text(),\'Create Player\')]',
+          locateStrategy: 'xpath',
+        },
+        deletePlayer: {
+          selector: './/*[contains(text(),\'Delete Player\')]',
           locateStrategy: 'xpath',
         },
       },

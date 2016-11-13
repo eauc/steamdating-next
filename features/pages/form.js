@@ -42,10 +42,15 @@ module.exports = {
       doSubmit() {
         this.click('@submitButton');
       },
-      expectInput(labelText, { inputTag = 'input' } = {}) {
+      expectInput(labelText, { value, inputTag = 'input' } = {}) {
         this.getInputSelectorFor(labelText, (inputSelector) => {
           this.expect.element(inputSelector)
             .to.be.visible;
+          if (value) {
+            const valueText = R.type(value) === 'Array' ? R.head(value) : value;
+            this.expect.element(inputSelector)
+              .to.have.value.that.deep.equals(valueText);
+          }
         }, { inputTag });
         return this;
       },
