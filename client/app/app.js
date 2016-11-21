@@ -2,8 +2,8 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 self.R = R;
-import Joi from 'joi-browser';
-self.Joi = Joi;
+import Ajv from 'ajv';
+self.Ajv = Ajv;
 
 /* eslint-disable no-unused-vars */
 import React from 'react';

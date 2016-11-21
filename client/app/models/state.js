@@ -1,6 +1,7 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
+import ajv from 'app/helpers/ajv';
 import log from 'app/helpers/log';
 import cellModel from 'app/models/cell.js';
 
@@ -47,17 +48,19 @@ function stateRegisterValidator(name, path, schema, context) {
 }
 
 const validateNextState$ = R.curry(function val(name, path, schema, state) {
+  const validate = ajv.compile(schema);
   return R.thread(state)(
-    R.spy('validator', name),
     R.path(path),
-    R.spy('validator', name),
-    (scope) => schema.validate(scope),
-    R.spy('validator', name),
-    ({ error }) => {
-      if (error) log.error(`Validator "${name}" rejected state`, state, path, error);
-      return !error;
-    },
-    R.spy('validator', name)
+    validate,
+    R.tap((valid) => {
+      if (!valid) {
+        log.error(
+          `Validator "${name}" rejected state`,
+          state, path, validate.errors
+        );
+      }
+    }),
+    R.spy('validator', name, path, schema, validate.errors)
   );
 });
 

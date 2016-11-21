@@ -104,7 +104,7 @@ module.exports = function () {
 
   this.Then('I cannot create the invalid Player', function () {
     this.page.form()
-      .expectInputError('Name', '"Name" already exists')
+      .expectInputError('Name', 'already exists')
       .expectSubmitToBeDisabled();
   });
 

@@ -1,7 +1,6 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import Joi from 'joi-browser';
 import { registerInit } from 'app/services/init';
 import { dispatch,
          registerSubscription,
@@ -17,38 +16,53 @@ export const scope = {
   onlineList: ['online','list'],
 };
 
-const tournamentSchema = Joi.object();
-const onlineUrlsSchema = Joi.object({
-  link: Joi.string()
-    .empty('')
-    .required(),
-  mine: Joi.string()
-    .empty('')
-    .required(),
-});
-const onlineTournamentSchema = Joi.object({
-  id: Joi.number().required(),
-  date: Joi.date().required(),
-  name: Joi.string()
-    .empty('')
-    .required(),
-  link: Joi.string()
-    .empty('')
-    .required(),
-  // eslint-disable-next-line camelcase
-  updated_at: Joi.date().required(),
-});
-const onlineListSchema = Joi.array().items(onlineTournamentSchema);
-export const onlineSaveFormSchema = Joi.object({
-  name: Joi.string()
-    .empty('')
-    .required(),
-  date: Joi.date().required(),
-});
-const onlineSchema = Joi.object({
-  urls: onlineUrlsSchema,
-  list: onlineListSchema,
-});
+const tournamentSchema = { type: 'object' };
+const onlineUrlsSchema = {
+  type: 'object',
+  properties: {
+    link: { type: 'string' },
+    mine: { type: 'string' },
+  },
+  required: ['link', 'mine'],
+};
+const onlineTournamentSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'number' },
+    date: {
+      type: 'string',
+      format: 'date',
+    },
+    name: { type: 'string' },
+    link: { type: 'string' },
+    // eslint-disable-next-line camelcase
+    updated_at: {
+      type: 'string',
+      format: 'date-time',
+    },
+  },
+  required: ['id','date','name','link','updated_at'],
+};
+
+const onlineListSchema = {
+  type: 'array',
+  items: onlineTournamentSchema,
+};
+export const onlineSaveFormSchema = {
+  type: 'object',
+  properties: {
+    name: { type: 'string' },
+    date: { type: 'string', format: 'date' },
+  },
+  required: ['name','date'],
+};
+const onlineSchema = {
+  type: 'object',
+  properties: {
+    urls: onlineUrlsSchema,
+    list: onlineListSchema,
+  },
+};
 
 registerValidator('tournament', scope.tournament, tournamentSchema);
 registerValidator('online', scope.online, onlineSchema);

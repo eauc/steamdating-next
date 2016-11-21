@@ -9,21 +9,20 @@ describe('formModel', function () {
     return formModel.validate(this.schema, this.form);
   }, function () {
     beforeEach(function () {
-      this.form = formModel.create('edit');
-      this._schema = jasmine.createSpyObj('schema', ['validate']);
-      this._schema.validate
-        .and.callFake(() => this.validation);
-      this.validation = {};
-      this.schema = () => this._schema;
-    });
-
-    it('should validate form\'s <edit> with <schema>', function () {
-      expect(this._schema.validate)
-        .toHaveBeenCalledWith('edit', { abortEarly: false });
+      this.form = formModel.create({});
+      const _schema = {
+        type: 'object',
+        properties: {
+          number: { type: 'number' },
+          string: { type: 'string' },
+        },
+        additionnalProperties: false,
+      };
+      this.schema = () => _schema;
     });
 
     context('when there is no error', function () {
-      this.validation = { error: null };
+      this.form.edit.number = 42;
     }, function () {
       it('should return valid form', function () {
         expect(formModel.isValid(this.context))
@@ -32,11 +31,10 @@ describe('formModel', function () {
     });
 
     context('when there are errors', function () {
-      this.validation = { error: { details: [
-        { path: 'field1', message: 'error11' },
-        { path: 'field1', message: 'error12' },
-        { path: 'field2', message: 'error2' },
-      ] } };
+      this.form.edit = {
+        number: 'string',
+        string: 42,
+      };
     }, function () {
       it('should return invalid form', function () {
         expect(formModel.isValid(this.context))
@@ -44,10 +42,10 @@ describe('formModel', function () {
       });
 
       it('should set fields errors', function () {
-        expect(formModel.fieldError('field1', this.context))
-          .toBe('error11');
-        expect(formModel.fieldError('field2', this.context))
-          .toBe('error2');
+        expect(formModel.fieldError('number', this.context))
+          .toBe('should be number');
+        expect(formModel.fieldError('string', this.context))
+          .toBe('should be string');
       });
     });
   });

@@ -1,21 +1,34 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import Joi from 'joi-browser';
+import ajv from 'app/helpers/ajv';
 import log from 'app/helpers/log';
 import { dispatch } from 'app/services/state';
 
-export default R.curry(function validateArgs(argsSchema, handler) {
-  const schema = Joi.array().ordered(...argsSchema);
+export default R.curry(function validateArgs(schemaOrArray, handler) {
+  const argsSchema = (
+    R.type(schemaOrArray) === 'Array'
+      ? { type: 'array', items: R.map(typeStringToSchema, schemaOrArray), additionnalItems: false }
+    : schemaOrArray
+  );
+  const validate = ajv.compile(argsSchema);
   return function (state, [event, ...args]) {
-    const validation = Joi.validate(args, schema);
-    if (!validation.error) return handler(state, [event, ...args]);
+    const valid = validate(args);
+    if (valid) return handler(state, [event, ...args]);
 
-    log.error(`Args validation error: ${validation.error.message}`, validation);
-    if (!event.startsWith('error')) {
-      dispatch(['toaster-set', { type: 'error',
-                                 message: 'Invalid arguments' }]);
+    log.error('Args validation error', args, validate.errors);
+    if (!event.startsWith('toaster')) {
+      dispatch(['toaster-set', {
+        type: 'error',
+        message: 'Invalid arguments',
+      }]);
     }
     return state;
   };
 });
+
+function typeStringToSchema(typeStringOrSchema) {
+  return R.type(typeStringOrSchema) === 'String' ?
+    { type: typeStringOrSchema } :
+  typeStringOrSchema;
+}

@@ -75,9 +75,9 @@
       "packages": "client/lib"
     },
     "dependencies": {
+      "ajv": "npm:ajv@4.8.2",
       "auth0-lock": "github:auth0/lock@10.2.2",
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
-      "joi-browser": "npm:joi-browser@^9.0.4",
       "moment": "npm:moment@2.14.1",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "ramda": "github:ramda/ramda@^0.22.1",
@@ -95,6 +95,9 @@
       "core-js": "npm:core-js@^1.1.4"
     },
     "overrides": {
+      "npm:ajv@4.8.2": {
+        "main": "dist/ajv.min"
+      },
       "github:auth0/lock@10.2.2": {
         "format": "global",
         "main": "build/lock",

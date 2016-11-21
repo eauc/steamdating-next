@@ -1,41 +1,63 @@
 export let __hotReload = true;
 
-import Joi from 'joi-browser';
+import R from 'app/helpers/ramda';
+import ajv from 'app/helpers/ajv';
 import { registerValidator } from 'app/services/state';
 
 export const scope = ['tournament','players'];
 
-export const playerSchema = (playersNames) => Joi.object({
-  name: Joi.string()
-    .min(1)
-    .invalid(playersNames)
-    .insensitive()
-    .label('Name')
-    .required()
-    .empty('')
-    .options({ language: { any: { invalid: 'already exists' } } }),
-  origin: Joi.alternatives(null, Joi.string())
-    .label('Origin')
-    .empty(''),
-  faction: Joi.alternatives(null, Joi.string())
-    .label('Faction')
-    .empty(''),
-  lists: Joi.array()
-    .items(Joi.string())
-    .label('Lists'),
-  team: Joi.alternatives(null, Joi.string())
-    .label('Team')
-    .empty(''),
-  notes: Joi.alternatives(null, Joi.string())
-    .label('Notes')
-    .empty(''),
-  customField: Joi.alternatives(null, Joi.number().integer())
-    .label('Custom Field')
-    .empty(''),
-  droped: Joi.alternatives(Joi.number().integer(), null)
-    .label('Droped')
-    .empty(''),
+const numberOrNullSchema = {
+  oneOf: [
+    { type: 'null' },
+    { type: 'number' },
+  ],
+};
+const stringOrNullSchema = {
+  oneOf: [
+    { type: 'null' },
+    { type: 'string' },
+  ],
+};
+
+ajv.addKeyword('alreadyExists', {
+  validate: function alreadyExistsValidate(schema, data) {
+    const fails = R.contains(data, schema);
+    if (fails) {
+      alreadyExistsValidate.errors = [{
+        message: 'already exists',
+      }];
+    }
+    return !fails;
+  },
+  errors: true,
 });
-const playersSchema = Joi.array().items(playerSchema([]));
+
+export const playerSchema = (playersNames) => ({
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      minLength: 1,
+      alreadyExists: playersNames,
+    },
+    origin: stringOrNullSchema,
+    faction: stringOrNullSchema,
+    lists: {
+      type: 'array',
+      items: { type: 'string' },
+    },
+    team: stringOrNullSchema,
+    notes: stringOrNullSchema,
+    customField: numberOrNullSchema,
+    droped: numberOrNullSchema,
+  },
+  required: ['name'],
+});
+
+
+const playersSchema = {
+  type: 'array',
+  items: playerSchema([]),
+};
 
 registerValidator('tournament-players', scope, playersSchema);

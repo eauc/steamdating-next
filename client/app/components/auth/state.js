@@ -1,17 +1,29 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import Joi from 'joi-browser';
 import { dispatch,
          registerValidator } from 'app/services/state';
 import { registerInit } from 'app/services/init';
 import authModel from 'app/models/auth';
 
 export const scope = ['auth'];
-export const tokenSchema = Joi.alternatives(null, Joi.string());
-export const authSchema = Joi.object({
-  token: tokenSchema,
-});
+export const tokenSchema = {
+  oneOf: [
+    { type: 'null' },
+    {
+      type: 'string',
+      minLength: 1,
+    },
+  ],
+};
+export const authSchema = {
+  type: 'object',
+  properties: {
+    token: tokenSchema,
+  },
+  required: ['token'],
+  additionnalProperties: false,
+};
 
 let lock;
 
@@ -44,9 +56,12 @@ function initLock() {
         self.STEAMDATING_CONFIG.auth.client_id,
         self.STEAMDATING_CONFIG.auth.domain,
         { ui: { autoClose: true },
-          auth: { loginAfterSignup: true,
-                  redirect: false,
-                  params: { scope: 'openid email permissions' } } });
+          auth: {
+            loginAfterSignup: true,
+            redirect: false,
+            params: { scope: 'openid email permissions' },
+          },
+        });
       lock.on('authenticated', onLogin);
       return lock;
     });

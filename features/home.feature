@@ -7,11 +7,7 @@ Feature: Home Page Tests
     When I test the "Toaster"
     Then the "Toaster" appears with a test message
 
-  Scenario: Test Validate State
-    When I test the "Validate"
-    Then the Toaster appears with "Invalid state" message
-
-  Scenario: Test Validate State
+  Scenario: Test Validate Args
     When I test the "ValidateArgs"
     Then the Toaster appears with "Invalid arguments" message
 

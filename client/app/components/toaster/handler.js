@@ -12,7 +12,7 @@ const middlewares = [
 ];
 
 registerHandler('toaster-set', [
-  validateArgs(toasterSchema),
+  validateArgs([toasterSchema]),
   middlewares,
 ], toasterSetHandler);
 

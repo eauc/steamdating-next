@@ -1,6 +1,5 @@
 export let __hotReload = true;
 
-import Joi from 'joi-browser';
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
 import cellModel from 'app/models/cell.js';
@@ -11,7 +10,7 @@ let CONTEXT = stateModel.createContext();
 const STATE_CELL = cellModel.from(() => CONTEXT.STATE);
 STATE_CELL._name = 'STATE';
 const EVENT_QUEUE = tasksQueueModel.create();
-registerValidator('state', [], Joi.object());
+registerValidator('state', [], { type: 'object' });
 
 const stateService = {
   dispatch: stateDispatch,

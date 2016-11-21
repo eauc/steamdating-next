@@ -26,5 +26,5 @@ registerHandler(
 
 registerHandler('auth-setToken', [
   middlewares,
-  validateArgs(tokenSchema),
+  validateArgs([tokenSchema]),
 ], (state, [token]) => authModel.setToken(token, state));

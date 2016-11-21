@@ -2,15 +2,9 @@
 
 ** TODO
 
-- [X] setup nightwatch/cucumber
-- [X] features players
-  - [X] create
-  - [X] delete
-  - [X] edit
-  - [X] filter
-- [ ] replace Joi with ajv/jsonSchema
-- [ ] effects/coeffects
+- [X] replace Joi with ajv/jsonSchema
+- [ ] rename stripv -> stripEvent
+- [ ] effects/coeffects - httpRequest
 - [ ] features online ?
 - [ ] pairing/steps trace
 - [ ] setup appCache
-

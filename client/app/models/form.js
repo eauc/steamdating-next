@@ -2,6 +2,7 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
+import ajv from 'app/helpers/ajv';
 
 const formModel = {
   create: formCreate,
@@ -20,14 +21,15 @@ function formCreate(value) {
   };
 }
 
-function formValidate(schema, { edit, base }) {
+function formValidate(getSchema, { edit, base }) {
+  const schema = getSchema();
   log.sub('form edit', edit, schema);
-  const validation = schema().validate(edit, { abortEarly: false });
-  const { error } = validation;
-  log.sub('form validation', validation);
-  if (error) {
-    error.details = R.groupBy(R.prop('path'), error.details);
-  }
+  const validate = ajv.compile(schema);
+  const valid = validate(edit);
+  log.sub('form validation', valid, validate.errors);
+  const error = R.exists(validate.errors) ?
+          R.groupBy(R.prop('dataPath'), validate.errors) :
+          null;
   return { edit, base, error };
 }
 
@@ -44,5 +46,5 @@ function formFieldValue(path, form) {
 }
 
 function formFieldError(path, form) {
-  return R.pathOr('', ['error', 'details', path, 0, 'message'], form);
+  return R.pathOr('', ['error', `.${path}`, 0, 'message'], form);
 }

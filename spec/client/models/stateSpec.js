@@ -148,40 +148,32 @@ describe('stateModel', function () {
           .and.callFake((state, [event, ...args]) =>
                         R.assoc(event, args, state));
       }, function () {
-        context('when validators have been registered', function () {
+        beforeEach(function () {
+          self.STEAMDATING_CONFIG.debug = true;
+          this.validatorSchema1 = {
+            type: 'array',
+            item: { type: 'string' },
+          };
+          this.validatorSchema2 = {
+            type: 'object',
+            properties: {
+              myEvent: this.validatorSchema1,
+            },
+          };
           this.stateContext = stateModel
             .registerValidator('validator1', ['myEvent'], this.validatorSchema1, this.stateContext);
           this.stateContext = stateModel
             .registerValidator('validator2', [], this.validatorSchema2, this.stateContext);
+        });
+
+        context('when a validator fails', function () {
+          this.expectContextError();
+          this.validatorSchema2.properties
+            .myEvent = { type: 'string' };
         }, function () {
-          beforeEach(function () {
-            self.STEAMDATING_CONFIG.debug = true;
-            this.validatorSchema1 = jasmine.createSpyObj('validatorSchema1', [
-              'validate',
-            ]);
-            this.validatorSchema1.validate.and.returnValue({});
-            this.validatorSchema2 = jasmine.createSpyObj('validatorSchema2', [
-              'validate',
-            ]);
-            this.validatorSchema2.validate.and.returnValue({});
-          });
-
-          it('should validate new state against each validator', function () {
-            expect(this.validatorSchema1.validate)
-              .toHaveBeenCalledWith(['arg1','arg2']);
-            expect(this.validatorSchema2.validate)
-              .toHaveBeenCalledWith({ myEvent: ['arg1','arg2'] });
-          });
-
-          context('when a validator fails', function () {
-            this.expectContextError();
-            this.validatorSchema2.validate
-              .and.returnValue({ error: 'error' });
-          }, function () {
-            it('should reject <event>', function () {
-              expect(this.contextError)
-                .toEqual(['Invalid State']);
-            });
+          it('should reject <event>', function () {
+            expect(this.contextError)
+              .toEqual(['Invalid State']);
           });
         });
 

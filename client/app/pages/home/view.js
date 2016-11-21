@@ -1,9 +1,7 @@
 export let __hotReload = true;
 
 import { dispatch, registerHandler } from 'app/services/state';
-import validate from 'app/helpers/middlewares/validate';
 import validateArgs from 'app/helpers/middlewares/validateArgs';
-import Joi from 'joi-browser';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { Page,
@@ -14,8 +12,7 @@ import { Page,
 /* eslint-enable no-unused-vars */
 
 registerHandler('test', [
-  validateArgs([Joi.string().required(), null, Joi.number().required()]),
-  validate(Joi.number()),
+  validateArgs(['string', 'null', 'number']),
 ], () => 'Oups');
 
 registerHandler('test-prompt', (state, [_event_, ...result]) => {
@@ -46,12 +43,6 @@ function homePageRender() {
              dispatch(['toaster-set', { type: 'error', message: 'Ouuups5!' }]);
           }}>
           Test Toaster x5
-        </PageMenuItem>
-        <PageMenuItem
-           onClick={() => {
-             dispatch(['test', 'Baaaaka', null, 1]);
-          }}>
-          Test Validate
         </PageMenuItem>
         <PageMenuItem
            onClick={() => {
