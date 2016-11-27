@@ -2,14 +2,14 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import path from 'app/helpers/middlewares/path';
-import stripv from 'app/helpers/middlewares/stripv';
+import stripEvent from 'app/helpers/middlewares/stripEvent';
 import { registerHandler } from 'app/services/state';
 import { scope } from 'app/components/form/state';
 import formModel from 'app/models/form';
 
 const middlewares = [
   path(scope, {}),
-  stripv,
+  stripEvent,
 ];
 
 registerHandler(

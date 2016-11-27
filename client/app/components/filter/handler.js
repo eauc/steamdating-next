@@ -1,14 +1,14 @@
 export let __hotReload = true;
 
 import path from 'app/helpers/middlewares/path';
-import stripv from 'app/helpers/middlewares/stripv';
+import stripEvent from 'app/helpers/middlewares/stripEvent';
 import { registerHandler } from 'app/services/state';
 import filterModel from 'app/models/filter';
 import { scope } from 'app/components/filter/state';
 
 const middlewares = [
   path(scope, {}),
-  stripv,
+  stripEvent,
 ];
 
 registerHandler(

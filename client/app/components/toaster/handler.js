@@ -2,13 +2,13 @@ export let __hotReload = true;
 
 import { dispatch, registerHandler } from 'app/services/state';
 import path from 'app/helpers/middlewares/path';
-import stripv from 'app/helpers/middlewares/stripv';
+import stripEvent from 'app/helpers/middlewares/stripEvent';
 import validateArgs from 'app/helpers/middlewares/validateArgs';
 import { scope, toasterSchema } from 'app/components/toaster/state';
 
 const middlewares = [
   path(scope, null),
-  stripv,
+  stripEvent,
 ];
 
 registerHandler('toaster-set', [

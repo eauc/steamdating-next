@@ -1,7 +1,7 @@
 export let __hotReload = true;
 
 import path from 'app/helpers/middlewares/path';
-import stripv from 'app/helpers/middlewares/stripv';
+import stripEvent from 'app/helpers/middlewares/stripEvent';
 import tap from 'app/helpers/middlewares/tap';
 import validateArgs from 'app/helpers/middlewares/validateArgs';
 import authModel from 'app/models/auth';
@@ -10,7 +10,7 @@ import { scope, tokenSchema, authLogin } from 'app/components/auth/state';
 
 const middlewares = [
   path(scope, {}),
-  stripv,
+  stripEvent,
 ];
 
 registerHandler('auth-signin', [

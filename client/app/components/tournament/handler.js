@@ -5,13 +5,13 @@ import { dispatch, registerHandler } from 'app/services/state';
 import fileService from 'app/services/file';
 import tournamentsApiService from 'app/services/apis/tournaments';
 import path from 'app/helpers/middlewares/path';
-import stripv from 'app/helpers/middlewares/stripv';
+import stripEvent from 'app/helpers/middlewares/stripEvent';
 import tap from 'app/helpers/middlewares/tap';
 import { scope } from 'app/components/tournament/state';
 
 const middlewares = [
   path(scope.tournament, {}),
-  stripv,
+  stripEvent,
 ];
 
 registerHandler('tournament-set',
@@ -29,30 +29,30 @@ registerHandler('tournament-openSuccess',
                 tournamentOpenSuccessHandler);
 
 registerHandler('tournament-onlineRefresh',[
-  stripv,
+  stripEvent,
   tap,
 ], tournamentOnlineRefreshHandler);
 registerHandler('tournament-onlineRefreshRequest',[
-  stripv,
+  stripEvent,
   tap,
 ], tournamentOnlineRefreshRequestHandler);
 registerHandler('tournament-onlineRefreshSuccess',[
   path(scope.onlineList, []),
-  stripv,
+  stripEvent,
 ], tournamentOnlineRefreshSuccessHandler);
 registerHandler('tournament-onlineGetUrlsSuccess',[
   path(scope.onlineUrls, {}),
-  stripv,
+  stripEvent,
 ], tournamentOnlineGetUrlsSuccessHandler);
 registerHandler('tournament-onlineSave',[
-  stripv,
+  stripEvent,
   tap,
 ], tournamentOnlineSaveHandler);
 registerHandler('tournament-onlineSaveSuccess',
                 middlewares,
                 tournamentOnlineSaveSuccessHandler);
 registerHandler('tournament-onlineDownload',[
-  stripv,
+  stripEvent,
   tap,
 ], tournamentOnlineDownloadHandler);
 registerHandler('tournament-onlineDownloadSuccess', [

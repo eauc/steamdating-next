@@ -3,12 +3,12 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import { dispatch, registerHandler } from 'app/services/state';
 import path from 'app/helpers/middlewares/path';
-import stripv from 'app/helpers/middlewares/stripv';
+import stripEvent from 'app/helpers/middlewares/stripEvent';
 import { scope } from 'app/components/prompt/state';
 
 const middlewares = [
   path(scope, null),
-  stripv,
+  stripEvent,
 ];
 
 registerHandler('prompt-set', middlewares, (_state_, [prompt]) => prompt);

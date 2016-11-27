@@ -3,7 +3,7 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import history from 'app/helpers/history';
 import path from 'app/helpers/middlewares/path';
-import stripv from 'app/helpers/middlewares/stripv';
+import stripEvent from 'app/helpers/middlewares/stripEvent';
 import tap from 'app/helpers/middlewares/tap';
 import { dispatch, registerHandler } from 'app/services/state';
 import { scope } from 'app/components/players/state';
@@ -12,7 +12,7 @@ import playersModel from 'app/models/players';
 
 const middlewares = [
   path(scope, []),
-  stripv,
+  stripEvent,
 ];
 
 registerHandler('players-create', middlewares, (state, [{ edit }]) => {

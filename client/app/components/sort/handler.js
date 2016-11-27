@@ -4,7 +4,7 @@ import R from 'app/helpers/ramda';
 import { registerHandler } from 'app/services/state';
 import { scope, sortSchema } from 'app/components/sort/state';
 import path from 'app/helpers/middlewares/path';
-import stripv from 'app/helpers/middlewares/stripv';
+import stripEvent from 'app/helpers/middlewares/stripEvent';
 import validateArgs from 'app/helpers/middlewares/validateArgs';
 
 registerHandler('sort-set', [
@@ -16,5 +16,5 @@ registerHandler('sort-set', [
     },
     sortSchema,
   ]),
-  stripv,
+  stripEvent,
 ], (state, [name, value]) => R.assoc(name, value, state));

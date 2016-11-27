@@ -2,16 +2,16 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import { registerHandler } from 'app/services/state';
-import stripv from 'app/helpers/middlewares/stripv';
+import stripEvent from 'app/helpers/middlewares/stripEvent';
 
 registerHandler('debug-set', [
-  stripv,
+  stripEvent,
 ], function debugSetHandler(state, [path, value]) {
   return R.updateIn(path, value, state);
 });
 
 registerHandler('debug-remove', [
-  stripv,
+  stripEvent,
 ], function debugRemoveHander(state, [path]) {
   return R.dissocIn(path, state);
 });
