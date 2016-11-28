@@ -11,23 +11,18 @@ const eventVectorSchema = {
 };
 
 const promptSchema = {
-  oneOf: [
-    { type: 'null' },
-    {
-      type: 'object',
-      properties: {
-        type: { enum: ['alert','prompt','confirm'] },
-        msg: {
-          type: 'string',
-          minLength: 1,
-        },
-        value: {},
-        onOk: eventVectorSchema,
-        onCancel: eventVectorSchema,
-      },
-      required: ['type', 'msg', 'onOk'],
+  type: 'object',
+  properties: {
+    type: { enum: ['alert','prompt','confirm'] },
+    msg: {
+      type: 'string',
+      minLength: 1,
     },
-  ],
+    value: {},
+    onOk: eventVectorSchema,
+    onCancel: eventVectorSchema,
+  },
+  required: ['type', 'msg', 'onOk'],
 };
 
 registerValidator('prompt', scope, promptSchema);

@@ -9,17 +9,12 @@ export const typeSchema = {
 };
 export const messageSchema = { type: 'string' };
 export const toasterSchema = {
-  oneOf: [
-    { type: 'null' },
-    {
-      type: 'object',
-      properties: {
-        type: typeSchema,
-        message: messageSchema,
-      },
-      required: ['type', 'message'],
-    },
-  ],
+  type: 'object',
+  properties: {
+    type: typeSchema,
+    message: messageSchema,
+  },
+  required: ['type', 'message'],
 };
 
 registerValidator('toaster', scope, toasterSchema);

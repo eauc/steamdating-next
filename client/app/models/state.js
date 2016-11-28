@@ -40,9 +40,15 @@ function stateRegisterValidator(name, path, schema, context) {
   if (R.prop(name, context.VALIDATORS)) {
     log.state(`overwriting validator "${name}" `);
   }
+	const schemaOrNull = {
+		oneOf: [
+			{ type: 'null' },
+			schema,
+		],
+	};
   return R.assocPath(
     ['VALIDATORS',name],
-    validateNextState$(name, path, schema),
+    validateNextState$(name, path, schemaOrNull),
     context
   );
 }
@@ -50,7 +56,7 @@ function stateRegisterValidator(name, path, schema, context) {
 const validateNextState$ = R.curry(function val(name, path, schema, state) {
   const validate = ajv.compile(schema);
   return R.thread(state)(
-    R.path(path),
+    R.pathOr(null, path),
     validate,
     R.tap((valid) => {
       if (!valid) {

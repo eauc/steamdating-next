@@ -4,7 +4,7 @@
 
 - [X] replace Joi with ajv/jsonSchema
 - [ ] rename stripv -> stripEvent
-- [ ] effects/coeffects - httpRequest
+- [ ] effects/coeffects - httpRequest/dispatch/toaster/history/timeout
 - [ ] features online ?
 - [ ] pairing/steps trace
 - [ ] setup appCache

@@ -66,6 +66,7 @@ const onlineSchema = {
 
 registerValidator('tournament', scope.tournament, tournamentSchema);
 registerValidator('online', scope.online, onlineSchema);
+
 const tournamentOnlineResetSaveFormSub = registerSubscription(
   'tournament-onlineResetSetForm',
   (state) => {
