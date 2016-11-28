@@ -2,10 +2,11 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import history from 'app/helpers/history';
+import { effects } from 'app/helpers/middlewares/effects';
 import path from 'app/helpers/middlewares/path';
 import stripEvent from 'app/helpers/middlewares/stripEvent';
 import tap from 'app/helpers/middlewares/tap';
-import { dispatch, registerHandler } from 'app/services/state';
+import { registerHandler } from 'app/services/state';
 import { scope } from 'app/components/players/state';
 import playerModel from 'app/models/player';
 import playersModel from 'app/models/players';
@@ -26,9 +27,14 @@ registerHandler(
   (state, [{ base, edit }]) => playersModel.update(base.name, edit, state)
 );
 
-registerHandler('players-removeCurrentEdit', [tap], (state) => {
+registerHandler('players-removeCurrentEdit', [
+  tap,
+  effects,
+], (state) => {
   history.goBack();
-  dispatch(['players-remove', R.pathOr({}, ['forms', 'player', 'base'], state)]);
+  return {
+    dispatch: ['players-remove', R.pathOr({}, ['forms', 'player', 'base'], state)],
+  };
 });
 
 registerHandler(

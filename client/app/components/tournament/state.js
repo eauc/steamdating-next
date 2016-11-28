@@ -16,7 +16,9 @@ export const scope = {
   onlineList: ['online','list'],
 };
 
-const tournamentSchema = { type: 'object' };
+const tournamentSchema = {
+  type: 'object',
+};
 const onlineUrlsSchema = {
   type: 'object',
   properties: {

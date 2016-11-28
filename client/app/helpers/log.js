@@ -7,6 +7,8 @@ self.STEAMDATING_CONFIG.debugFlags = {
   cell: null,
   // cycle: 'warn',
   cycle: null,
+  effects: 'debug',
+  // effects: null,
   http: 'debug',
   init: 'log',
   // sub: 'debug',

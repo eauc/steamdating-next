@@ -18,14 +18,12 @@ import { tournamentOpenHandler,
        } from 'app/components/tournament/handler';
 
 import fileService from 'app/services/file';
-import stateService from 'app/services/state';
 import tournamentsApiService from 'app/services/apis/tournaments';
 
 describe('tournamentComponent', function () {
   beforeEach(function () {
     this.state = {};
     spyOnService(fileService, 'file');
-    spyOnService(stateService, 'state');
     spyOnService(tournamentsApiService, 'tournamentsApi');
   });
 
@@ -41,8 +39,10 @@ describe('tournamentComponent', function () {
       fileService.readP.resolveWith('data');
     }, function () {
       it('should set tournament to read data', function () {
-        expect(stateService.dispatch)
-          .toHaveBeenCalledWith(['tournament-openSuccess', 'data']);
+        return this.context.dispatch.then((event) => {
+					expect(event)
+						.toEqual(['tournament-openSuccess', 'data']);
+				});
       });
     });
 
@@ -50,11 +50,13 @@ describe('tournamentComponent', function () {
       fileService.readP.resolveWith(undefined);
     }, function () {
       it('should set error', function () {
-        expect(stateService.dispatch)
-          .toHaveBeenCalledWith(['toaster-set', {
-            type: 'error',
-            message: 'Invalid file',
-          }]);
+        return this.context.dispatch.then((event) => {
+					expect(event)
+						.toEqual(['toaster-set', {
+							type: 'error',
+							message: 'Invalid file',
+						}]);
+				});
       });
     });
   });
@@ -63,16 +65,13 @@ describe('tournamentComponent', function () {
     return tournamentOpenSuccessHandler(this.state, ['data']);
   }, function () {
     it('should notify file loaded', function () {
-      expect(stateService.dispatch)
-        .toHaveBeenCalledWith(['toaster-set', {
-          type: 'success',
-          message: 'File loaded',
-        }]);
+      expect(this.context.dispatch)
+        .toContain(['toaster-set', { type: 'success', message: 'File loaded' }]);
     });
 
     it('should set tournament data', function () {
-      expect(stateService.dispatch)
-        .toHaveBeenCalledWith(['tournament-set', 'data']);
+      expect(this.context.dispatch)
+        .toContain(['tournament-set', 'data']);
     });
   });
 
@@ -80,8 +79,8 @@ describe('tournamentComponent', function () {
     return tournamentSetHandler(this.state, ['data']);
   }, function () {
     it('should prompt user for confirmation', function () {
-      expect(stateService.dispatch)
-        .toHaveBeenCalledWith([
+      expect(this.context.dispatch)
+        .toEqual([
           'prompt-set',
           { type: 'confirm',
             msg: 'All previous data will be replaced. You sure ?',
@@ -132,8 +131,10 @@ describe('tournamentComponent', function () {
     });
 
     it('should dispatch refreshRequest event', function () {
-      expect(stateService.dispatch)
-        .toHaveBeenCalledWith(['tournament-onlineRefreshRequest']);
+      this.context.dispatch.then((event) => {
+				expect(event)
+					.toEqual(['tournament-onlineRefreshRequest']);
+			});
     });
   });
 
@@ -204,21 +205,18 @@ describe('tournamentComponent', function () {
   context('tournamentOnlineSaveSuccessHandler(<tournament>)', function () {
     return tournamentOnlineSaveSuccessHandler(this.state, ['tournament']);
   }, function () {
-    it('should display save success toaster', function () {
-      expect(stateService.dispatch)
-        .toHaveBeenCalledWith(['toaster-set', {
-          type: 'success',
-          message: 'Tournament saved online',
-        }]);
+    it('should display save success toaster & refresh online list', function () {
+      expect(this.context.dispatch)
+        .toContain(['toaster-set', { type: 'success', message: 'Tournament saved online' }]);
     });
 
-    it('should refresh online tournaments list', function () {
-      expect(stateService.dispatch)
-        .toHaveBeenCalledWith(['tournament-onlineRefresh']);
+    it('should refresh online list', function () {
+      expect(this.context.dispatch)
+        .toContain(['tournament-onlineRefresh']);
     });
 
     it('should update <state>\'s tournament', function () {
-      expect(this.context)
+      expect(this.context.state)
         .toBe('tournament');
     });
   });
@@ -246,16 +244,13 @@ describe('tournamentComponent', function () {
     return tournamentOnlineDownloadSuccessHandler(this.state, ['tournament']);
   }, function () {
     it('should display save success toaster', function () {
-      expect(stateService.dispatch)
-        .toHaveBeenCalledWith(['toaster-set', {
-          type: 'success',
-          message: 'Tournament loaded',
-        }]);
+      expect(this.context.dispatch)
+        .toContain(['toaster-set', { type: 'success', message: 'Tournament loaded' }]);
     });
 
     it('should set local tournament', function () {
-      expect(stateService.dispatch)
-        .toHaveBeenCalledWith(['tournament-set', 'tournament']);
+      expect(this.context.dispatch)
+        .toContain(['toaster-set', { type: 'success', message: 'Tournament loaded' }]);
     });
   });
 });

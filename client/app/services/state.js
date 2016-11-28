@@ -2,6 +2,7 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
+import { registerEffect } from 'app/helpers/middlewares/effects';
 import cellModel from 'app/models/cell.js';
 import stateModel from 'app/models/state.js';
 import tasksQueueModel from 'app/models/tasksQueue.js';
@@ -17,6 +18,15 @@ const stateService = {
 };
 export default stateService;
 export const dispatch = (...args) => stateService.dispatch(...args);
+
+registerEffect('dispatch', (events) => {
+  const eventsArray = R.type(events[0]) === 'Array' ? events : [events];
+	R.thread(eventsArray)(
+		R.map((event) => self.Promise.resolve(event).catch(() => null)),
+		(eventsPromises) => self.Promise.all(eventsPromises),
+		(promise) => promise.then(R.compose(R.forEach(stateService.dispatch), R.reject(R.isNil)))
+	);
+});
 
 export function registerValidator(name, path, schema) {
   CONTEXT = stateModel.registerValidator(name, path, schema, CONTEXT);

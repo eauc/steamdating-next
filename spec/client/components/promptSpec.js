@@ -6,13 +6,11 @@ import { beforeEach,
 import { promptUpdateValueHandler,
          promptOkHandler,
          promptCancelHandler } from 'app/components/prompt/handler';
-import appStateService from 'app/services/state';
 
 describe('promptComponent', function () {
   beforeEach(function () {
     this.state = {};
-    spyOnService(appStateService, 'state');
-  });
+	});
 
   context('promptUpdateValueHandler(<value>)', function () {
     return promptUpdateValueHandler(this.state, ['value']);
@@ -31,12 +29,12 @@ describe('promptComponent', function () {
     });
 
     it('should reset prompt', function () {
-      expect(this.context).toBe(null);
+      expect(this.context.state).toBe(null);
     });
 
     it('should dispatch <prompt.onOk> event', function () {
-      expect(appStateService.dispatch)
-        .toHaveBeenCalledWith(['on-ok-event']);
+      expect(this.context.dispatch)
+        .toEqual(['on-ok-event']);
     });
 
     context('when type==="prompt"', function () {
@@ -44,8 +42,8 @@ describe('promptComponent', function () {
       this.state.value = 42;
     }, function () {
       it('should append <prompt.value> to event', function () {
-        expect(appStateService.dispatch)
-          .toHaveBeenCalledWith(['on-ok-event', 42]);
+        expect(this.context.dispatch)
+          .toEqual(['on-ok-event', 42]);
       });
     });
   });
@@ -54,15 +52,15 @@ describe('promptComponent', function () {
     return promptCancelHandler(this.state);
   }, function () {
     it('should reset prompt', function () {
-      expect(this.context).toBe(null);
+      expect(this.context.state).toBe(null);
     });
 
     context('when <promp.onCancel> is defined', function () {
       this.state.onCancel = ['on-cancel-event', 'value'];
     }, function () {
       it('should dispatch <prompt.onCancel> event', function () {
-        expect(appStateService.dispatch)
-          .toHaveBeenCalledWith(['on-cancel-event', 'value']);
+        expect(this.context.dispatch)
+          .toEqual(['on-cancel-event', 'value']);
       });
     });
   });
