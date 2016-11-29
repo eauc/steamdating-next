@@ -71,21 +71,23 @@ registerValidator('online', scope.online, onlineSchema);
 
 const tournamentOnlineResetSaveFormSub = registerSubscription(
   'tournament-onlineResetSetForm',
-  (state) => {
+  (stateCell) => {
     const defaut = {};
-    return state
+    let init = true;
+    return stateCell
       .map(R.pathOr(defaut, scope.onlineInfo))
       .map((info) => {
+        if (init) {
+          init = false;
+          return;
+        }
         dispatch(['form-reset', 'tournament_onlineSave', R.pick(['name','date'], info)]);
       });
   }
 );
-registerInit('tournament-online', ['storage'], initTournamentOnline);
+getPermanentSubscription('tournament-onlineInfo', [tournamentOnlineResetSaveFormSub]);
 
+registerInit('tournament-online', ['storage'], initTournamentOnline);
 function initTournamentOnline(state) {
-  getPermanentSubscription(
-    'tournament-onlineInfo',
-    [tournamentOnlineResetSaveFormSub]
-  );
   return R.assoc('online', {}, state);
 }
