@@ -40,9 +40,9 @@ describe('tournamentComponent', function () {
     }, function () {
       it('should set tournament to read data', function () {
         return this.context.dispatch.then((event) => {
-					expect(event)
-						.toEqual(['tournament-openSuccess', 'data']);
-				});
+          expect(event)
+            .toEqual(['tournament-openSuccess', 'data']);
+        });
       });
     });
 
@@ -51,12 +51,12 @@ describe('tournamentComponent', function () {
     }, function () {
       it('should set error', function () {
         return this.context.dispatch.then((event) => {
-					expect(event)
-						.toEqual(['toaster-set', {
-							type: 'error',
-							message: 'Invalid file',
-						}]);
-				});
+          expect(event)
+            .toEqual(['toaster-set', {
+              type: 'error',
+              message: 'Invalid file',
+            }]);
+        });
       });
     });
   });
@@ -132,9 +132,9 @@ describe('tournamentComponent', function () {
 
     it('should dispatch refreshRequest event', function () {
       this.context.dispatch.then((event) => {
-				expect(event)
-					.toEqual(['tournament-onlineRefreshRequest']);
-			});
+        expect(event)
+          .toEqual(['tournament-onlineRefreshRequest']);
+      });
     });
   });
 

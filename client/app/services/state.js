@@ -42,14 +42,14 @@ export function registerSubscription(view, subscription) {
   return getSubscription$(view);
 }
 
-export function getPermanentSubscription(name, [sub, ...args]) {
+export function getPermanentSubscription(name, [view, ...args]) {
   self._views = self._views || {};
   if (self._views[name]) {
     log.sub('permanentSub revoke', name);
     revokeView(self._views[name]);
   }
-  log.sub('permanentSub get', name, sub, args);
-  self._views[name] = sub(args);
+  log.sub('permanentSub get', name, args);
+  self._views[name] = view(args);
 }
 
 export function revokeView(cell) {
@@ -85,7 +85,7 @@ function _dispatch([resolve, reject, event, ...args]) {
       return stateModel.resolveCells(CONTEXT);
     })
     .then(R.tap((newContext) => {
-      CONTEXT = newContext;
+      CONTEXT.TICK = newContext.TICK;
     }))
     .then(resolve)
     .catch(reject);

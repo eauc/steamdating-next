@@ -40,12 +40,12 @@ function stateRegisterValidator(name, path, schema, context) {
   if (R.prop(name, context.VALIDATORS)) {
     log.state(`overwriting validator "${name}" `);
   }
-	const schemaOrNull = {
-		oneOf: [
-			{ type: 'null' },
-			schema,
-		],
-	};
+  const schemaOrNull = {
+    oneOf: [
+      { type: 'null' },
+      schema,
+    ],
+  };
   return R.assocPath(
     ['VALIDATORS',name],
     validateNextState$(name, path, schemaOrNull),

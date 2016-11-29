@@ -7,14 +7,14 @@ import formModel from 'app/models/form';
 
 export const formSub = registerSubscription(
   'form',
-  (state, [_sub_, form, schema]) => {
-    let _schema = ( (R.type(schema) !== 'Function')
+  (stateCell, [_sub_, form, schema]) => {
+    let schemaFn = ( (R.type(schema) !== 'Function')
                     ? () => schema
                     : schema
                   );
-    return state
+    return stateCell
       .map(R.pathOr({}, [...scope, form]))
-      .map(formModel.validate$(_schema));
+      .map(formModel.validate$(schemaFn));
   }
 );
 

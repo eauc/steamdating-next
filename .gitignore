@@ -1,4 +1,5 @@
 node_modules
+.dir-locals.el
 *.log
 /client/dist
 /client/lib

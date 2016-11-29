@@ -23,10 +23,10 @@ function formCreate(value) {
 
 function formValidate(getSchema, { edit, base }) {
   const schema = getSchema();
-  log.sub('form edit', edit, schema);
+  log.form('form edit', edit, schema);
   const validate = ajv.compile(schema);
   const valid = validate(edit);
-  log.sub('form validation', valid, validate.errors);
+  log.form('form validation', valid, validate.errors);
   const error = R.exists(validate.errors) ?
           R.groupBy(R.prop('dataPath'), validate.errors) :
           null;

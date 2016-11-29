@@ -53,7 +53,7 @@ function formEditRender() {
 }
 
 function formEditGetInitialState() {
-  return {};
+  return { form: {} };
 }
 
 function formEditGetChildContext() {

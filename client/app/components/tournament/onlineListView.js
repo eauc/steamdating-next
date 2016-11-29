@@ -25,9 +25,14 @@ function listRender() {
 const ListContent = createComponent({
   displayName: 'TournamentOnlineList',
   subscriptions: { list: tournamentOnlineListSub },
+  getInitialState: listContentGetInitialState,
   render: listContentRender,
   componentDidMount: listContentDidMount,
 });
+
+function listContentGetInitialState() {
+  return { list: [] };
+}
 
 function listContentRender() {
   const items = R.map((item) => (

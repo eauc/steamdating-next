@@ -10,8 +10,13 @@ import { Icon } from 'app/components/misc/misc';
 export const AuthRequired = createComponent({
   displayName: 'AuthRequired',
   subscriptions: { active: authActiveSub },
+  getInitialState: authGetInitialState,
   render: authRequiredRender,
 });
+
+function authGetInitialState() {
+  return { active: false };
+}
 
 function authRequiredRender() {
   return this.state.active

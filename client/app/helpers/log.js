@@ -9,6 +9,8 @@ self.STEAMDATING_CONFIG.debugFlags = {
   cycle: null,
   effects: 'debug',
   // effects: null,
+  form: 'debug',
+  // form: null,
   http: 'debug',
   init: 'log',
   // sub: 'debug',

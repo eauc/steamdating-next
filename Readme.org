@@ -2,9 +2,13 @@
 
 ** TODO
 
-- [X] replace Joi with ajv/jsonSchema
-- [ ] rename stripv -> stripEvent
-- [ ] effects/coeffects - httpRequest/dispatch/toaster/history/timeout
+- [-] effects/coeffects
+	- [ ] httpRequest
+	- [X] dispatch
+	- [ ] toaster
+	- [ ] history
+	- [ ] timeout/dispatchWithDelay
+- [ ] replace initializers with init events, using a main init event + 'dispatch' effects
 - [ ] features online ?
 - [ ] pairing/steps trace
 - [ ] setup appCache
