@@ -10,31 +10,18 @@ import { TournamentOnlineListItem } from 'app/components/tournament/onlineListIt
 /* eslint-enable no-unused-vars */
 
 export const TournamentOnlineList = createComponent({
-  render: listRender,
-});
-
-function listRender() {
-  return (
-    <AuthRequired>
-      <ListContent />
-    </AuthRequired>
-  );
-}
-
-// eslint-disable-next-line no-unused-vars
-const ListContent = createComponent({
   displayName: 'TournamentOnlineList',
   subscriptions: { list: tournamentOnlineListSub },
-  getInitialState: listContentGetInitialState,
-  render: listContentRender,
-  componentDidMount: listContentDidMount,
+  getInitialState: listGetInitialState,
+  render: listRender,
+  componentDidMount: listDidMount,
 });
 
-function listContentGetInitialState() {
+function listGetInitialState() {
   return { list: [] };
 }
 
-function listContentRender() {
+function listRender() {
   const items = R.map((item) => (
     <TournamentOnlineListItem
        key={item.id}
@@ -63,6 +50,6 @@ function listContentRender() {
   );
 }
 
-function listContentDidMount() {
+function listDidMount() {
   dispatch(['tournament-onlineRefresh']);
 }

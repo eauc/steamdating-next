@@ -1,17 +1,17 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
+import { registerEffect } from 'app/helpers/middlewares/effects';
 import log from 'app/helpers/log';
 import { dispatch } from 'app/services/state';
 
 const httpService = {
-  getP: httpGetP,
-  postP: httpPostP,
-  putP: httpPutP,
-  deleteP: httpDeleteP,
+  requestP: httpRequestP,
 };
 
 export default R.curryService(httpService);
+
+registerEffect('http', httpRequestP);
 
 const DEFAULT_HEADERS = {
   'Content-Type': 'application/json;charset=UTF-8',
@@ -22,26 +22,8 @@ const errorListener$ = R.curry(errorListener);
 const dispatchSuccess$ = R.curry(dispatchSuccess);
 const dispatchError$ = R.curry(dispatchError);
 
-function httpGetP({ url, headers = {}, onSuccess, onError }) {
-  return new self.Promise(httpRequest$({ method: 'GET', url, headers }))
-    .then(dispatchSuccess$({ onSuccess }))
-    .catch(dispatchError$({ onError }));
-}
-
-function httpPostP({ url, headers = {}, data, onSuccess, onError }) {
-  return new self.Promise(httpRequest$({ method: 'POST', url, headers, data }))
-    .then(dispatchSuccess$({ onSuccess }))
-    .catch(dispatchError$({ onError }));
-}
-
-function httpPutP({ url, headers = {}, data, onSuccess, onError }) {
-  return new self.Promise(httpRequest$({ method: 'PUT', url, headers, data }))
-    .then(dispatchSuccess$({ onSuccess }))
-    .catch(dispatchError$({ onError }));
-}
-
-function httpDeleteP({ url, headers = {}, onSuccess, onError }) {
-  return new self.Promise(httpRequest$({ method: 'DELETE', url, headers }))
+function httpRequestP({ method, url, headers = {}, data, onSuccess, onError }) {
+  return new self.Promise(httpRequest$({ method, url, headers, data }))
     .then(dispatchSuccess$({ onSuccess }))
     .catch(dispatchError$({ onError }));
 }
@@ -101,7 +83,11 @@ function dispatchSuccess({ onSuccess }, data) {
 }
 
 function dispatchError({ onError }, error) {
-  const [message, payload] = R.type(error) === 'Error' ? [error.message] : error;
+  const [message, payload] = R.cond([
+    [R.equals('Error'), () => [error.message]],
+    [R.equals('String'), () => [error]],
+    [R.T, () => error],
+  ])(R.type(error));
   log.error(message, payload);
   let ret = onError
         ? dispatch(onError)

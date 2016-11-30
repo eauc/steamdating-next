@@ -14,22 +14,20 @@ export const TournamentOnlineSave = createComponent({
 
 function onlineSaveRender() {
   return (
-    <AuthRequired>
-      <FormEdit name="tournament_onlineSave"
-                label="Save Tournament Online"
-                schema={onlineSaveFormSchema}
-                onSubmit="tournament-onlineSave">
-        <FormInput name="name"
-                   label="Name"
-                   type="text"
-                   required="required"
-                   order="1" />
-        <FormInput name="date"
-                   label="Date"
-                   type="text"
-                   placeholder="YYYY-MM-DD"
-                   order="2" />
-      </FormEdit>
-    </AuthRequired>
+    <FormEdit name="tournament_onlineSave"
+              label="Save Tournament Online"
+              schema={onlineSaveFormSchema}
+              onSubmit="tournament-onlineSave">
+      <FormInput name="name"
+                 label="Name"
+                 type="text"
+                 required="required"
+                 order="1" />
+      <FormInput name="date"
+                 label="Date"
+                 type="text"
+                 placeholder="YYYY-MM-DD"
+                 order="2" />
+    </FormEdit>
   );
 }

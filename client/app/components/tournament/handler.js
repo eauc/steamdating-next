@@ -3,7 +3,7 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import { registerHandler } from 'app/services/state';
 import fileService from 'app/services/file';
-import tournamentsApiService from 'app/services/apis/tournaments';
+import tournamentsApiModel from 'app/models/apis/tournaments';
 import { effects } from 'app/helpers/middlewares/effects';
 import path from 'app/helpers/middlewares/path';
 import stripEvent from 'app/helpers/middlewares/stripEvent';
@@ -29,7 +29,7 @@ registerHandler(
 registerHandler('tournament-open', [
   middlewares,
   tap,
-	effects,
+  effects,
 ], tournamentOpenHandler);
 registerHandler('tournament-openSuccess', [
   middlewares,
@@ -45,18 +45,26 @@ registerHandler('tournament-onlineRefresh',[
 registerHandler('tournament-onlineRefreshRequest',[
   stripEvent,
   tap,
+  effects,
 ], tournamentOnlineRefreshRequestHandler);
 registerHandler('tournament-onlineRefreshSuccess',[
   path(scope.onlineList, []),
   stripEvent,
 ], tournamentOnlineRefreshSuccessHandler);
+registerHandler('tournament-onlineRefreshError',[
+  path(scope.onlineList, []),
+  stripEvent,
+  effects,
+], tournamentOnlineRefreshErrorHandler);
 registerHandler('tournament-onlineGetUrlsSuccess',[
   path(scope.onlineUrls, {}),
   stripEvent,
+  effects,
 ], tournamentOnlineGetUrlsSuccessHandler);
 registerHandler('tournament-onlineSave',[
   stripEvent,
   tap,
+  effects,
 ], tournamentOnlineSaveHandler);
 registerHandler('tournament-onlineSaveSuccess', [
   middlewares,
@@ -65,6 +73,7 @@ registerHandler('tournament-onlineSaveSuccess', [
 registerHandler('tournament-onlineDownload',[
   stripEvent,
   tap,
+  effects,
 ], tournamentOnlineDownloadHandler);
 registerHandler('tournament-onlineDownloadSuccess', [
   middlewares,
@@ -89,15 +98,15 @@ export function tournamentSetConfirmHandler(_state_, [data]) {
 
 export function tournamentOpenHandler(_state_, [file]) {
   return {
-		dispatch: R.threadP(file)(
-			fileService.readP,
-			R.ifElse(
-				R.exists,
-				(data) => ['tournament-openSuccess', data],
-				() => ['toaster-set', { type: 'error', message: 'Invalid file' }]
-			)
-		),
-	};
+    dispatch: R.threadP(file)(
+      fileService.readP,
+      R.ifElse(
+        R.exists,
+        (data) => ['tournament-openSuccess', data],
+        () => ['toaster-set', { type: 'error', message: 'Invalid file' }]
+      )
+    ),
+  };
 }
 
 export function tournamentOpenSuccessHandler(_state_, [data]) {
@@ -109,40 +118,55 @@ export function tournamentOpenSuccessHandler(_state_, [data]) {
   };
 }
 
-export function tournamentOnlineRefreshHandler(state) {
+export function tournamentOnlineGetUrlsSuccessHandler(_state_, [urls]) {
   return {
-		dispatch: R.threadP(state)(
-			initOnlineUrlsP,
-			() => ['tournament-onlineRefreshRequest']
-		),
-	};
+    state: urls,
+    dispatch: ['tournament-onlineRefreshRequest'],
+  };
+}
+
+export function tournamentOnlineRefreshHandler(state) {
+  const urls = R.path(['online','urls'], state);
+  if (R.exists(urls)) {
+    return {
+      dispatch: ['tournament-onlineRefreshRequest'],
+    };
+  }
+  return {
+    http: tournamentsApiModel.getUrls({
+      onSuccess: ['tournament-onlineGetUrlsSuccess'],
+      onError: ['tournament-onlineRefreshError'],
+    }),
+  };
 }
 
 export function tournamentOnlineRefreshRequestHandler(state) {
   const urls = R.path(['online','urls'], state);
-  tournamentsApiService.getMineP({
-    urls,
-    authToken: R.path(['auth','token'], state),
-    onSuccess: ['tournament-onlineRefreshSuccess'],
-  });
+  return {
+    http: tournamentsApiModel.getMine({
+      urls,
+      authToken: R.path(['auth','token'], state),
+      onSuccess: ['tournament-onlineRefreshSuccess'],
+      onError: ['tournament-onlineRefreshError'],
+    }),
+  };
 }
 
 export function tournamentOnlineRefreshSuccessHandler(state, [list]) {
   return R.deepMergeArray(list, state);
 }
 
-function initOnlineUrlsP(state) {
-  const urls = R.path(['online','urls'], state);
-  if (R.exists(urls)) {
-    return self.Promise.resolve(urls);
-  }
-  return tournamentsApiService.getUrlsP({
-    onSuccess: ['tournament-onlineGetUrlsSuccess'],
-  });
-}
-
-export function tournamentOnlineGetUrlsSuccessHandler(_state_, [urls]) {
-  return urls;
+export function tournamentOnlineRefreshErrorHandler() {
+  return {
+    state: [],
+    dispatch: [
+      'toaster-set',
+      {
+        type: 'error',
+        message: 'Error loading tournaments from server',
+      },
+    ],
+  };
 }
 
 export function tournamentOnlineSaveHandler(state, [form]) {
@@ -151,12 +175,14 @@ export function tournamentOnlineSaveHandler(state, [form]) {
     R.assocPath([...scope.onlineInfo, 'date'], R.path(['edit','date'], form)),
     R.path(scope.tournament)
   );
-  tournamentsApiService.saveP({
-    urls: R.path(['online','urls'], state),
-    authToken: R.path(['auth','token'], state),
-    tournament,
-    onSuccess: ['tournament-onlineSaveSuccess'],
-  });
+  return {
+    http: tournamentsApiModel.save({
+      urls: R.path(['online','urls'], state),
+      authToken: R.path(['auth','token'], state),
+      tournament,
+      onSuccess: ['tournament-onlineSaveSuccess'],
+    }),
+  };
 }
 
 export function tournamentOnlineSaveSuccessHandler(_state_, [tournament]) {
@@ -170,11 +196,13 @@ export function tournamentOnlineSaveSuccessHandler(_state_, [tournament]) {
 }
 
 export function tournamentOnlineDownloadHandler(state, [tournament]) {
-  tournamentsApiService.loadP({
-    tournament,
-    authToken: R.path(['auth','token'], state),
-    onSuccess: ['tournament-onlineDownloadSuccess'],
-  });
+  return {
+    http: tournamentsApiModel.load({
+      tournament,
+      authToken: R.path(['auth','token'], state),
+      onSuccess: ['tournament-onlineDownloadSuccess'],
+    }),
+  };
 }
 
 export function tournamentOnlineDownloadSuccessHandler(_state_, [tournament]) {

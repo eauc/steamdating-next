@@ -1,40 +1,50 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import httpService from 'app/services/http';
 
 const tournamentsApiService = {
-  getUrlsP: tournamentsApiGetUrlsP,
-  getMineP: tournamentsApiGetMineP,
-  loadP: tournamentsApiLoadP,
-  saveP: tournamentsApiSaveP,
+  getUrls: tournamentsApiGetUrls,
+  getMine: tournamentsApiGetMine,
+  load: tournamentsApiLoad,
+  save: tournamentsApiSave,
 };
 
 export default R.curryService(tournamentsApiService);
 
-const TOURNAMENTS_API = R.path(['STEAMDATING_CONFIG','apis','tournaments'], self);
+const TOURNAMENTS_API = R.pathOr(
+  '/api/tournaments',
+  ['STEAMDATING_CONFIG','apis','tournaments'],
+  self
+);
 
-function tournamentsApiGetUrlsP({ onSuccess }) {
-  return httpService.getP$({
+function tournamentsApiGetUrls({ onSuccess, onError }) {
+  const onErrorEvent = R.exists(onError)
+          ? onError
+          : ['toaster-set', { type: 'error', message: 'Error accessing server' }];
+  return {
+    method: 'GET',
     url: TOURNAMENTS_API,
     onSuccess: (result) => [...onSuccess, R.propOr({}, 'tournaments', result)],
-    onError: ['toaster-set', { type: 'error',
-                               message: 'Error accessing server' }],
-  });
+    onError: onErrorEvent,
+  };
 }
 
-function tournamentsApiGetMineP({ authToken, onSuccess, urls }) {
-  return httpService.getP({
+function tournamentsApiGetMine({ authToken, onSuccess, onError, urls }) {
+  const onErrorEvent = R.exists(onError)
+          ? onError
+          : ['toaster-set', { type: 'error', message: 'Error loading tournaments from server' }];
+  return {
+    method: 'GET',
     url: `${TOURNAMENTS_API}${R.prop('mine', urls)}`,
     headers: { Authorization: `Bearer ${authToken}` },
     onSuccess: (result) => [...onSuccess, R.propOr([], 'data', result)],
-    onError: ['toaster-set', { type: 'error',
-                               message: 'Error loading tournaments from server' }],
-  });
+    onError: onErrorEvent,
+  };
 }
 
-function tournamentsApiLoadP({ authToken, onSuccess, tournament }) {
-  return httpService.getP({
+function tournamentsApiLoad({ authToken, onSuccess, tournament }) {
+  return {
+    method: 'GET',
     url: `${TOURNAMENTS_API}${R.prop('link', tournament)}`,
     headers: { Authorization: `Bearer ${authToken}` },
     onSuccess: (result) => [...onSuccess, R.thread(result)(
@@ -47,12 +57,14 @@ function tournamentsApiLoadP({ authToken, onSuccess, tournament }) {
         R.assoc('online', R.pick(['name', 'date', 'id', 'updated_at'], data))
       )
     )],
-    onError: ['toaster-set', { type: 'error',
-                               message: 'Error loading tournament from server' }],
-  });
+    onError: ['toaster-set', {
+      type: 'error',
+      message: 'Error loading tournament from server',
+    }],
+  };
 }
 
-function tournamentsApiSaveP({ authToken, onSuccess, tournament, urls }) {
+function tournamentsApiSave({ authToken, onSuccess, tournament, urls }) {
   const data = R.thread(tournament)(
     R.prop('online'),
     R.pick(['name', 'date']),
@@ -70,20 +82,24 @@ function tournamentsApiSaveP({ authToken, onSuccess, tournament, urls }) {
         tournament
       )
     )],
-    onError: ['toaster-set', { type: 'error',
-                               message: 'Error saving tournament on server' }],
+    onError: ['toaster-set', {
+      type: 'error',
+      message: 'Error saving tournament on server',
+    }],
   };
   const id = R.path(['online','id'], tournament);
   if (id) {
-    return httpService.putP({
+    return {
       ...config,
+      method: 'PUT',
       url: `${TOURNAMENTS_API}${id}`,
-    });
+    };
   }
   else {
-    return httpService.postP({
+    return {
       ...config,
+      method: 'POST',
       url: `${TOURNAMENTS_API}${R.prop('mine', urls)}`,
-    });
+    };
   }
 }

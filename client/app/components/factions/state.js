@@ -26,7 +26,8 @@ const factionsSchema = {
 };
 
 registerInit('factions', [], R.tap(() => {
-  httpService.getP({
+  httpService.requestP({
+    method: 'GET',
     url: '/data/factions.json',
     onSuccess: ['factions-set'],
     onError: [

@@ -11,6 +11,7 @@ import { tournamentOpenHandler,
          tournamentOnlineRefreshHandler,
          tournamentOnlineRefreshRequestHandler,
          tournamentOnlineRefreshSuccessHandler,
+         tournamentOnlineRefreshErrorHandler,
          tournamentOnlineSaveHandler,
          tournamentOnlineSaveSuccessHandler,
          tournamentOnlineDownloadHandler,
@@ -18,13 +19,34 @@ import { tournamentOpenHandler,
        } from 'app/components/tournament/handler';
 
 import fileService from 'app/services/file';
-import tournamentsApiService from 'app/services/apis/tournaments';
 
 describe('tournamentComponent', function () {
   beforeEach(function () {
     this.state = {};
     spyOnService(fileService, 'file');
-    spyOnService(tournamentsApiService, 'tournamentsApi');
+  });
+
+  context('tournamentSetHandler(<data>)', function () {
+    return tournamentSetHandler(this.state, ['data']);
+  }, function () {
+    it('should prompt user for confirmation', function () {
+      expect(this.context.dispatch)
+        .toEqual([
+          'prompt-set',
+          { type: 'confirm',
+            msg: 'All previous data will be replaced. You sure ?',
+            onOk: ['tournament-setConfirm', 'data'] },
+        ]);
+    });
+  });
+
+  context('tournamentSetConfirmHandler(<data>)', function () {
+    return tournamentSetConfirmHandler(this.state, ['data']);
+  }, function () {
+    it('should set <data> as current tournament', function () {
+      expect(this.context)
+        .toBe('data');
+    });
   });
 
   context('tournamentOpenHandler(<file>)', function () {
@@ -75,35 +97,17 @@ describe('tournamentComponent', function () {
     });
   });
 
-  context('tournamentSetHandler(<data>)', function () {
-    return tournamentSetHandler(this.state, ['data']);
-  }, function () {
-    it('should prompt user for confirmation', function () {
-      expect(this.context.dispatch)
-        .toEqual([
-          'prompt-set',
-          { type: 'confirm',
-            msg: 'All previous data will be replaced. You sure ?',
-            onOk: ['tournament-setConfirm', 'data'] },
-        ]);
-    });
-  });
-
-  context('tournamentSetConfirmHandler(<data>)', function () {
-    return tournamentSetConfirmHandler(this.state, ['data']);
-  }, function () {
-    it('should set <data> as current tournament', function () {
-      expect(this.context)
-        .toBe('data');
-    });
-  });
-
   context('tournamentOnlineGetUrlsSuccessHandler(<urls>)', function () {
     return tournamentOnlineGetUrlsSuccessHandler(this.state, ['urls']);
   }, function () {
     it('should set <urls> in current state', function () {
-      expect(this.context)
+      expect(this.context.state)
         .toBe('urls');
+    });
+
+    it('should refresh online list', function () {
+      expect(this.context.dispatch)
+        .toEqual(['tournament-onlineRefreshRequest']);
     });
   });
 
@@ -114,9 +118,14 @@ describe('tournamentComponent', function () {
       this.state.online = { urls: null };
     }, function () {
       it('should get the urls', function () {
-        expect(tournamentsApiService.getUrlsP)
-          .toHaveBeenCalledWith({
-            onSuccess: ['tournament-onlineGetUrlsSuccess'],
+        expect(this.context)
+          .toEqual({
+            http: {
+              method: 'GET',
+              onError: ['tournament-onlineRefreshError'],
+              onSuccess: jasmine.any(Function),
+              url: '/api/tournaments',
+            },
           });
       });
     });
@@ -124,16 +133,9 @@ describe('tournamentComponent', function () {
     context('when online urls are initialized', function () {
       this.state.online = { urls: 'urls' };
     }, function () {
-      it('should not get the urls agains', function () {
-        expect(tournamentsApiService.getUrlsP)
-          .not.toHaveBeenCalled();
-      });
-    });
-
-    it('should dispatch refreshRequest event', function () {
-      this.context.dispatch.then((event) => {
-        expect(event)
-          .toEqual(['tournament-onlineRefreshRequest']);
+      it('should refresh online list', function () {
+        expect(this.context)
+          .toEqual({ dispatch: ['tournament-onlineRefreshRequest'] });
       });
     });
   });
@@ -143,18 +145,22 @@ describe('tournamentComponent', function () {
   }, function () {
     beforeEach(function () {
       this.state.online = {
-        urls: 'urls',
+        urls: { mine: '/mine' },
         list: ['list'],
       };
       this.state.auth = { token: 'token' };
     });
 
     it('should get online list for current user', function () {
-      expect(tournamentsApiService.getMineP)
-        .toHaveBeenCalledWith({
-          urls: 'urls',
-          authToken: 'token',
-          onSuccess: ['tournament-onlineRefreshSuccess'],
+      expect(this.context)
+        .toEqual({
+          http: {
+            headers: { Authorization: 'Bearer token' },
+            method: 'GET',
+            onError: ['tournament-onlineRefreshError'],
+            onSuccess: jasmine.any(Function),
+            url: '/api/tournaments/mine',
+          },
         });
     });
   });
@@ -173,31 +179,52 @@ describe('tournamentComponent', function () {
     });
   });
 
+  context('tournamentOnlineRefreshErrorHandler(<list>)', function () {
+    return tournamentOnlineRefreshErrorHandler();
+  }, function () {
+    it('should reset online list', function () {
+      expect(this.context.state)
+        .toEqual([]);
+    });
+
+    it('should display error message', function () {
+      expect(this.context.dispatch)
+        .toEqual(['toaster-set', { type: 'error', message: 'Error loading tournaments from server' }]);
+    });
+  });
+
   context('tournamentOnlineSaveHandler(<form>)', function () {
     return tournamentOnlineSaveHandler(this.state, [this.form]);
   }, function () {
     beforeEach(function () {
       this.state = {
         auth: { token: 'token' },
-        online: { urls: 'urls' },
+        online: { urls: { mine: '/mine' } },
         tournament: { players: ['players'] },
       };
       this.form = {
-        edit: { name: 'name',
-                date: 'date',
-              },
+        edit: {
+          name: 'name',
+          date: 'date',
+        },
       };
     });
 
     it('should save current tournament on server', function () {
-      expect(tournamentsApiService.saveP)
-        .toHaveBeenCalledWith({
-          urls: 'urls',
-          authToken: 'token',
-          tournament: { players: ['players'],
-                        online: { name: 'name', date: 'date' },
-                      },
-          onSuccess: ['tournament-onlineSaveSuccess'],
+      expect(this.context)
+        .toEqual({
+          http: {
+            data: {
+              data: '{"players":["players"],"online":{"name":"name","date":"date"}}',
+              date: 'date',
+              name: 'name',
+            },
+            headers: { Authorization: 'Bearer token' },
+            method: 'POST',
+            onError: ['toaster-set', { message: 'Error saving tournament on server', type: 'error' }],
+            onSuccess: jasmine.any(Function),
+            url: '/api/tournaments/mine',
+          },
         });
     });
   });
@@ -222,20 +249,27 @@ describe('tournamentComponent', function () {
   });
 
   context('tournamentOnlineDownloadHandler(<tournament>)', function () {
-    return tournamentOnlineDownloadHandler(this.state, ['tournament']);
+    return tournamentOnlineDownloadHandler(this.state, [this.tournament]);
   }, function () {
     beforeEach(function () {
       this.state = {
         auth: { token: 'token' },
       };
+      this.tournament = {
+        link: '/link',
+      };
     });
 
     it('should load tournament from server', function () {
-      expect(tournamentsApiService.loadP)
-        .toHaveBeenCalledWith({
-          authToken: 'token',
-          tournament: 'tournament',
-          onSuccess: ['tournament-onlineDownloadSuccess'],
+      expect(this.context)
+        .toEqual({
+          http: {
+            headers: { Authorization: 'Bearer token' },
+            method: 'GET',
+            onError: ['toaster-set', { message: 'Error loading tournament from server', type: 'error' }],
+            onSuccess: jasmine.any(Function),
+            url: '/api/tournaments/link',
+          },
         });
     });
   });
