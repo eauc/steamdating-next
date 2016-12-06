@@ -16,7 +16,8 @@ import ReactDOM from 'react-dom';
 
 import log from 'app/helpers/log';
 import offlineService from 'app/services/offline';
-import { dispatch, stateDebug } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch, stateDebug } = stateService;
 export * from 'app/services/init';
 export * from 'app/components/storage/storage';
 

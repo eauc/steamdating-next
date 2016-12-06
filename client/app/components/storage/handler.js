@@ -1,6 +1,7 @@
 export let __hotReload = true;
 
-import { registerHandler } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerHandler } = stateService;
 import stripEvent from 'app/helpers/middlewares/stripEvent';
 import { storageRefreshHandler } from 'app/components/storage/state';
 

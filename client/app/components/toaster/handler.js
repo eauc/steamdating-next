@@ -1,6 +1,7 @@
 export let __hotReload = true;
 
-import { dispatch, registerHandler } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerHandler } = stateService;
 import path from 'app/helpers/middlewares/path';
 import stripEvent from 'app/helpers/middlewares/stripEvent';
 import validateArgs from 'app/helpers/middlewares/validateArgs';
@@ -22,7 +23,9 @@ let timeout;
 
 export function toasterSetHandler(_state_, [toaster]) {
   if (timeout) self.clearTimeout(timeout);
-  timeout = self.setTimeout(() => dispatch(['toaster-clear']), 1000);
+  timeout = self.setTimeout(() => {
+    stateService.dispatch(['toaster-clear']);
+  }, 1000);
   return toaster;
 }
 

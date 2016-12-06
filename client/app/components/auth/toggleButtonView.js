@@ -1,6 +1,7 @@
 export let __hotReload = true;
 
-import { dispatch } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch } = stateService;
 import { authActiveSub } from 'app/components/auth/sub';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';

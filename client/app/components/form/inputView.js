@@ -4,7 +4,8 @@ import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
 import { React, createComponent } from 'app/helpers/react';
 import ReactDOM from 'react-dom';
-import { dispatch } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch } = stateService;
 import { formFieldSub, formErrorSub } from 'app/components/form/sub';
 
 export const FormInput = createComponent({

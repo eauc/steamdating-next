@@ -1,6 +1,7 @@
 export let __hotReload = true;
 
-import { registerValidator } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerValidator } = stateService;
 
 export const scope = ['toaster'];
 

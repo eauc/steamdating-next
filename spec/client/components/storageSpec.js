@@ -39,9 +39,10 @@ describe('storageComponent', function () {
       expect(this.context)
         .toEqual({
           override: true,
-          value: { refresh: true,
-                   unchanged: true,
-                 },
+          value: {
+            refresh: true,
+            unchanged: true,
+          },
         });
     });
   });
@@ -82,9 +83,10 @@ describe('storageComponent', function () {
     it('should merge current state with refresh', function () {
       expect(this.context).toEqual({
         override: true,
-        value: { refresh: true,
-                 unchanged: true,
-               },
+        value: {
+          refresh: true,
+          unchanged: true,
+        },
       });
     });
   });

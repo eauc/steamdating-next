@@ -3,7 +3,8 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import path from 'app/helpers/middlewares/path';
 import stripEvent from 'app/helpers/middlewares/stripEvent';
-import { registerHandler } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerHandler } = stateService;
 import { scope } from 'app/components/form/state';
 import formModel from 'app/models/form';
 

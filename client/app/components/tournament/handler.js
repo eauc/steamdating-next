@@ -1,7 +1,8 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { registerHandler } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerHandler } = stateService;
 import fileService from 'app/services/file';
 import tournamentsApiModel from 'app/models/apis/tournaments';
 import { effects } from 'app/helpers/middlewares/effects';

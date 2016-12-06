@@ -2,7 +2,8 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import { dispatch } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch } = stateService;
 import { filterSub } from 'app/components/filter/filter';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';

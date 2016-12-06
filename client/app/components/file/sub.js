@@ -2,7 +2,8 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import fileService from 'app/services/file';
-import { registerSubscription } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerSubscription } = stateService;
 
 export const fileSub = registerSubscription('file', (state, [_name_, path, transform]) => {
   let fileUrl;

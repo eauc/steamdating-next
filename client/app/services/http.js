@@ -3,7 +3,8 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import { registerEffect } from 'app/helpers/middlewares/effects';
 import log from 'app/helpers/log';
-import { dispatch } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch } = stateService;
 
 const httpService = {
   requestP: httpRequestP,

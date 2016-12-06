@@ -1,7 +1,8 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { registerHandler } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerHandler } = stateService;
 import { scope, sortSchema } from 'app/components/sort/state';
 import path from 'app/helpers/middlewares/path';
 import stripEvent from 'app/helpers/middlewares/stripEvent';

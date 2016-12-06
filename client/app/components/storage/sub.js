@@ -1,8 +1,9 @@
 export let __hotReload = true;
 
-import { registerSubscription,
+import stateService from 'app/services/state';
+const { registerSubscription,
          getPermanentSubscription,
-       } from 'app/services/state';
+      } = stateService;
 import { storageUpdate } from 'app/components/storage/state';
 
 const stateStoreSub = registerSubscription(

@@ -2,7 +2,8 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import { dispatch } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch } = stateService;
 import { formSub } from 'app/components/form/sub';
 import formModel from 'app/models/form';
 /* eslint-disable no-unused-vars */

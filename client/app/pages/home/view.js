@@ -1,6 +1,7 @@
 export let __hotReload = true;
 
-import { dispatch, registerHandler } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch, registerHandler } = stateService;
 import validateArgs from 'app/helpers/middlewares/validateArgs';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';

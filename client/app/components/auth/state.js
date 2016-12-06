@@ -1,8 +1,9 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { dispatch,
-         registerValidator } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch,
+        registerValidator } = stateService;
 import { registerInit } from 'app/services/init';
 import authModel from 'app/models/auth';
 

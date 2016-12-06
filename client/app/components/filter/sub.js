@@ -1,7 +1,8 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { registerSubscription } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerSubscription } = stateService;
 import filterModel from 'app/models/filter';
 import { scope } from 'app/components/filter/state';
 

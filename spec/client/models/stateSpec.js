@@ -7,10 +7,12 @@ import { beforeEach,
 import cellModel from 'app/models/cell';
 
 import stateModel from 'app/models/state';
+import subscriptionsModel from 'app/models/subscriptions';
 
 describe('stateModel', function () {
   beforeEach(function () {
     this.stateContext = stateModel.createContext();
+    this.subscriptionsContext = subscriptionsModel.createContext();
   });
 
   context('resolveEvent([<event>, <args>])', function () {
@@ -86,8 +88,9 @@ describe('stateModel', function () {
           };
           this.middlewares = [
             this.middleware1,
-            [this.middleware2,
-             this.middleware3,
+            [
+              this.middleware2,
+              this.middleware3,
             ],
           ];
 
@@ -186,8 +189,12 @@ describe('stateModel', function () {
   });
 
   context('resolveCells()', function () {
-    return stateModel
-      .resolveCells(this.stateContext);
+    return subscriptionsModel
+      .resolveCells(this.subscriptionsContext)
+      .then(() => subscriptionsModel.advanceTick(this.subscriptionsContext))
+      .then((subscriptionsModel) => {
+        this.subscriptionsModel = subscriptionsModel;
+      });
   }, function () {
     const value2 = { subpath: 'value2' };
 
@@ -198,31 +205,38 @@ describe('stateModel', function () {
         .registerHandler('event', [function (state, [_event_, path, value]) {
           return R.assocPath(path, value, state);
         }], this.stateContext);
-      this.stateContext = stateModel
+      this.subscriptionsContext = subscriptionsModel
         .registerSubscription('view', function (stateCell, [_view_, ...path]) {
           return stateCell.map(R.pathOr('default', path));
-        }, this.stateContext);
+        }, this.subscriptionsContext);
 
-      const { cell: view1, context: newStateContext1 } = stateModel
-              .getSubscription('view', ['path1'], this.stateCell, this.stateContext);
+      const {
+        cell: view1,
+        context: newSubscriptionsContext1,
+      } = subscriptionsModel
+              .getSubscription('view', ['path1'], this.stateCell, this.subscriptionsContext);
       this.view1 = view1;
       this.view1Changes = jasmine.createSpy('view1Changes');
       this.view1.changes(this.view1Changes);
 
-      const { cell: view2, context: newStateContext2 } = stateModel
-              .getSubscription('view', ['path2'], this.stateCell, newStateContext1);
+      const {
+        cell: view2,
+        context: newSubscriptionsContext2,
+      } = subscriptionsModel
+              .getSubscription('view', ['path2'], this.stateCell, newSubscriptionsContext1);
       this.view2 = view2;
       this.view2Changes = jasmine.createSpy('view2Changes');
       this.view2.changes(this.view2Changes);
-      this.stateContext = newStateContext2;
+      this.subscriptionsContext = newSubscriptionsContext2;
 
       return R.threadP(this.stateContext)(
         stateModel.resolveEvent$(['event', [['path1'], 'value1']]),
         stateModel.resolveEvent$(['event', [['path2'], value2]]),
         R.tap((stateContext) => { this.stateContext = stateContext; }),
-        stateModel.resolveCells,
-        (stateContext) => {
-          this.stateContext = stateContext;
+        () => subscriptionsModel.resolveCells(this.subscriptionsContext),
+        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
+        (subscriptionsContext) => {
+          this.subscriptionsContext = subscriptionsContext;
           this.view1Changes.calls.reset();
           this.view2Changes.calls.reset();
         }
@@ -278,11 +292,10 @@ describe('stateModel', function () {
     });
 
     context('when view is revoked and state changes', function () {
-      return R.threadP(this.stateContext)(
-        stateModel.revokeView$(this.view1),
-        stateModel.resolveEvent$(['event', [['path1'], 'value']]),
-        (stateContext) => { this.stateContext = stateContext; }
-      );
+      this.subscriptionsContext = subscriptionsModel
+        .revokeView(this.view1, this.subscriptionsContext);
+      return stateModel.resolveEvent(['event', [['path1'], 'value']], this.stateContext)
+        .then((stateContext) => { this.stateContext = stateContext; });
     }, function () {
       it('should not update revoked view', function () {
         expect(this.view1Changes).not.toHaveBeenCalled();
@@ -298,17 +311,20 @@ describe('stateModel', function () {
         .registerHandler('event', [function (state, [_event_, path, value]) {
           return R.assocPath(path, value, state);
         }], this.stateContext);
-      this.stateContext = stateModel
+      this.subscriptionsContext = subscriptionsModel
         .registerSubscription('view', function (stateCell, [_view_, ...path]) {
           return stateCell.map(R.pathOr('default', path));
-        }, this.stateContext);
+        }, this.subscriptionsContext);
 
-      const { cell: view1, context: newStateContext } = stateModel
-              .getSubscription('view', ['path1'], this.stateCell, this.stateContext);
+      const {
+        cell: view1,
+        context: newSubscriptionsContext,
+      } = subscriptionsModel
+              .getSubscription('view', ['path1'], this.stateCell, this.subscriptionsContext);
       this.view1 = view1;
       this.view1Changes = jasmine.createSpy('view1Changes');
       this.view1.changes(this.view1Changes);
-      this.stateContext = newStateContext;
+      this.subscriptionsContext = newSubscriptionsContext;
 
       return R.threadP(this.stateContext)(
         stateModel.resolveEvent$(['event', [['path1'], 'value1']]),
@@ -316,9 +332,10 @@ describe('stateModel', function () {
         stateModel.resolveEvent$(['event', [['path1'], 'value3']]),
         stateModel.resolveEvent$(['event', [['path1'], 'value4']]),
         R.tap((stateContext) => { this.stateContext = stateContext; }),
-        stateModel.resolveCells,
-        (stateContext) => {
-          this.stateContext = stateContext;
+        () => subscriptionsModel.resolveCells(this.subscriptionsContext),
+        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
+        (subscriptionsContext) => {
+          this.subscriptionsContext = subscriptionsContext;
           this.view1Changes.calls.reset();
         }
       );
@@ -328,8 +345,11 @@ describe('stateModel', function () {
       return R.threadP(this.stateContext)(
         stateModel.back,
         R.tap((stateContext) => { this.stateContext = stateContext; }),
-        stateModel.resolveCells,
-        R.tap((stateContext) => { this.stateContext = stateContext; })
+        () => subscriptionsModel.resolveCells(this.subscriptionsContext),
+        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
+        R.tap((subscriptionsContext) => {
+          this.subscriptionsContext = subscriptionsContext;
+        })
       );
     }, function () {
       example(function (exple, desc) {
@@ -383,8 +403,11 @@ describe('stateModel', function () {
       return R.threadP(this.stateContext)(
         stateModel.first,
         R.tap((stateContext) => { this.stateContext = stateContext; }),
-        stateModel.resolveCells,
-        R.tap((stateContext) => { this.stateContext = stateContext; })
+        () => subscriptionsModel.resolveCells(this.subscriptionsContext),
+        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
+        R.tap((subscriptionsContext) => {
+          this.subscriptionsContext = subscriptionsContext;
+        })
       );
     }, function () {
       it('should rewind to first state', function () {
@@ -397,17 +420,21 @@ describe('stateModel', function () {
       return R.threadP(this.stateContext)(
         stateModel.redo,
         R.tap((stateContext) => { this.stateContext = stateContext; }),
-        stateModel.resolveCells,
-        R.tap((stateContext) => { this.stateContext = stateContext; })
+        () => subscriptionsModel.resolveCells(this.subscriptionsContext),
+        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
+        R.tap((subscriptionsContext) => {
+          this.subscriptionsContext = subscriptionsContext;
+        })
       );
     }, function () {
       beforeEach(function () {
         return R.threadP(this.stateContext)(
           stateModel.first,
           R.tap((stateContext) => { this.stateContext = stateContext; }),
-          stateModel.resolveCells,
-          R.tap((stateContext) => {
-            this.stateContext = stateContext;
+          () => subscriptionsModel.resolveCells(this.subscriptionsContext),
+          () => subscriptionsModel.advanceTick(this.subscriptionsContext),
+          R.tap((subscriptionsContext) => {
+            this.subscriptionsContext = subscriptionsContext;
             this.view1Changes.calls.reset();
           })
         );
@@ -464,17 +491,21 @@ describe('stateModel', function () {
       return R.threadP(this.stateContext)(
         stateModel.last,
         R.tap((stateContext) => { this.stateContext = stateContext; }),
-        stateModel.resolveCells,
-        R.tap((stateContext) => { this.stateContext = stateContext; })
+        () => subscriptionsModel.resolveCells(this.subscriptionsContext),
+        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
+        R.tap((subscriptionsContext) => {
+          this.subscriptionsContext = subscriptionsContext;
+        })
       );
     }, function () {
       beforeEach(function () {
         return R.threadP(this.stateContext)(
           stateModel.first,
           R.tap((stateContext) => { this.stateContext = stateContext; }),
-          stateModel.resolveCells,
-          R.tap((stateContext) => {
-            this.stateContext = stateContext;
+          () => subscriptionsModel.resolveCells(this.subscriptionsContext),
+          () => subscriptionsModel.advanceTick(this.subscriptionsContext),
+          R.tap((subscriptionsContext) => {
+            this.subscriptionsContext = subscriptionsContext;
             this.view1Changes.calls.reset();
           })
         );

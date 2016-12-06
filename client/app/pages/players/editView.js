@@ -9,7 +9,8 @@ import { Page,
        } from 'app/components/page/page';
 import { Icon } from 'app/components/misc/misc';
 import { PlayerEdit } from 'app/components/players/players';
-import { dispatch } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch } = stateService;
 /* eslint-enable no-unused-vars */
 
 export const PlayersEditPage = createComponent({

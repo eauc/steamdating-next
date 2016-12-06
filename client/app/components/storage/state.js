@@ -2,7 +2,7 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import { dispatch } from 'app/services/state';
+import stateService from 'app/services/state';
 import { registerInit } from 'app/services/init';
 
 export const STATE_STORAGE_KEY = 'STEAMDATING_APP.state';
@@ -18,7 +18,7 @@ registerInit('storage', [], storageInit);
 export function storageListener(event) {
   if (event.key !== STATE_STORAGE_KEY) return;
   const newState = R.jsonParse(event.newValue);
-  if (newState) dispatch(['storage-refresh', newState]);
+  if (newState) stateService.dispatch(['storage-refresh', newState]);
 }
 
 let refreshing = true;

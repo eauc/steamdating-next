@@ -2,11 +2,12 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import { registerInit } from 'app/services/init';
-import { dispatch,
+import stateService from 'app/services/state';
+const { dispatch,
          registerSubscription,
          getPermanentSubscription,
          registerValidator,
-       } from 'app/services/state';
+      } = stateService;
 
 export const scope = {
   tournament: ['tournament'],

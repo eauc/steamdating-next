@@ -3,7 +3,8 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import ajv from 'app/helpers/ajv';
 import log from 'app/helpers/log';
-import { dispatch } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch } = stateService;
 
 export default R.curry(function validateArgs(schemaOrArray, handler) {
   const argsSchema = (

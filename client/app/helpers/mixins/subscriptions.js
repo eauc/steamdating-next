@@ -2,7 +2,8 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import { revokeView } from 'app/services/state';
+import stateService from 'app/services/state';
+const { revokeView } = stateService;
 
 const subscriptionsMixin = {
   componentWillMount: subscriptionsWillMount,

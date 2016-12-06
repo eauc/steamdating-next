@@ -1,7 +1,8 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { registerSubscription } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerSubscription } = stateService;
 import playersModel from 'app/models/players';
 import factionsModel from 'app/models/factions';
 import { scope } from 'app/components/players/state';

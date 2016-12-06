@@ -1,7 +1,8 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { registerSubscription } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerSubscription } = stateService;
 import { scope } from 'app/components/toaster/state';
 
 export const toasterSub = registerSubscription(

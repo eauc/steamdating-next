@@ -1,8 +1,8 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import history from 'app/helpers/history';
-import { dispatch } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch } = stateService;
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { FactionIcon } from 'app/components/factions/factions';

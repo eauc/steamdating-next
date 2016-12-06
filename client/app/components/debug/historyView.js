@@ -1,7 +1,8 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { stateDebug } from 'app/services/state';
+import stateService from 'app/services/state';
+const { stateDebug } = stateService;
 import { debugHistorySub, debugLogSub } from 'app/components/debug/sub';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';

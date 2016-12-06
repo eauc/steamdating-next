@@ -3,17 +3,12 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import ajv from 'app/helpers/ajv';
 import log from 'app/helpers/log';
-import cellModel from 'app/models/cell.js';
 
 const stateModel = {
   createContext: stateCreateContext,
   registerHandler: stateRegisterHandler,
-  registerSubscription: stateRegisterSubscription,
   registerValidator: stateRegisterValidator,
-  getSubscription: stateGetSubscription,
-  revokeView: stateRevokeView,
   resolveEvent: stateResolveEvent,
-  resolveCells: stateResolveCells,
   dropLog: stateDropLog,
   dropHistory: stateDropHistory,
   first: stateFirst,
@@ -25,13 +20,10 @@ export default R.curryService(stateModel);
 
 function stateCreateContext() {
   return {
-    TICK: 0,
     STATE: {},
     STATE_HISTORY: [],
     STATE_LOG: [],
-    CELLS: [],
     HANDLERS: {},
-    SUBSCRIPTIONS: {},
     VALIDATORS: {},
   };
 }
@@ -92,47 +84,6 @@ function stateRegisterHandler(event, args, context) {
   }
 }
 
-function stateRegisterSubscription(view, subscription, context) {
-  if (R.prop(view, context.SUBSCRIPTIONS)) {
-    log.state(`overwriting view "${view}" subscription`);
-  }
-  return R.assocPath(
-    ['SUBSCRIPTIONS', view],
-    subscription,
-    context
-  );
-}
-
-function stateGetSubscription(view, args, stateCell, context) {
-  if (R.isNil(R.prop(view, context.SUBSCRIPTIONS))) {
-    log.warn(`-- ignoring view "${view}" without subscription`);
-    return cellModel.from(null);
-  }
-  const cell = context.SUBSCRIPTIONS[view](stateCell, [view, ...args]);
-  cell._name = view;
-  cell._args = JSON.stringify(R.map((arg) => {
-    if ('Function' === R.type(arg)) return '##Fun';
-    if ('Object' === R.type(arg)) return '{Obj}';
-    return arg;
-  }, args));
-  return {
-    cell,
-    context: R.over(
-      R.lensProp('CELLS'),
-      R.append(cell),
-      context
-    ),
-  };
-}
-
-function stateRevokeView(cell, context) {
-  return R.over(
-    R.lensProp('CELLS'),
-    R.reject((_cell) => (_cell === cell)),
-    context
-  );
-}
-
 function stateResolveEvent([event, args], context) {
   return new self.Promise((resolve, reject) => {
     let newContext = context;
@@ -164,18 +115,6 @@ function stateResolveEvent([event, args], context) {
     }
     return resolve(newContext);
   });
-}
-
-function stateResolveCells(context) {
-  return R.thread(context)(
-    R.over(
-      R.lensProp('TICK'),
-      R.inc
-    ),
-    (context) => cellModel
-      .resolveCells(context.TICK, context.CELLS)
-      .then(() => context)
-  );
 }
 
 function stateToHistoryLast(context) {

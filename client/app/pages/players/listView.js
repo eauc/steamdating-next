@@ -1,6 +1,5 @@
 export let __hotReload = true;
 
-import history from 'app/helpers/history';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { Page,
@@ -9,7 +8,8 @@ import { Page,
          PageMenuItem,
        } from 'app/components/page/page';
 import { Icon } from 'app/components/misc/misc';
-import { dispatch } from 'app/services/state';
+import stateService from 'app/services/state';
+const { dispatch } = stateService;
 import { PlayersList } from 'app/components/players/players';
 /* eslint-enable no-unused-vars */
 

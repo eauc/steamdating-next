@@ -2,7 +2,8 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import ajv from 'app/helpers/ajv';
-import { registerValidator } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerValidator } = stateService;
 
 export const scope = ['tournament','players'];
 

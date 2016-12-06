@@ -3,7 +3,8 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import httpService from 'app/services/http';
 import { registerInit } from 'app/services/init';
-import { registerValidator } from 'app/services/state';
+import stateService from 'app/services/state';
+const { registerValidator } = stateService;
 
 export const scope = ['factions'];
 

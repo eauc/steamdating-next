@@ -4,21 +4,30 @@ import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
 import { registerEffect } from 'app/helpers/middlewares/effects';
 import cellModel from 'app/models/cell.js';
+import subscriptionsModel from 'app/models/subscriptions.js';
 import stateModel from 'app/models/state.js';
 import tasksQueueModel from 'app/models/tasksQueue.js';
 
-let CONTEXT = stateModel.createContext();
-const STATE_CELL = cellModel.from(() => CONTEXT.STATE);
-STATE_CELL._name = 'STATE';
-const EVENT_QUEUE = tasksQueueModel.create();
-registerValidator('state', [], { type: 'object' });
-
+const stateDebug = {};
 const stateService = {
+  stateDebug,
   dispatch: stateDispatch,
+  registerValidator,
+  registerHandler,
+  registerSubscription,
+  getPermanentSubscription,
+  revokeView,
 };
 export default stateService;
-export const dispatch = (...args) => stateService.dispatch(...args);
+// export const dispatch = (...args) => stateService.dispatch(...args);
 
+let STATE_CONTEXT = stateModel.createContext();
+let SUBSCRIPTIONS_CONTEXT = subscriptionsModel.createContext();
+const STATE_CELL = cellModel.from(() => STATE_CONTEXT.STATE);
+STATE_CELL._name = 'STATE';
+const EVENT_QUEUE = tasksQueueModel.create();
+
+registerValidator('state', [], { type: 'object' });
 registerEffect('dispatch', (events) => {
   const eventsArray = R.type(events[0]) === 'Array' ? events : [events];
   R.thread(eventsArray)(
@@ -31,17 +40,19 @@ registerEffect('dispatch', (events) => {
   );
 });
 
-export function registerValidator(name, path, schema) {
-  CONTEXT = stateModel.registerValidator(name, path, schema, CONTEXT);
+function registerValidator(name, path, schema) {
+  STATE_CONTEXT = stateModel
+    .registerValidator(name, path, schema, STATE_CONTEXT);
 }
 
-export function registerHandler(event, ...args) {
-  CONTEXT = stateModel.registerHandler(event, args, CONTEXT);
+function registerHandler(event, ...args) {
+  STATE_CONTEXT = stateModel
+    .registerHandler(event, args, STATE_CONTEXT);
 }
 
-export function registerSubscription(view, subscription) {
-  CONTEXT = stateModel
-    .registerSubscription(view, subscription, CONTEXT);
+function registerSubscription(view, subscription) {
+  SUBSCRIPTIONS_CONTEXT = subscriptionsModel
+    .registerSubscription(view, subscription, SUBSCRIPTIONS_CONTEXT);
   return getSubscription$(view);
 }
 
@@ -56,7 +67,8 @@ export function getPermanentSubscription(name, [view, ...args]) {
 }
 
 export function revokeView(cell) {
-  CONTEXT = stateModel.revokeView(cell, CONTEXT);
+  SUBSCRIPTIONS_CONTEXT = subscriptionsModel
+    .revokeView(cell, SUBSCRIPTIONS_CONTEXT);
 }
 
 function stateDispatch([event, ...args]) {
@@ -67,89 +79,90 @@ function stateDispatch([event, ...args]) {
 function _dispatch([resolve, reject, event, ...args]) {
   log.state('>> dispatch', event, args);
   return stateModel
-    .resolveEvent([event, args], CONTEXT)
+    .resolveEvent([event, args], STATE_CONTEXT)
     .catch((error) => {
       if (event !== 'toaster-set') {
-        stateDispatch(['toaster-set', { 
-         type: 'error',
+        stateDispatch(['toaster-set', {
+          type: 'error',
           message: error,
         }]);
       }
       return self.Promise.reject(error);
     })
-    .then((newContext) => {
-      if (newContext === CONTEXT) {
-        return CONTEXT;
+    .then((newStateContext) => {
+      if (newStateContext === STATE_CONTEXT) {
+        return STATE_CONTEXT;
       }
       // update CONTEXT is necessary
       // for STATE_CELL to be resolved correctly
-      // CONTEXT = newContext;
-      CONTEXT.STATE = newContext.STATE;
-      CONTEXT.STATE_HISTORY = newContext.STATE_HISTORY;
-      CONTEXT.STATE_LOG = newContext.STATE_LOG;
-      log.state('<< new STATE', CONTEXT.STATE);
-      return stateModel.resolveCells(CONTEXT);
+      STATE_CONTEXT = newStateContext;
+      log.state('<< new STATE', STATE_CONTEXT.STATE);
+      return resolveCells();
     })
-    .then(R.tap((newContext) => {
-      CONTEXT.TICK = newContext.TICK;
-    }))
     .then(resolve)
     .catch(reject);
 }
 
 const getSubscription$ = R.curry(function getSubscription(view, args) {
-  const { cell, context } = stateModel
-          .getSubscription(view, args, STATE_CELL, CONTEXT);
-  CONTEXT = context;
+  const { cell, context } = subscriptionsModel
+          .getSubscription(view, args, STATE_CELL, SUBSCRIPTIONS_CONTEXT);
+  SUBSCRIPTIONS_CONTEXT = context;
   return cell;
 });
 
-export const stateDebug = {};
+function resolveCells() {
+  return subscriptionsModel
+    .resolveCells(SUBSCRIPTIONS_CONTEXT)
+    .then(() => {
+      SUBSCRIPTIONS_CONTEXT = subscriptionsModel
+        .advanceTick(SUBSCRIPTIONS_CONTEXT);
+    });
+}
 
 if (self.STEAMDATING_CONFIG.debug) {
   Object.assign(stateDebug, {
     cells: () => {
-      console.table(R.map(cellModel.dump, CONTEXT.CELLS));
+      console.table(R.map(cellModel.dump, SUBSCRIPTIONS_CONTEXT.CELLS));
     },
-    current: () => CONTEXT.STATE,
+    current: () => STATE_CONTEXT.STATE,
     ll: () => {
       console.table(R.map(([event, args]) => [
         event, JSON.stringify(args),
-      ], CONTEXT.STATE_HISTORY));
+      ], STATE_CONTEXT.STATE_HISTORY));
     },
-    log: () => CONTEXT.STATE_LOG,
+    log: () => STATE_CONTEXT.STATE_LOG,
     dropLog: (index) => {
-      CONTEXT = stateModel.dropLog(index, CONTEXT);
-      stateModel.resolveCells(CONTEXT);
+      STATE_CONTEXT = stateModel.dropLog(index, STATE_CONTEXT);
+      resolveCells();
     },
     replayLog: (index) => {
-      const [event, args] = CONTEXT.STATE_LOG[index];
-      dispatch([event, ...args]);
+      const [event, args] = STATE_CONTEXT.STATE_LOG[index];
+      stateService.dispatch([event, ...args]);
     },
-    history: () => CONTEXT.STATE_HISTORY,
+    history: () => STATE_CONTEXT.STATE_HISTORY,
     dropHistory: (index) => {
-      CONTEXT = stateModel.dropHistory(index, CONTEXT);
-      stateModel.resolveCells(CONTEXT);
+      STATE_CONTEXT = stateModel.dropHistory(index, STATE_CONTEXT);
+      resolveCells();
     },
     replayHistory: (index) => {
-      const [event, args] = CONTEXT.STATE_HISTORY[index];
-      dispatch([event, ...args]);
+      const [event, args] = STATE_CONTEXT.STATE_HISTORY[index];
+      stateService.dispatch([event, ...args]);
     },
     first: () => {
-      CONTEXT = stateModel.first(CONTEXT);
-      stateModel.resolveCells(CONTEXT);
+      STATE_CONTEXT = stateModel.first(STATE_CONTEXT);
+      resolveCells();
     },
     back: () => {
-      CONTEXT = stateModel.back(CONTEXT);
-      stateModel.resolveCells(CONTEXT);
+      STATE_CONTEXT = stateModel.back(STATE_CONTEXT);
+      resolveCells();
     },
     redo: () => {
-      CONTEXT = stateModel.redo(CONTEXT);
-      stateModel.resolveCells(CONTEXT);
+      STATE_CONTEXT = stateModel.redo(STATE_CONTEXT);
+      resolveCells();
     },
     last: () => {
-      CONTEXT = stateModel.last(CONTEXT);
-      stateModel.resolveCells(CONTEXT);
+      STATE_CONTEXT = stateModel.last(STATE_CONTEXT);
+      resolveCells();
     },
   });
 }
