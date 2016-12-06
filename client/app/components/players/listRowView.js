@@ -51,8 +51,5 @@ function playersListRowGetInitialState() {
 }
 
 function playersListRowDoEdit() {
-  dispatch(['form-reset', 'player', this.props.player])
-    .then(() => {
-      history.push('/players/edit');
-    });
+  dispatch(['players-startEdit', this.props.player]);
 }

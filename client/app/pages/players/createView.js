@@ -1,6 +1,5 @@
 export let __hotReload = true;
 
-import history from 'app/helpers/history';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { Page,
@@ -16,13 +15,14 @@ import { dispatch } from 'app/services/state';
 export const PlayersCreatePage = createComponent({
   render: playersCreatePageRender,
   doCreate: playersCreateDoCreate,
+  doCancel: playersCreateDoCancel,
 });
 
 function playersCreatePageRender() {
   return (
     <Page>
       <PageMenu>
-        <PageMenuItem onClick={() => history.goBack()}>
+        <PageMenuItem onClick={this.doCancel}>
           <span>Cancel </span>
           <Icon name="close" />
         </PageMenuItem>
@@ -35,7 +35,10 @@ function playersCreatePageRender() {
   );
 }
 
-function playersCreateDoCreate(form) {
-  dispatch(['players-create', form])
-    .then(() => history.goBack());
+function playersCreateDoCreate() {
+  dispatch(['players-createCurrentEdit']);
+}
+
+function playersCreateDoCancel() {
+  dispatch(['players-closeEdit']);
 }

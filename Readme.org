@@ -3,12 +3,15 @@
 ** TODO
 
 - [-] effects/coeffects
-	- [ ] httpRequest
-	- [X] dispatch
-	- [ ] toaster
-	- [ ] history
-	- [ ] timeout/dispatchWithDelay
+        - [X] httpRequest
+        - [X] dispatch
+        - [X] toaster
+        - [ ] history
+        - [ ] timeout/dispatchWithDelay
 - [ ] replace initializers with init events, using a main init event + 'dispatch' effects
 - [ ] features online ?
 - [ ] pairing/steps trace
 - [ ] setup appCache
+- [ ] event as objects
+- [ ] separate state and subscriptions
+- [ ] memoize subscriptions instead of null

@@ -35,8 +35,5 @@ function playersListPageRender() {
 }
 
 function playersListPageOnCreatePlayer() {
-  dispatch(['form-reset', 'player', {}])
-    .then(() => {
-      history.push('/players/create');
-    });
+  dispatch(['players-startCreate']);
 }

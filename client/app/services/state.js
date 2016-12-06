@@ -24,9 +24,9 @@ registerEffect('dispatch', (events) => {
   R.thread(eventsArray)(
     R.map((event) => self.Promise.resolve(event).catch(() => null)),
     (eventsPromises) => self.Promise.all(eventsPromises),
-    (promise) => promise.then(R.compose(
-      R.forEach(stateService.dispatch),
-      R.reject(R.isNil)
+    (promise) => promise.then(R.pipe(
+      R.reject(R.isNil),
+      R.forEach((event) => stateService.dispatch(event))
     ))
   );
 });
@@ -70,8 +70,8 @@ function _dispatch([resolve, reject, event, ...args]) {
     .resolveEvent([event, args], CONTEXT)
     .catch((error) => {
       if (event !== 'toaster-set') {
-        stateDispatch(['toaster-set', {
-          type: 'error',
+        stateDispatch(['toaster-set', { 
+         type: 'error',
           message: error,
         }]);
       }
@@ -83,7 +83,10 @@ function _dispatch([resolve, reject, event, ...args]) {
       }
       // update CONTEXT is necessary
       // for STATE_CELL to be resolved correctly
-      CONTEXT = newContext;
+      // CONTEXT = newContext;
+      CONTEXT.STATE = newContext.STATE;
+      CONTEXT.STATE_HISTORY = newContext.STATE_HISTORY;
+      CONTEXT.STATE_LOG = newContext.STATE_LOG;
       log.state('<< new STATE', CONTEXT.STATE);
       return stateModel.resolveCells(CONTEXT);
     })
