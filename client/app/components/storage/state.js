@@ -18,7 +18,12 @@ registerInit('storage', [], storageInit);
 export function storageListener(event) {
   if (event.key !== STATE_STORAGE_KEY) return;
   const newState = R.jsonParse(event.newValue);
-  if (newState) stateService.dispatch(['storage-refresh', newState]);
+  if (newState) {
+    stateService.dispatch({
+      eventName: 'storage-refresh',
+      newState,
+    });
+  }
 }
 
 let refreshing = true;
@@ -44,7 +49,7 @@ export function storageUpdate(state) {
     .setItem(STATE_STORAGE_KEY, R.jsonStringify(null, state));
 }
 
-export function storageRefreshHandler(state, [refresh]) {
+export function storageRefreshHandler(state, { newState }) {
   refreshing = true;
-  return R.deepMerge([refresh], state);
+  return R.deepMerge([newState], state);
 }

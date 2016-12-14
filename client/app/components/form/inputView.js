@@ -152,5 +152,9 @@ function formInputDoUpdate(event) {
 
 function formInputDispatchUpdate(value) {
   log.cycle('form-input dispatch', this.path);
-  dispatch(['form-update', this.path, value]);
+  dispatch({
+    eventName: 'form-update',
+    fieldName: this.path,
+    value,
+  });
 }

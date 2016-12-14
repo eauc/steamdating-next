@@ -51,5 +51,9 @@ function filterInputDoUpdate(event) {
 }
 
 function filterInputDispatchUpdate(value) {
-  dispatch(['filter-set', this.props.name, value]);
+  dispatch({
+    eventName: 'filter-set',
+    name: this.props.name,
+    value,
+  });
 }

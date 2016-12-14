@@ -1,5 +1,6 @@
 export let __hotReload = true;
 
+import R from 'app/helpers/ramda';
 import stateService from 'app/services/state';
 const { dispatch } = stateService;
 import ReactDOM from 'react-dom';
@@ -36,6 +37,6 @@ function fileOpenButtonGetInitialState() {
 }
 
 function fileOpenButtonDoChange(event) {
-  dispatch([this.props.onOpen, event.target.files[0]]);
+  dispatch({ eventName: this.props.onOpen, file: event.target.files[0] });
   ReactDOM.findDOMNode(this.refs.input).value = null;
 }

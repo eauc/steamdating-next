@@ -5,36 +5,34 @@ import { effects } from 'app/helpers/middlewares/effects';
 import stateService from 'app/services/state';
 const { registerHandler } = stateService;
 import path from 'app/helpers/middlewares/path';
-import stripEvent from 'app/helpers/middlewares/stripEvent';
 import { scope } from 'app/components/prompt/state';
 
-const middlewares = [
+registerHandler('prompt-set', [
   path(scope, null),
-  stripEvent,
-];
+], (_state_, prompt) => R.omit(['eventName'], prompt));
 
-registerHandler('prompt-set', middlewares, (_state_, [prompt]) => prompt);
-
-registerHandler('prompt-update-value', middlewares, promptUpdateValueHandler);
+registerHandler('prompt-update-value', [
+  path(scope, null),
+], promptUpdateValueHandler);
 
 registerHandler('prompt-ok', [
-  middlewares,
+  path(scope, null),
   effects,
 ], promptOkHandler);
 
 registerHandler('prompt-cancel', [
-  middlewares,
+  path(scope, null),
   effects,
 ], promptCancelHandler);
 
-export function promptUpdateValueHandler(state, [value]) {
+export function promptUpdateValueHandler(state, { value }) {
   return R.assoc('value', value, state);
 }
 
 export function promptOkHandler(state) {
   let event = state.onOk;
   if (state.type === 'prompt') {
-    event = R.append(state.value, event);
+    event = R.assoc('value', state.value, event);
   }
   return {
     dispatch: event,

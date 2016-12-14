@@ -6,23 +6,29 @@ import log from 'app/helpers/log';
 import stateService from 'app/services/state';
 const { dispatch } = stateService;
 
-export default R.curry(function validateArgs(schemaOrArray, handler) {
-  const argsSchema = (
-    R.type(schemaOrArray) === 'Array'
-      ? { type: 'array', items: R.map(typeStringToSchema, schemaOrArray), additionnalItems: false }
-    : schemaOrArray
-  );
+export default R.curry(function validateArgs(properties, handler) {
+  const argsSchema = {
+    type: 'object',
+    properties: R.reduce(
+      (mem, key) => R.assoc(key, typeStringToSchema(properties[key]), mem),
+      { eventName: { type: 'string' } },
+      R.keys(properties)
+    ),
+    additionnalProperties: false,
+  };
   const validate = ajv.compile(argsSchema);
-  return function (state, [event, ...args]) {
-    const valid = validate(args);
-    if (valid) return handler(state, [event, ...args]);
+  return function (state, event) {
+    const { eventName } = event;
+    const valid = validate(event);
+    if (valid) return handler(state, event);
 
-    log.error('Args validation error', args, validate.errors);
-    if (!event.startsWith('toaster')) {
-      dispatch(['toaster-set', {
+    log.error('Args validation error', event, validate.errors);
+    if (!eventName.startsWith('toaster')) {
+      dispatch({
+        eventName: 'toaster-set',
         type: 'error',
         message: 'Invalid arguments',
-      }]);
+      });
     }
     return state;
   };

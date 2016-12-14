@@ -24,7 +24,7 @@ function tournamentsApiGetUrls({ onSuccess, onError }) {
   return {
     method: 'GET',
     url: TOURNAMENTS_API,
-    onSuccess: (result) => [...onSuccess, R.propOr({}, 'tournaments', result)],
+    onSuccess: (httpData) => R.assoc('urls', R.propOr({}, 'tournaments', httpData), onSuccess),
     onError: onErrorEvent,
   };
 }
@@ -37,7 +37,7 @@ function tournamentsApiGetMine({ authToken, onSuccess, onError, urls }) {
     method: 'GET',
     url: `${TOURNAMENTS_API}${R.prop('mine', urls)}`,
     headers: { Authorization: `Bearer ${authToken}` },
-    onSuccess: (result) => [...onSuccess, R.propOr([], 'data', result)],
+    onSuccess: (httpData) => R.assoc('tournaments', R.propOr([], 'data', httpData), onSuccess),
     onError: onErrorEvent,
   };
 }
@@ -47,20 +47,21 @@ function tournamentsApiLoad({ authToken, onSuccess, tournament }) {
     method: 'GET',
     url: `${TOURNAMENTS_API}${R.prop('link', tournament)}`,
     headers: { Authorization: `Bearer ${authToken}` },
-    onSuccess: (result) => [...onSuccess, R.thread(result)(
+    onSuccess: (httpData) => R.assoc('tournament', R.thread(httpData)(
       R.propOr({}, 'data'),
-      R.assoc('id', R.prop('link', result)),
+      R.assoc('id', R.prop('link', httpData)),
       (data) => R.thread(data)(
         R.prop('data'),
         R.jsonParse,
         R.defaultTo({}),
         R.assoc('online', R.pick(['name', 'date', 'id', 'updated_at'], data))
       )
-    )],
-    onError: ['toaster-set', {
+    ), onSuccess),
+    onError: {
+      eventName: 'toaster-set',
       type: 'error',
       message: 'Error loading tournament from server',
-    }],
+    },
   };
 }
 
@@ -73,19 +74,20 @@ function tournamentsApiSave({ authToken, onSuccess, tournament, urls }) {
   const config = {
     headers: { Authorization: `Bearer ${authToken}` },
     data,
-    onSuccess: (result) => [...onSuccess, R.thread(result)(
+    onSuccess: (httpData) => R.assoc('tournament', R.thread(httpData)(
       R.propOr({}, 'data'),
-      R.assoc('id', R.prop('link', result)),
+      R.assoc('id', R.prop('link', httpData)),
       (data) => R.assoc(
         'online',
         R.pick(['name', 'date', 'id', 'updated_at'], data),
         tournament
       )
-    )],
-    onError: ['toaster-set', {
+    ), onSuccess),
+    onError: {
+      eventName: 'toaster-set',
       type: 'error',
       message: 'Error saving tournament on server',
-    }],
+    },
   };
   const id = R.path(['online','id'], tournament);
   if (id) {

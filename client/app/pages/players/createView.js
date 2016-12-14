@@ -37,9 +37,9 @@ function playersCreatePageRender() {
 }
 
 function playersCreateDoCreate() {
-  dispatch(['players-createCurrentEdit']);
+  dispatch({ eventName: 'players-createCurrentEdit' });
 }
 
 function playersCreateDoCancel() {
-  dispatch(['players-closeEdit']);
+  dispatch({ eventName: 'players-closeEdit' });
 }

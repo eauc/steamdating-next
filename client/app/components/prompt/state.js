@@ -5,10 +5,12 @@ const { registerValidator } = stateService;
 
 export const scope = ['prompt'];
 
-const eventVectorSchema = {
-  type: 'array',
-  items: [{ type: 'string' }],
-  additionnalItems: true,
+const eventSchema = {
+  type: 'object',
+  properties: {
+    eventName: { type: 'string' },
+  },
+  required: ['eventName'],
 };
 
 const promptSchema = {
@@ -20,8 +22,8 @@ const promptSchema = {
       minLength: 1,
     },
     value: {},
-    onOk: eventVectorSchema,
-    onCancel: eventVectorSchema,
+    onOk: eventSchema,
+    onCancel: eventSchema,
   },
   required: ['type', 'msg', 'onOk'],
 };

@@ -67,13 +67,20 @@ function promptRender() {
 }
 
 function promptOnChange(event) {
-  dispatch(['prompt-update-value', event.target.value]);
+  dispatch({
+    eventName: 'prompt-update-value',
+    value: event.target.value,
+  });
 }
 
 function promptOnOk() {
-  dispatch(['prompt-ok']);
+  dispatch({
+    eventName: 'prompt-ok',
+  });
 }
 
 function promptOnCancel() {
-  dispatch(['prompt-cancel']);
+  dispatch({
+    eventName: 'prompt-cancel',
+  });
 }

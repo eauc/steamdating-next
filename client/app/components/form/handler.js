@@ -2,32 +2,26 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import path from 'app/helpers/middlewares/path';
-import stripEvent from 'app/helpers/middlewares/stripEvent';
 import stateService from 'app/services/state';
 const { registerHandler } = stateService;
 import { scope } from 'app/components/form/state';
 import formModel from 'app/models/form';
 
-const middlewares = [
+registerHandler('form-reset', [
   path(scope, {}),
-  stripEvent,
-];
+], (state, { formName, value }) => R.assoc(
+  formName,
+  formModel.create(value),
+  state
+));
 
-registerHandler(
-  'form-reset',
-  middlewares,
-  (state, [form, value]) => R.assoc(form, formModel.create(value), state)
-);
-
-registerHandler(
-  'form-update',
-  middlewares,
-  (state, [formFieldName, value]) => {
-    const [form, ...fieldPath] = R.split('.', formFieldName);
-    return R.over(
-      R.lensProp(form),
-      formModel.updateFieldValue$(fieldPath, value),
-      state
-    );
-  }
-);
+registerHandler('form-update', [
+  path(scope, {}),
+], (state, { fieldName, value }) => {
+  const [formName, ...fieldPath] = R.split('.', fieldName);
+  return R.over(
+    R.lensProp(formName),
+    formModel.updateFieldValue$(fieldPath, value),
+    state
+  );
+});

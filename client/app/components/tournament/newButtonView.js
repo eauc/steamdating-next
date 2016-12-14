@@ -16,7 +16,7 @@ export const TournamentNewButton = createComponent({
 function newButtonRender() {
   return (
     <button type="button"
-            onClick={() => dispatch(['tournament-set', {}])}>
+            onClick={() => dispatch({ eventName: 'tournament-set', tournament: {} })}>
       <Icon name="file-o" />
       <span> New</span>
     </button>

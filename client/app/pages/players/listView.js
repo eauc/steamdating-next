@@ -35,5 +35,5 @@ function playersListPageRender() {
 }
 
 function playersListPageOnCreatePlayer() {
-  dispatch(['players-startCreate']);
+  dispatch({ eventName: 'players-startCreate' });
 }

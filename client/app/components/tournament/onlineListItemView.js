@@ -43,5 +43,8 @@ function itemRender() {
 }
 
 function itemDoDownload() {
-  dispatch(['tournament-onlineDownload', this.props.tournament]);
+  dispatch({
+    eventName: 'tournament-onlineDownload',
+    tournament: this.props.tournament,
+  });
 }

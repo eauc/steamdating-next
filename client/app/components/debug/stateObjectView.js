@@ -75,7 +75,10 @@ function debugStateObjectDoToggleShow() {
 }
 
 function debugStateObjectDoRemove() {
-  dispatch(['debug-remove', this.path]);
+  dispatch({
+    eventName: 'debug-remove',
+    path: this.path,
+  });
 }
 
 function debugStateValue(path, name, value) {

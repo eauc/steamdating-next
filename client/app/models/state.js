@@ -84,15 +84,16 @@ function stateRegisterHandler(event, args, context) {
   }
 }
 
-function stateResolveEvent([event, args], context) {
+function stateResolveEvent(event, context) {
+  const { eventName } = event;
   return new self.Promise((resolve, reject) => {
     let newContext = context;
-    if (R.isNil(R.prop(event, context.HANDLERS))) {
-      log.warn(`-- ignoring event "${event}" without handler`);
+    if (R.isNil(R.prop(eventName, context.HANDLERS))) {
+      log.warn(`-- ignoring event "${eventName}" without handler`);
       return reject('Event Ignored');
     }
     try {
-      const newState = context.HANDLERS[event](context.STATE, [event, ...args]);
+      const newState = context.HANDLERS[eventName](context.STATE, event);
       if (newState === context.STATE) {
         return resolve(newContext);
       }
@@ -104,13 +105,13 @@ function stateResolveEvent([event, args], context) {
       if (self.STEAMDATING_CONFIG.debug) {
         newContext = R.over(
           R.lensProp('STATE_HISTORY'),
-          R.append([event, args, newContext.STATE]),
+          R.append([event, newContext.STATE]),
           newContext
         );
       }
     }
     catch (error) {
-      log.error(`xx error in event "${event}" handler`, error);
+      log.error(`xx error in event "${eventName}" handler`, error);
       return reject('Error in Event Handler');
     }
     return resolve(newContext);
@@ -118,7 +119,7 @@ function stateResolveEvent([event, args], context) {
 }
 
 function stateToHistoryLast(context) {
-  const [_event_, _args_, restore] = R.last(context.STATE_HISTORY);
+  const [_event_, restore] = R.last(context.STATE_HISTORY);
   let newContext = R.assoc('STATE', restore, context);
   log.state('<< restore STATE', newContext.STATE);
   return newContext;

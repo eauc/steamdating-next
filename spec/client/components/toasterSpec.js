@@ -22,7 +22,7 @@ describe('toasterComponent', function () {
   });
 
   context('toasterSetHandler(<msg>)', function () {
-    return toasterSetHandler(this.state, [{ type: 'error', message: 'msg' }]);
+    return toasterSetHandler(this.state, { type: 'error', message: 'msg' });
   }, function () {
     it('should set toaster field', function () {
       expect(this.context).toEqual({ type: 'error', message: 'msg' });
@@ -32,7 +32,7 @@ describe('toasterComponent', function () {
       expect(self.setTimeout)
         .toHaveBeenCalledWith(jasmine.any(Function), 1000);
       expect(appStateService.dispatch)
-        .toHaveBeenCalledWith(['toaster-clear']);
+        .toHaveBeenCalledWith({ eventName: 'toaster-clear' });
     });
   });
 });

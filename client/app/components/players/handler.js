@@ -4,7 +4,6 @@ import R from 'app/helpers/ramda';
 import { coeffects } from 'app/helpers/middlewares/coeffects';
 import { effects } from 'app/helpers/middlewares/effects';
 import path from 'app/helpers/middlewares/path';
-import stripEvent from 'app/helpers/middlewares/stripEvent';
 import tap from 'app/helpers/middlewares/tap';
 import stateService from 'app/services/state';
 const { registerHandler } = stateService;
@@ -12,27 +11,20 @@ import { scope } from 'app/components/players/state';
 import playerModel from 'app/models/player';
 import playersModel from 'app/models/players';
 
-const middlewares = [
+registerHandler('players-create', [
   path(scope, []),
-  stripEvent,
-];
-
-registerHandler('players-create', middlewares, (state, [{ edit }]) => {
+], (state, { edit }) => {
   const player = playerModel.create(edit);
   return playersModel.add(player, state);
 });
 
-registerHandler(
-  'players-update',
-  middlewares,
-  (state, [{ base, edit }]) => playersModel.update(base.name, edit, state)
-);
+registerHandler('players-update', [
+  path(scope, []),
+], (state, { base, edit }) => playersModel.update(base.name, edit, state));
 
-registerHandler(
-  'players-remove',
-  middlewares,
-  (state, [player]) => playersModel.remove(player.name, state)
-);
+registerHandler('players-remove', [
+  path(scope, []),
+], (state, { player }) => playersModel.remove(player.name, state));
 
 registerHandler('players-startCreate', [
   tap,
@@ -45,7 +37,6 @@ registerHandler('players-openCreate', [
 ], playersOpenCreateHandler);
 
 registerHandler('players-startEdit', [
-  stripEvent,
   tap,
   effects,
 ], playersStartEditHandler);
@@ -78,8 +69,8 @@ registerHandler('players-removeCurrentEdit', [
 export function playersStartCreateHandler() {
   return {
     dispatch: [
-      ['form-reset', 'player', {}],
-      ['players-openCreate'],
+      { eventName: 'form-reset', formName: 'player', value: {} },
+      { eventName: 'players-openCreate' },
     ],
   };
 }
@@ -88,11 +79,11 @@ export function playersOpenCreateHandler({ history }) {
   history.push('/players/create');
 }
 
-export function playersStartEditHandler(_state_, [player]) {
+export function playersStartEditHandler(_state_, { player }) {
   return {
     dispatch: [
-      ['form-reset', 'player', player],
-      ['players-openEdit'],
+      { eventName: 'form-reset', formName: 'player', value: player },
+      { eventName: 'players-openEdit' },
     ],
   };
 }
@@ -108,8 +99,8 @@ export function playersCloseEditHandler({ history }) {
 export function playersUpdateCurrentEditHandler(state) {
   return {
     dispatch: [
-      ['players-update', R.pathOr({}, ['forms', 'player'], state)],
-      ['players-closeEdit'],
+      R.assoc('eventName', 'players-update', R.pathOr({}, ['forms', 'player'], state)),
+      { eventName: 'players-closeEdit' },
     ],
   };
 }
@@ -117,8 +108,8 @@ export function playersUpdateCurrentEditHandler(state) {
 export function playersCreateCurrentEditHandler(state) {
   return {
     dispatch: [
-      ['players-create', R.pathOr({}, ['forms', 'player'], state)],
-      ['players-closeEdit'],
+      R.assoc('eventName', 'players-create', R.pathOr({}, ['forms', 'player'], state)),
+      { eventName: 'players-closeEdit' },
     ],
   };
 }
@@ -126,8 +117,8 @@ export function playersCreateCurrentEditHandler(state) {
 export function playersRemoveCurrentEditHandler(state) {
   return {
     dispatch: [
-      ['players-remove', R.pathOr({}, ['forms', 'player', 'base'], state)],
-      ['players-closeEdit'],
+      { eventName: 'players-remove', player: R.pathOr({}, ['forms', 'player', 'base'], state) },
+      { eventName: 'players-closeEdit' },
     ],
   };
 }

@@ -52,5 +52,5 @@ function listRender() {
 }
 
 function listDidMount() {
-  dispatch(['tournament-onlineRefresh']);
+  dispatch({ eventName: 'tournament-onlineRefresh' });
 }

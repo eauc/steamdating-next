@@ -56,9 +56,16 @@ function debugStateValueDoChange(event) {
 
 function debugStateValueUpdate() {
   console.log('update', this.props.value, this.state.value);
-  dispatch(['debug-set', this.path, this.state.value]);
+  dispatch({
+    eventName: 'debug-set',
+    path: this.path,
+    value: this.state.value,
+  });
 }
 
 function debugStateValueDoRemove() {
-  dispatch(['debug-remove', this.path]);
+  dispatch({
+    eventName: 'debug-remove',
+    path: this.path,
+  });
 }

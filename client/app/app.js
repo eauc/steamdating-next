@@ -44,7 +44,7 @@ function appInit() {
       !self.STEAMDATING_CONFIG.test) {
     offlineService.registerWorker();
   }
-  dispatch(['init']);
+  dispatch({ eventName: 'init' });
 }
 
 // eslint-disable-next-line no-unused-vars

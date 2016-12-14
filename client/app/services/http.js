@@ -77,7 +77,7 @@ function dispatchSuccess({ onSuccess }, data) {
   if (onSuccess) {
     let onSuccessEvent;
     if ('Function' === R.type(onSuccess)) onSuccessEvent = onSuccess(data);
-    else onSuccessEvent = R.append(data, onSuccess);
+    else onSuccessEvent = R.assoc('httpData', data, onSuccess);
     return dispatch(onSuccessEvent);
   }
   return data;
@@ -92,6 +92,10 @@ function dispatchError({ onError }, error) {
   log.error(message, payload);
   let ret = onError
         ? dispatch(onError)
-        : dispatch(['toaster-set', { type: 'error', message }]);
+        : dispatch({
+          eventName: 'toaster-set',
+          type: 'error',
+          message,
+        });
   return ret.then(() => self.Promise.reject(message));
 }

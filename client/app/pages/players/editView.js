@@ -42,17 +42,18 @@ function playersEditPageRender() {
 }
 
 function playersEditRemove() {
-  dispatch(['prompt-set', {
+  dispatch({
+    eventName: 'prompt-set',
     type: 'confirm',
     msg: 'Are you sure you want to delete this player ?',
-    onOk: ['players-removeCurrentEdit'],
-  }]);
+    onOk: { eventName: 'players-removeCurrentEdit' },
+  });
 }
 
 function playersEditDoUpdate() {
-  dispatch(['players-updateCurrentEdit']);
+  dispatch({ eventName: 'players-updateCurrentEdit' });
 }
 
 function playersEditDoCancel() {
-  dispatch(['players-closeEdit']);
+  dispatch({ eventName: 'players-closeEdit' });
 }

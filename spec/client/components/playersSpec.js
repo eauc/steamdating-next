@@ -27,8 +27,8 @@ describe('playersComponent', function () {
       expect(this.context)
         .toEqual({
           dispatch: [
-            ['form-reset', 'player', {}],
-            ['players-openCreate'],
+            { eventName: 'form-reset', formName: 'player', value: {} },
+            { eventName: 'players-openCreate' },
           ],
         });
     });
@@ -45,14 +45,14 @@ describe('playersComponent', function () {
 
 
   context('playersStartEditHandler(<player>)', function () {
-    return playersStartEditHandler('state', ['playertoEdit']);
+    return playersStartEditHandler('state', { player: 'playertoEdit' });
   }, function () {
     it('should reset player form then open edit page', function () {
       expect(this.context)
         .toEqual({
           dispatch: [
-            ['form-reset', 'player', 'playertoEdit'],
-            ['players-openEdit'],
+            { eventName: 'form-reset', formName: 'player', value: 'playertoEdit' },
+            { eventName: 'players-openEdit' },
           ],
         });
     });
@@ -76,43 +76,43 @@ describe('playersComponent', function () {
     });
   });
 
-  context('playersCreateCurrentEditHandler({ state, history })', function () {
+  context('playersCreateCurrentEditHandler({ state })', function () {
     return playersCreateCurrentEditHandler(this.state);
   }, function () {
     beforeEach(function () {
-      this.state.forms = { player: 'playerEditForm' };
+      this.state.forms = { player: { edit: 'playerEditForm' } };
     });
 
     it('should create currently edited player into players list and close Edit page', function () {
       expect(this.context)
         .toEqual({
           dispatch: [
-            ['players-create', 'playerEditForm'],
-            ['players-closeEdit'],
+            { eventName: 'players-create', edit: 'playerEditForm' },
+            { eventName: 'players-closeEdit' },
           ],
         });
     });
   });
 
-  context('playersUpdateCurrentEditHandler({ state, history })', function () {
+  context('playersUpdateCurrentEditHandler({ state })', function () {
     return playersUpdateCurrentEditHandler(this.state);
   }, function () {
     beforeEach(function () {
-      this.state.forms = { player: 'playerEditForm' };
+      this.state.forms = { player: { edit: 'playerEditForm' } };
     });
 
     it('should update currently edited player from players list and close Edit page', function () {
       expect(this.context)
         .toEqual({
           dispatch: [
-            ['players-update', 'playerEditForm'],
-            ['players-closeEdit'],
+            { eventName: 'players-update', edit: 'playerEditForm' },
+            { eventName: 'players-closeEdit' },
           ],
         });
     });
   });
 
-  context('playersRemoveCurrentEditHandler({ state, history })', function () {
+  context('playersRemoveCurrentEditHandler({ state })', function () {
     return playersRemoveCurrentEditHandler(this.state);
   }, function () {
     beforeEach(function () {
@@ -123,8 +123,8 @@ describe('playersComponent', function () {
       expect(this.context)
         .toEqual({
           dispatch: [
-            ['players-remove', 'currentEditPlayer'],
-            ['players-closeEdit'],
+            { eventName: 'players-remove', player: 'currentEditPlayer' },
+            { eventName: 'players-closeEdit' },
           ],
         });
     });

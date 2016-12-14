@@ -72,6 +72,6 @@ function formEditDoSubmit(event) {
     this.props.onSubmit(this.state.form);
   }
   else {
-    dispatch([this.props.onSubmit, this.state.form]);
+    dispatch({ eventName: this.props.onSubmit, form: this.state.form });
   }
 }

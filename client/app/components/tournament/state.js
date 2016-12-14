@@ -82,7 +82,11 @@ const tournamentOnlineResetSaveFormSub = registerSubscription(
           init = false;
           return;
         }
-        dispatch(['form-reset', 'tournament_onlineSave', R.pick(['name','date'], info)]);
+        dispatch({
+          eventName: 'form-reset',
+          formName: 'tournament_onlineSave',
+          value: R.pick(['name','date'], info),
+        });
       });
   }
 );

@@ -42,5 +42,10 @@ function playersListDoSortBy() {
   if (by === this.props.sort.by) reverse = !reverse;
   else reverse = false;
 
-  dispatch(['sort-set', 'players', { reverse, by }]);
+  dispatch({
+    eventName: 'sort-set',
+    name: 'players',
+    reverse,
+    by,
+  });
 }

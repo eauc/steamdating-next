@@ -1,32 +1,27 @@
 export let __hotReload = true;
 
+import R from 'app/helpers/ramda';
 import stateService from 'app/services/state';
 const { registerHandler } = stateService;
 import path from 'app/helpers/middlewares/path';
-import stripEvent from 'app/helpers/middlewares/stripEvent';
-import validateArgs from 'app/helpers/middlewares/validateArgs';
-import { scope, toasterSchema } from 'app/components/toaster/state';
-
-const middlewares = [
-  path(scope, null),
-  stripEvent,
-];
+import { scope } from 'app/components/toaster/state';
 
 registerHandler('toaster-set', [
-  validateArgs([toasterSchema]),
-  middlewares,
+  path(scope, null),
 ], toasterSetHandler);
 
-registerHandler('toaster-clear', middlewares, toasterClearHandler);
+registerHandler('toaster-clear', [
+  path(scope, null),
+], toasterClearHandler);
 
 let timeout;
 
-export function toasterSetHandler(_state_, [toaster]) {
+export function toasterSetHandler(_state_, toaster) {
   if (timeout) self.clearTimeout(timeout);
   timeout = self.setTimeout(() => {
-    stateService.dispatch(['toaster-clear']);
+    stateService.dispatch({ eventName: 'toaster-clear' });
   }, 1000);
-  return toaster;
+  return R.omit(['eventName'], toaster);
 }
 
 export function toasterClearHandler(_state_) {

@@ -29,7 +29,7 @@ const EVENT_QUEUE = tasksQueueModel.create();
 
 registerValidator('state', [], { type: 'object' });
 registerEffect('dispatch', (events) => {
-  const eventsArray = R.type(events[0]) === 'Array' ? events : [events];
+  const eventsArray = R.type(events) === 'Array' ? events : [events];
   R.thread(eventsArray)(
     R.map((event) => self.Promise.resolve(event).catch(() => null)),
     (eventsPromises) => self.Promise.all(eventsPromises),
@@ -71,21 +71,23 @@ export function revokeView(cell) {
     .revokeView(cell, SUBSCRIPTIONS_CONTEXT);
 }
 
-function stateDispatch([event, ...args]) {
+function stateDispatch(event) {
   return tasksQueueModel
-    .push([_dispatch, event, ...args], EVENT_QUEUE);
+    .push([_dispatch, event], EVENT_QUEUE);
 }
 
-function _dispatch([resolve, reject, event, ...args]) {
-  log.state('>> dispatch', event, args);
+function _dispatch([resolve, reject, event]) {
+  const { eventName } = event;
+  log.state('>> dispatch', event);
   return stateModel
-    .resolveEvent([event, args], STATE_CONTEXT)
+    .resolveEvent(event, STATE_CONTEXT)
     .catch((error) => {
-      if (event !== 'toaster-set') {
-        stateDispatch(['toaster-set', {
+      if (eventName !== 'toaster-set') {
+        stateDispatch({
+          eventName: 'toaster-set',
           type: 'error',
           message: error,
-        }]);
+        });
       }
       return self.Promise.reject(error);
     })
@@ -126,8 +128,8 @@ if (self.STEAMDATING_CONFIG.debug) {
     },
     current: () => STATE_CONTEXT.STATE,
     ll: () => {
-      console.table(R.map(([event, args]) => [
-        event, JSON.stringify(args),
+      console.table(R.map(([{ eventName, ...args }]) => [
+        eventName, JSON.stringify(args),
       ], STATE_CONTEXT.STATE_HISTORY));
     },
     log: () => STATE_CONTEXT.STATE_LOG,
@@ -136,8 +138,8 @@ if (self.STEAMDATING_CONFIG.debug) {
       resolveCells();
     },
     replayLog: (index) => {
-      const [event, args] = STATE_CONTEXT.STATE_LOG[index];
-      stateService.dispatch([event, ...args]);
+      const [event] = STATE_CONTEXT.STATE_LOG[index];
+      stateService.dispatch(event);
     },
     history: () => STATE_CONTEXT.STATE_HISTORY,
     dropHistory: (index) => {
@@ -145,8 +147,8 @@ if (self.STEAMDATING_CONFIG.debug) {
       resolveCells();
     },
     replayHistory: (index) => {
-      const [event, args] = STATE_CONTEXT.STATE_HISTORY[index];
-      stateService.dispatch([event, ...args]);
+      const [event] = STATE_CONTEXT.STATE_HISTORY[index];
+      stateService.dispatch(event);
     },
     first: () => {
       STATE_CONTEXT = stateModel.first(STATE_CONTEXT);

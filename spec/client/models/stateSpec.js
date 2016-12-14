@@ -15,13 +15,16 @@ describe('stateModel', function () {
     this.subscriptionsContext = subscriptionsModel.createContext();
   });
 
-  context('resolveEvent([<event>, <args>])', function () {
+  context('resolveEvent(<event>)', function () {
     return stateModel
-      .resolveEvent([this.event, this.args], this.stateContext);
+      .resolveEvent(this.event, this.stateContext);
   }, function () {
     beforeEach(function () {
-      this.event = 'myEvent';
-      this.args = ['arg1','arg2'];
+      this.event = {
+        eventName: 'myEvent',
+        arg1: 'arg1',
+        arg2: 'arg2',
+      };
       this.handler = jasmine.createSpy('eventHandler');
     });
     context('when <event> has no handler', function () {
@@ -36,7 +39,7 @@ describe('stateModel', function () {
 
     context('when <event> has a handler', function () {
       this.stateContext = stateModel
-        .registerHandler(this.event,
+        .registerHandler(this.event.eventName,
                          this.handlerAndMiddlewares,
                          this.stateContext);
     }, function () {
@@ -44,9 +47,9 @@ describe('stateModel', function () {
         this.handlerAndMiddlewares = [this.handler];
       });
 
-      it('should call handler with <args>', function () {
+      it('should call handler with <event>', function () {
         expect(this.handler)
-          .toHaveBeenCalledWith({}, ['myEvent','arg1','arg2']);
+          .toHaveBeenCalledWith({}, this.event);
       });
 
       context('when handler uses middlewares', function () {
@@ -61,8 +64,8 @@ describe('stateModel', function () {
               .createSpy('middlewareSpy1')
               .and.callFake((state, event) => R.over(
                 R.lensProp('myEvent'),
-                (event) => `${event}.M1`,
-                handler(state, R.append('A1', event))
+                (eventValue) => `${eventValue}.M1`,
+                handler(state, R.assoc('A1', 'A1', event))
               ));
             return this.middlewareSpy1;
           };
@@ -71,8 +74,8 @@ describe('stateModel', function () {
               .createSpy('middlewareSpy2')
               .and.callFake((state, event) => R.over(
                 R.lensProp('myEvent'),
-                (event) => `${event}.M2`,
-                handler(state, R.append('A2', event))
+                (eventValue) => `${eventValue}.M2`,
+                handler(state, R.assoc('A2', 'A2', event))
               ));
             return this.middlewareSpy2;
           };
@@ -81,8 +84,8 @@ describe('stateModel', function () {
               .createSpy('middlewareSpy3')
               .and.callFake((state, event) => R.over(
                 R.lensProp('myEvent'),
-                (event) => `${event}.M3`,
-                handler(state, R.append('A3', event))
+                (eventValue) => `${eventValue}.M3`,
+                handler(state, R.assoc('A3', 'A3', event))
               ));
             return this.middlewareSpy3;
           };
@@ -95,30 +98,28 @@ describe('stateModel', function () {
           ];
 
           this.handler
-            .and.callFake((state, [event, ...args]) =>
-                          R.assoc(event, args.join('.'), state));
+            .and.callFake((state, { eventName, ...args }) =>
+                          R.assoc(eventName, R.values(args).join('.'), state));
         });
 
         it('should call each middlewares & handler correctly', function () {
           expect(this.handler)
-            .toHaveBeenCalledWith({}, [
-              'myEvent',...this.args,
-              'A1','A2','A3',
-            ]);
+            .toHaveBeenCalledWith({}, {
+              ...this.event,
+              A1: 'A1', A2: 'A2', A3: 'A3',
+            });
           expect(this.middlewareSpy3)
-            .toHaveBeenCalledWith({}, [
-              'myEvent',...this.args,
-              'A1','A2',
-            ]);
+            .toHaveBeenCalledWith({}, {
+              ...this.event,
+              A1: 'A1', A2: 'A2',
+            });
           expect(this.middlewareSpy2)
-            .toHaveBeenCalledWith({}, [
-              'myEvent',...this.args,
-              'A1',
-            ]);
+            .toHaveBeenCalledWith({}, {
+              ...this.event,
+              A1: 'A1',
+            });
           expect(this.middlewareSpy1)
-            .toHaveBeenCalledWith({}, [
-              'myEvent',...this.args,
-            ]);
+            .toHaveBeenCalledWith({}, this.event);
 
           expect(this.context.STATE)
             .toEqual({ myEvent: 'arg1.arg2.A1.A2.A3.M3.M2.M1' });
@@ -148,8 +149,8 @@ describe('stateModel', function () {
 
       context('when handler changes state', function () {
         this.handler
-          .and.callFake((state, [event, ...args]) =>
-                        R.assoc(event, args, state));
+          .and.callFake((state, { eventName, ...args }) =>
+                        R.assoc(eventName, R.values(args), state));
       }, function () {
         beforeEach(function () {
           self.STEAMDATING_CONFIG.debug = true;
@@ -182,7 +183,7 @@ describe('stateModel', function () {
 
         it('should resolve <event> with the state returned by the handler', function () {
           expect(this.context.STATE)
-            .toEqual({ myEvent: this.args });
+            .toEqual({ myEvent: ['arg1','arg2'] });
         });
       });
     });
@@ -202,7 +203,7 @@ describe('stateModel', function () {
       this.stateCell = cellModel.from(() => this.stateContext.STATE);
 
       this.stateContext = stateModel
-        .registerHandler('event', [function (state, [_event_, path, value]) {
+        .registerHandler('event', [function (state, { path, value }) {
           return R.assocPath(path, value, state);
         }], this.stateContext);
       this.subscriptionsContext = subscriptionsModel
@@ -230,8 +231,8 @@ describe('stateModel', function () {
       this.subscriptionsContext = newSubscriptionsContext2;
 
       return R.threadP(this.stateContext)(
-        stateModel.resolveEvent$(['event', [['path1'], 'value1']]),
-        stateModel.resolveEvent$(['event', [['path2'], value2]]),
+        stateModel.resolveEvent$({ eventName: 'event', path: ['path1'], value: 'value1' }),
+        stateModel.resolveEvent$({ eventName: 'event', path: ['path2'], value: value2 }),
         R.tap((stateContext) => { this.stateContext = stateContext; }),
         () => subscriptionsModel.resolveCells(this.subscriptionsContext),
         () => subscriptionsModel.advanceTick(this.subscriptionsContext),
@@ -245,7 +246,7 @@ describe('stateModel', function () {
 
     context('when state change does not affect views', function () {
       return stateModel
-        .resolveEvent(['event', [this.eventArgsPath, this.eventArgsValue]], this.stateContext)
+        .resolveEvent({ eventName: 'event', path: this.eventArgsPath, value: this.eventArgsValue }, this.stateContext)
         .then((stateContext) => { this.stateContext = stateContext; });
     }, function () {
       example(function (exple, desc) {
@@ -268,7 +269,7 @@ describe('stateModel', function () {
 
     context('when state change does affects views', function () {
       return stateModel
-        .resolveEvent(['event', [this.eventArgsPath, this.eventArgsValue]], this.stateContext)
+        .resolveEvent({ eventName: 'event', path: this.eventArgsPath, value: this.eventArgsValue }, this.stateContext)
         .then((stateContext) => { this.stateContext = stateContext; });
     }, function () {
       example(function (exple, desc) {
@@ -294,7 +295,7 @@ describe('stateModel', function () {
     context('when view is revoked and state changes', function () {
       this.subscriptionsContext = subscriptionsModel
         .revokeView(this.view1, this.subscriptionsContext);
-      return stateModel.resolveEvent(['event', [['path1'], 'value']], this.stateContext)
+      return stateModel.resolveEvent({ eventName: 'event', path: ['path1'], value: 'value' }, this.stateContext)
         .then((stateContext) => { this.stateContext = stateContext; });
     }, function () {
       it('should not update revoked view', function () {
@@ -308,7 +309,7 @@ describe('stateModel', function () {
       this.stateCell = cellModel.from(() => this.stateContext.STATE);
 
       this.stateContext = stateModel
-        .registerHandler('event', [function (state, [_event_, path, value]) {
+        .registerHandler('event', [function (state, { path, value }) {
           return R.assocPath(path, value, state);
         }], this.stateContext);
       this.subscriptionsContext = subscriptionsModel
@@ -327,10 +328,10 @@ describe('stateModel', function () {
       this.subscriptionsContext = newSubscriptionsContext;
 
       return R.threadP(this.stateContext)(
-        stateModel.resolveEvent$(['event', [['path1'], 'value1']]),
-        stateModel.resolveEvent$(['event', [['path1'], 'value2']]),
-        stateModel.resolveEvent$(['event', [['path1'], 'value3']]),
-        stateModel.resolveEvent$(['event', [['path1'], 'value4']]),
+        stateModel.resolveEvent$({ eventName: 'event', path: ['path1'], value: 'value1' }),
+        stateModel.resolveEvent$({ eventName: 'event', path: ['path1'], value: 'value2' }),
+        stateModel.resolveEvent$({ eventName: 'event', path: ['path1'], value: 'value3' }),
+        stateModel.resolveEvent$({ eventName: 'event', path: ['path1'], value: 'value4' }),
         R.tap((stateContext) => { this.stateContext = stateContext; }),
         () => subscriptionsModel.resolveCells(this.subscriptionsContext),
         () => subscriptionsModel.advanceTick(this.subscriptionsContext),

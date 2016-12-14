@@ -51,5 +51,8 @@ function playersListRowGetInitialState() {
 }
 
 function playersListRowDoEdit() {
-  dispatch(['players-startEdit', this.props.player]);
+  dispatch({
+    eventName: 'players-startEdit',
+    player: this.props.player,
+  });
 }

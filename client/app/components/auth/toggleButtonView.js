@@ -32,9 +32,9 @@ function authToggleButtonGetInitialState() {
 
 function authToggleButtonDoToggle() {
   if (this.state.active) {
-    dispatch(['auth-signout']);
+    dispatch({ eventName: 'auth-signout' });
   }
   else {
-    dispatch(['auth-signin']);
+    dispatch({ eventName: 'auth-signin' });
   }
 }

@@ -69,16 +69,19 @@ describe('storageComponent', function () {
     }, function () {
       it('should refresh state', function () {
         expect(appStateService.dispatch)
-          .toHaveBeenCalledWith(['storage-refresh', { value: 'new' }]);
+          .toHaveBeenCalledWith({
+            eventName: 'storage-refresh',
+            newState: { value: 'new' },
+          });
       });
     });
   });
 
-  context('storageRefreshHandler(<refresh>)', function () {
-    return storageRefreshHandler(this.state, [{
+  context('storageRefreshHandler(<newState>)', function () {
+    return storageRefreshHandler(this.state, { newState: {
       value: { refresh: true },
       override: true,
-    }]);
+    } });
   }, function () {
     it('should merge current state with refresh', function () {
       expect(this.context).toEqual({

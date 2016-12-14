@@ -1,5 +1,6 @@
 export let __hotReload = true;
 
+import R from 'app/helpers/ramda';
 import stateService from 'app/services/state';
 const { dispatch, registerHandler } = stateService;
 import validateArgs from 'app/helpers/middlewares/validateArgs';
@@ -13,11 +14,15 @@ import { Page,
 /* eslint-enable no-unused-vars */
 
 registerHandler('test', [
-  validateArgs(['string', 'null', 'number']),
+  validateArgs({ string: 'string', null: 'null', number: 'number' }),
 ], () => 'Oups');
 
-registerHandler('test-prompt', (state, [_event_, ...result]) => {
-  dispatch(['toaster-set', { type: 'info', message: result.join(', ') }]);
+registerHandler('test-prompt', (state, { result, value }) => {
+  dispatch({
+    eventName: 'toaster-set',
+    type: 'info',
+    message: R.reject(R.isNil, [result, value]).join(', '),
+  });
   return state;
 });
 
@@ -31,53 +36,59 @@ function homePageRender() {
       <PageMenu>
         <PageMenuItem
            onClick={() => {
-             dispatch(['toaster-set', { type: 'success', message: 'Ouuups1!' }]);
+             dispatch({ eventName: 'toaster-set', type: 'success', message: 'Ouuups1!' });
           }}>
           Test Toaster
         </PageMenuItem>
         <PageMenuItem
            onClick={() => {
-             dispatch(['toaster-set', { type: 'error', message: 'Ouuups1!' }]);
-             dispatch(['toaster-set', { type: 'info', message: 'Ouuups2!' }]);
-             dispatch(['toaster-set', { type: 'success', message: 'Ouuups3!' }]);
-             dispatch(['toaster-set', { type: 'warning', message: 'Ouuups4!' }]);
-             dispatch(['toaster-set', { type: 'error', message: 'Ouuups5!' }]);
+             dispatch({ eventName: 'toaster-set', type: 'error', message: 'Ouuups1!' });
+             dispatch({ eventName: 'toaster-set', type: 'info', message: 'Ouuups2!' });
+             dispatch({ eventName: 'toaster-set', type: 'success', message: 'Ouuups3!' });
+             dispatch({ eventName: 'toaster-set', type: 'warning', message: 'Ouuups4!' });
+             dispatch({ eventName: 'toaster-set', type: 'error', message: 'Ouuups5!' });
           }}>
           Test Toaster x5
         </PageMenuItem>
         <PageMenuItem
            onClick={() => {
-             dispatch(['test', 1, 'Baaaaka']);
+             dispatch({ eventName: 'test', string: 1, null: 'Baaaaka' });
           }}>
           Test ValidateArgs
         </PageMenuItem>
         <PageMenuItem
            onClick={() => {
-             dispatch(['prompt-set',
-                       { type:'alert',
-                         msg: 'This is an alert',
-                         onOk: ['test-prompt', 'alert-ok'] }]);
+             dispatch({
+               eventName: 'prompt-set',
+               type:'alert',
+               msg: 'This is an alert',
+               onOk: { eventName: 'test-prompt', result: 'alert-ok' },
+             });
           }}>
           Test Alert
         </PageMenuItem>
         <PageMenuItem
            onClick={() => {
-             dispatch(['prompt-set',
-                       { type: 'confirm',
-                         msg: 'This is a confirm',
-                         onOk: ['test-prompt', 'confirm-ok'],
-                         onCancel: ['test-prompt', 'confirm-cancel'] }]);
+             dispatch({
+               eventName: 'prompt-set',
+               type: 'confirm',
+               msg: 'This is a confirm',
+               onOk: { eventName: 'test-prompt', result: 'confirm-ok' },
+               onCancel: { eventName: 'test-prompt', result: 'confirm-cancel' },
+             });
           }}>
           Test Confirm
         </PageMenuItem>
         <PageMenuItem
            onClick={() => {
-             dispatch(['prompt-set',
-                       { type: 'prompt',
-                         msg: 'This is a prompt',
-                         value: 42,
-                         onOk: ['test-prompt', 'prompt-ok'],
-                         onCancel: ['test-prompt', 'prompt-cancel'] }]);
+             dispatch({
+               eventName: 'prompt-set',
+               type: 'prompt',
+               msg: 'This is a prompt',
+               value: 42,
+               onOk: { eventName: 'test-prompt', result: 'prompt-ok' },
+               onCancel: { eventName: 'test-prompt', result: 'prompt-cancel' },
+             });
           }}>
           Test Prompt
         </PageMenuItem>

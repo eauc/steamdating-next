@@ -31,7 +31,7 @@ function authRequiredRender() {
       <div className="lock">
         <button
            className="signin"
-           onClick={() => dispatch(['auth-signin'])}>
+           onClick={() => dispatch({ eventName: 'auth-signin' })}>
           <Icon name="sign-in" />
           <span> Sign In Required</span>
         </button>

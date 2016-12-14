@@ -1,7 +1,6 @@
 import { beforeEach,
          context,
-         it,
-         spyOnService } from 'spec/client/helpers/helpers';
+         it } from 'spec/client/helpers/helpers';
 
 import { promptUpdateValueHandler,
          promptOkHandler,
@@ -10,10 +9,10 @@ import { promptUpdateValueHandler,
 describe('promptComponent', function () {
   beforeEach(function () {
     this.state = {};
-	});
+  });
 
   context('promptUpdateValueHandler(<value>)', function () {
-    return promptUpdateValueHandler(this.state, ['value']);
+    return promptUpdateValueHandler(this.state, { value: 'value' });
   }, function () {
     it('should setup form <name> with <value>', function () {
       expect(this.context)
@@ -25,7 +24,7 @@ describe('promptComponent', function () {
     return promptOkHandler(this.state);
   }, function () {
     beforeEach(function () {
-      this.state.onOk = ['on-ok-event'];
+      this.state.onOk = { eventName: 'on-ok-event' };
     });
 
     it('should reset prompt', function () {
@@ -34,7 +33,7 @@ describe('promptComponent', function () {
 
     it('should dispatch <prompt.onOk> event', function () {
       expect(this.context.dispatch)
-        .toEqual(['on-ok-event']);
+        .toEqual({ eventName: 'on-ok-event' });
     });
 
     context('when type==="prompt"', function () {
@@ -43,7 +42,7 @@ describe('promptComponent', function () {
     }, function () {
       it('should append <prompt.value> to event', function () {
         expect(this.context.dispatch)
-          .toEqual(['on-ok-event', 42]);
+          .toEqual({ eventName: 'on-ok-event', value: 42 });
       });
     });
   });
@@ -56,11 +55,11 @@ describe('promptComponent', function () {
     });
 
     context('when <promp.onCancel> is defined', function () {
-      this.state.onCancel = ['on-cancel-event', 'value'];
+      this.state.onCancel = { eventName: 'on-cancel-event', payload: 'value' };
     }, function () {
       it('should dispatch <prompt.onCancel> event', function () {
         expect(this.context.dispatch)
-          .toEqual(['on-cancel-event', 'value']);
+          .toEqual({ eventName: 'on-cancel-event', payload: 'value' });
       });
     });
   });

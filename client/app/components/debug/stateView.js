@@ -14,8 +14,10 @@ export const DebugState = createComponent({
 });
 
 function debugStateGetInitialState() {
-  return { appState: {},
-           rootPath: [] };
+  return {
+    appState: {},
+    rootPath: [],
+  };
 }
 
 function debugStateRender() {

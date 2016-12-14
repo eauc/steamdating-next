@@ -30,13 +30,12 @@ registerInit('factions', [], R.tap(() => {
   httpService.requestP({
     method: 'GET',
     url: '/data/factions.json',
-    onSuccess: ['factions-set'],
-    onError: [
-      'toaster-set', {
-        type: 'error',
-        message: 'factions load failed',
-      },
-    ],
+    onSuccess: { eventName: 'factions-set' },
+    onError: {
+      eventName: 'toaster-set',
+      type: 'error',
+      message: 'factions load failed',
+    },
   });
 }));
 

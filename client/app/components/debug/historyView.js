@@ -11,38 +11,42 @@ import { Icon } from 'app/components/misc/misc';
 
 export const DebugHistory = createComponent({
   displayName: 'DebugHistory',
-  subscriptions: { history: debugHistorySub,
-                   log: debugLogSub },
+  subscriptions: {
+    history: debugHistorySub,
+    log: debugLogSub,
+  },
   getInitialState: debugHistoryGetInitialState,
   render: debugHistoryRender,
 });
 
 function debugHistoryGetInitialState() {
-  return { history: [],
-           log: [] };
+  return {
+    history: [],
+    log: [],
+  };
 }
 
 function debugHistoryRender() {
-  const history = R.reverse(R.addIndex(R.map)(([event], index) => (
+  const history = R.reverse(R.addIndex(R.map)(([{ eventName }], index) => (
     <tr key={index}
         className={{ current: (index + 1 === this.state.history.length) }}>
       <td>{index}</td>
       <td onClick={() => stateDebug.replayHistory(index)}>
         <Icon name="refresh" />
       </td>
-      <td>{event}</td>
+      <td>{eventName}</td>
       <td onClick={() => stateDebug.dropHistory(index)}>
         <Icon name="trash" />
       </td>
     </tr>
   ), this.state.history));
-  const log = R.addIndex(R.map)(([event], index) => (
+  const log = R.addIndex(R.map)(([{ eventName }], index) => (
     <tr key={index}>
       <td>{index}</td>
       <td onClick={() => stateDebug.replayLog(index)}>
         <Icon name="refresh" />
       </td>
-      <td>{event}</td>
+      <td>{eventName}</td>
       <td onClick={() => stateDebug.dropLog(index)}>
         <Icon name="trash" />
       </td>

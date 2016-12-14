@@ -40,7 +40,7 @@ export function authLogin() {
 }
 
 function onLogin(result) {
-  dispatch(['auth-setToken', result.idToken]);
+  dispatch({ eventName: 'auth-setToken', token: result.idToken });
 }
 
 function getLock() {

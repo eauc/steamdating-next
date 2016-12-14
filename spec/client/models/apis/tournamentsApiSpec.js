@@ -10,8 +10,8 @@ describe('tournamentsApiModel', function () {
   describe('getUrls({ onSuccess, onError })', function () {
     beforeEach(function () {
       this.params = {
-        onSuccess: ['success'],
-        onError: ['error'],
+        onSuccess: { eventName: 'success' },
+        onError: { eventName: 'error' },
       };
 
       this.context = tournamentsApiModel.getUrls(this.params);
@@ -21,7 +21,7 @@ describe('tournamentsApiModel', function () {
       expect(this.context)
         .toEqual({
           method: 'GET',
-          onError: ['error'],
+          onError: { eventName: 'error' },
           onSuccess: jasmine.any(Function),
           url: '/api/tournaments',
         });
@@ -38,7 +38,10 @@ describe('tournamentsApiModel', function () {
 
       it('should call "onSuccess" event with tournaments urls', function () {
         expect(this.event)
-          .toEqual(['success', 'tournamentsUrls']);
+          .toEqual({
+            eventName: 'success',
+            urls: 'tournamentsUrls',
+          });
       });
     });
   });
@@ -47,8 +50,8 @@ describe('tournamentsApiModel', function () {
     beforeEach(function () {
       this.params = {
         authToken: 'token',
-        onSuccess: ['success'],
-        onError: ['error'],
+        onSuccess: { eventName: 'success' },
+        onError: { eventName: 'error' },
         urls: { mine: '/mine' },
       };
 
@@ -60,7 +63,7 @@ describe('tournamentsApiModel', function () {
         .toEqual({
           headers: { Authorization: 'Bearer token' },
           method: 'GET',
-          onError: ['error'],
+          onError: { eventName: 'error' },
           onSuccess: jasmine.any(Function),
           url: '/api/tournaments/mine',
         });
@@ -77,7 +80,10 @@ describe('tournamentsApiModel', function () {
 
       it('should call "onSuccess" event with tournaments list', function () {
         expect(this.event)
-          .toEqual(['success', 'tournamentsList']);
+          .toEqual({
+            eventName: 'success',
+            tournaments: 'tournamentsList',
+          });
       });
     });
   });
@@ -86,7 +92,7 @@ describe('tournamentsApiModel', function () {
     beforeEach(function () {
       this.params = {
         authToken: 'token',
-        onSuccess: ['success'],
+        onSuccess: { eventName: 'success' },
         tournament: { link: '/link' },
       };
       this.context = tournamentsApiModel.load(this.params);
@@ -97,10 +103,11 @@ describe('tournamentsApiModel', function () {
         .toEqual({
           headers: { Authorization: 'Bearer token' },
           method: 'GET',
-          onError: ['toaster-set', {
+          onError: {
+            eventName: 'toaster-set',
             type: 'error',
             message: 'Error loading tournament from server',
-          }],
+          },
           onSuccess: jasmine.any(Function),
           url: '/api/tournaments/link',
         });
@@ -116,6 +123,7 @@ describe('tournamentsApiModel', function () {
             name: 'name',
             date: 'date',
             id: 'id',
+            // eslint-disable-next-line camelcase
             updated_at: 'updated_at',
             data: '{"tournament":"state"}',
           },
@@ -124,15 +132,19 @@ describe('tournamentsApiModel', function () {
 
       it('should call "onSuccess" event with loaded tournament', function () {
         expect(this.event)
-          .toEqual(['success', {
-            online: {
-              date: 'date',
-              id: '/id',
-              name: 'name',
-              updated_at: 'updated_at',
+          .toEqual({
+            eventName: 'success',
+            tournament: {
+              online: {
+                date: 'date',
+                id: '/id',
+                name: 'name',
+                // eslint-disable-next-line camelcase
+                updated_at: 'updated_at',
+              },
+              tournament: 'state',
             },
-            tournament: 'state',
-          }]);
+          });
       });
     });
   });
@@ -141,7 +153,7 @@ describe('tournamentsApiModel', function () {
     beforeEach(function () {
       this.params = {
         authToken: 'token',
-        onSuccess: ['success'],
+        onSuccess: { eventName: 'success' },
         tournament: {
           online: { name: 'name', date: 'date' },
           tournament: 'state',
@@ -163,7 +175,11 @@ describe('tournamentsApiModel', function () {
             },
             headers: { Authorization: 'Bearer token' },
             method: 'POST',
-            onError: ['toaster-set', { message: 'Error saving tournament on server', type: 'error' }],
+            onError: {
+              eventName: 'toaster-set',
+              type: 'error',
+              message: 'Error saving tournament on server',
+            },
             onSuccess: jasmine.any(Function),
             url: '/api/tournaments/mine',
           });
@@ -186,7 +202,11 @@ describe('tournamentsApiModel', function () {
             },
             headers: { Authorization: 'Bearer token' },
             method: 'PUT',
-            onError: ['toaster-set', { message: 'Error saving tournament on server', type: 'error' }],
+            onError: {
+              eventName: 'toaster-set',
+              type: 'error',
+              message: 'Error saving tournament on server',
+            },
             onSuccess: jasmine.any(Function),
             url: '/api/tournaments/id',
           });
@@ -204,6 +224,7 @@ describe('tournamentsApiModel', function () {
             name: 'name',
             date: 'date',
             id: 'id',
+            // eslint-disable-next-line camelcase
             updated_at: 'updated_at',
             data: '{"tournament":"state"}',
           },
@@ -212,15 +233,19 @@ describe('tournamentsApiModel', function () {
 
       it('should call "onSuccess" event with updated tournament', function () {
         expect(this.event)
-          .toEqual(['success', {
-            online: {
-              date: 'date',
-              id: '/id',
-              name: 'name',
-              updated_at: 'updated_at',
+          .toEqual({
+            eventName: 'success',
+            tournament: {
+              online: {
+                date: 'date',
+                id: '/id',
+                name: 'name',
+                // eslint-disable-next-line camelcase
+                updated_at: 'updated_at',
+              },
+              tournament: 'state',
             },
-            tournament: 'state',
-          }]);
+          });
       });
     });
   });
