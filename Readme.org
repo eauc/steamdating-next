@@ -9,7 +9,7 @@
   - [X] history
 - [X] event as objects
 - [X] separate state and subscriptions
-- [ ] replace initializers with init events, using a main init event + 'dispatch' effects
+- [X] replace initializers with init events, using a main init event + 'dispatch' effects
 - [ ] default values for toaster/prompt/...=all subscriptions
 - [ ] memoize subscriptions instead of null/tick
 - [ ] features online ?

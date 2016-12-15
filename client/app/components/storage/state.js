@@ -3,7 +3,6 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
 import stateService from 'app/services/state';
-import { registerInit } from 'app/services/init';
 
 export const STATE_STORAGE_KEY = 'STEAMDATING_APP.state';
 
@@ -12,8 +11,6 @@ if (self._storageListener) {
 }
 self._storageListener = storageListener;
 self.addEventListener('storage', storageListener);
-
-registerInit('storage', [], storageInit);
 
 export function storageListener(event) {
   if (event.key !== STATE_STORAGE_KEY) return;
@@ -28,7 +25,7 @@ export function storageListener(event) {
 
 let refreshing = true;
 
-export function storageInit(state) {
+export function storageInitHandler(state) {
   refreshing = true;
   const storedState = R.thread(STATE_STORAGE_KEY)(
     (key) => self.localStorage.getItem(key),

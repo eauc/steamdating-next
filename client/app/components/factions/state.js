@@ -1,8 +1,5 @@
 export let __hotReload = true;
 
-import R from 'app/helpers/ramda';
-import httpService from 'app/services/http';
-import { registerInit } from 'app/services/init';
 import stateService from 'app/services/state';
 const { registerValidator } = stateService;
 
@@ -25,18 +22,5 @@ const factionsSchema = {
   type: 'object',
   additionnalProperties: factionSchema,
 };
-
-registerInit('factions', [], R.tap(() => {
-  httpService.requestP({
-    method: 'GET',
-    url: '/data/factions.json',
-    onSuccess: { eventName: 'factions-set' },
-    onError: {
-      eventName: 'toaster-set',
-      type: 'error',
-      message: 'factions load failed',
-    },
-  });
-}));
 
 registerValidator('factions', scope, factionsSchema);

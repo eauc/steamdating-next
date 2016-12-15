@@ -12,8 +12,8 @@ const authModel = {
 
 export default R.curryService(authModel);
 
-function authCreate() {
-  return { token: null };
+function authCreate(data) {
+  return Object.assign({ token: null }, data);
 }
 
 function authReset(auth) {

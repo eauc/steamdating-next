@@ -1,7 +1,6 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { registerInit } from 'app/services/init';
 import stateService from 'app/services/state';
 const { dispatch,
          registerSubscription,
@@ -91,8 +90,3 @@ const tournamentOnlineResetSaveFormSub = registerSubscription(
   }
 );
 getPermanentSubscription('tournament-onlineInfo', [tournamentOnlineResetSaveFormSub]);
-
-registerInit('tournament-online', ['storage'], initTournamentOnline);
-function initTournamentOnline(state) {
-  return R.assoc('online', {}, state);
-}

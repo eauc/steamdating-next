@@ -1,34 +1,40 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
+import tap from 'app/helpers/middlewares/tap';
+import { effects } from 'app/helpers/middlewares/effects';
 import log from 'app/helpers/log';
 import stateService from 'app/services/state';
 const { registerHandler } = stateService;
 
-registerHandler('init', initHandler);
+registerHandler('init', [
+  tap,
+  effects,
+], initHandler);
 
-const defaultState = {};
 let initializers = {};
 
-export function registerInit(name, dependencies, fn) {
-  if (R.exists(initializers[name])) {
-    log('Overwriting initializer', name);
+export function registerInit(eventName, dependencies) {
+  if (R.exists(initializers[eventName])) {
+    log('Overwriting initializer', eventName);
   }
-  initializers[name] = [dependencies, fn];
+  initializers[eventName] = dependencies;
 }
 
 export function initHandler() {
-  initializers.storage[0] = R.thread(initializers)(
+  initializers['storage-init'] = R.thread(initializers)(
     R.keys,
-    R.without(['storage']),
+    R.without(['storage-init']),
     R.filter((name) => {
-      const [dependencies] = initializers[name];
-      return !R.contains('storage', dependencies);
+      const dependencies = initializers[name];
+      return !R.contains('storage-init', dependencies);
     })
   );
   const [names] = R.reduce(resolveDependencies, [[],[]], R.keys(initializers));
   log.init('Initializers will run', names);
-  return R.reduce(applyInitializer, defaultState, names);
+  return {
+    dispatch: R.map((eventName) => ({ eventName }), names),
+  };
 }
 
 function resolveDependencies([names, currents], name) {
@@ -43,20 +49,9 @@ function resolveDependencies([names, currents], name) {
   const [nextNames] = R.reduce(
     resolveDependencies,
     [names, [...currents, name]],
-    initializers[name][0]
+    initializers[name]
   );
   return [R.append(name, nextNames), currents];
-}
-
-function applyInitializer(state, name) {
-  log.init(name);
-  try {
-    return initializers[name][1](state);
-  }
-  catch (error) {
-    log.error('Error in initializer', name, error);
-    return state;
-  }
 }
 
 // TESTS ONLY

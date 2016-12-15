@@ -1,14 +1,18 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import stateService from 'app/services/state';
-const { registerHandler } = stateService;
-import fileService from 'app/services/file';
-import tournamentsApiModel from 'app/models/apis/tournaments';
 import { effects } from 'app/helpers/middlewares/effects';
 import path from 'app/helpers/middlewares/path';
 import tap from 'app/helpers/middlewares/tap';
+import fileService from 'app/services/file';
+import { registerInit } from 'app/services/init';
+import stateService from 'app/services/state';
+const { registerHandler } = stateService;
+import tournamentsApiModel from 'app/models/apis/tournaments';
 import { scope } from 'app/components/tournament/state';
+
+registerHandler('tournament-initOnline', tournamentInitOnlineHandler);
+registerInit('tournament-initOnline', ['storage-init']);
 
 registerHandler('tournament-set', [
   path(scope.tournament, {}),
@@ -66,6 +70,10 @@ registerHandler('tournament-onlineDownloadSuccess', [
   tap,
   effects,
 ], tournamentOnlineDownloadSuccessHandler);
+
+export function tournamentInitOnlineHandler(state) {
+  return R.assoc('online', {}, state);
+}
 
 export function tournamentSetHandler(_state_, { tournament }) {
   return {

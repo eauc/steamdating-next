@@ -6,7 +6,7 @@ import { beforeEach,
 import { storageRefreshHandler,
          storageUpdate,
          storageListener,
-         storageInit,
+         storageInitHandler,
          STATE_STORAGE_KEY } from 'app/components/storage/state';
 import appStateService from 'app/services/state';
 
@@ -19,8 +19,8 @@ describe('storageComponent', function () {
     spyOnService(appStateService, 'appState');
   });
 
-  context('storageInit()', function () {
-    return storageInit(this.state);
+  context('storageInitHandler()', function () {
+    return storageInitHandler(this.state);
   }, function () {
     beforeEach(function () {
       spyOn(self.localStorage, 'getItem')
