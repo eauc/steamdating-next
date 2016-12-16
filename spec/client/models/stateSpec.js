@@ -191,11 +191,7 @@ describe('stateModel', function () {
 
   context('resolveCells()', function () {
     return subscriptionsModel
-      .resolveCells(this.subscriptionsContext)
-      .then(() => subscriptionsModel.advanceTick(this.subscriptionsContext))
-      .then((subscriptionsModel) => {
-        this.subscriptionsModel = subscriptionsModel;
-      });
+      .resolveCells(this.subscriptionsContext);
   }, function () {
     const value2 = { subpath: 'value2' };
 
@@ -235,7 +231,6 @@ describe('stateModel', function () {
         stateModel.resolveEvent$({ eventName: 'event', path: ['path2'], value: value2 }),
         R.tap((stateContext) => { this.stateContext = stateContext; }),
         () => subscriptionsModel.resolveCells(this.subscriptionsContext),
-        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
         (subscriptionsContext) => {
           this.subscriptionsContext = subscriptionsContext;
           this.view1Changes.calls.reset();
@@ -334,7 +329,6 @@ describe('stateModel', function () {
         stateModel.resolveEvent$({ eventName: 'event', path: ['path1'], value: 'value4' }),
         R.tap((stateContext) => { this.stateContext = stateContext; }),
         () => subscriptionsModel.resolveCells(this.subscriptionsContext),
-        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
         (subscriptionsContext) => {
           this.subscriptionsContext = subscriptionsContext;
           this.view1Changes.calls.reset();
@@ -347,7 +341,6 @@ describe('stateModel', function () {
         stateModel.back,
         R.tap((stateContext) => { this.stateContext = stateContext; }),
         () => subscriptionsModel.resolveCells(this.subscriptionsContext),
-        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
         R.tap((subscriptionsContext) => {
           this.subscriptionsContext = subscriptionsContext;
         })
@@ -405,7 +398,6 @@ describe('stateModel', function () {
         stateModel.first,
         R.tap((stateContext) => { this.stateContext = stateContext; }),
         () => subscriptionsModel.resolveCells(this.subscriptionsContext),
-        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
         R.tap((subscriptionsContext) => {
           this.subscriptionsContext = subscriptionsContext;
         })
@@ -422,7 +414,6 @@ describe('stateModel', function () {
         stateModel.redo,
         R.tap((stateContext) => { this.stateContext = stateContext; }),
         () => subscriptionsModel.resolveCells(this.subscriptionsContext),
-        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
         R.tap((subscriptionsContext) => {
           this.subscriptionsContext = subscriptionsContext;
         })
@@ -433,7 +424,6 @@ describe('stateModel', function () {
           stateModel.first,
           R.tap((stateContext) => { this.stateContext = stateContext; }),
           () => subscriptionsModel.resolveCells(this.subscriptionsContext),
-          () => subscriptionsModel.advanceTick(this.subscriptionsContext),
           R.tap((subscriptionsContext) => {
             this.subscriptionsContext = subscriptionsContext;
             this.view1Changes.calls.reset();
@@ -493,7 +483,6 @@ describe('stateModel', function () {
         stateModel.last,
         R.tap((stateContext) => { this.stateContext = stateContext; }),
         () => subscriptionsModel.resolveCells(this.subscriptionsContext),
-        () => subscriptionsModel.advanceTick(this.subscriptionsContext),
         R.tap((subscriptionsContext) => {
           this.subscriptionsContext = subscriptionsContext;
         })
@@ -504,7 +493,6 @@ describe('stateModel', function () {
           stateModel.first,
           R.tap((stateContext) => { this.stateContext = stateContext; }),
           () => subscriptionsModel.resolveCells(this.subscriptionsContext),
-          () => subscriptionsModel.advanceTick(this.subscriptionsContext),
           R.tap((subscriptionsContext) => {
             this.subscriptionsContext = subscriptionsContext;
             this.view1Changes.calls.reset();

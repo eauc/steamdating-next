@@ -32,7 +32,7 @@ describe('cellModel', function () {
         this.sourceFn.and.returnValue('source2');
 
         return cellModel
-          .resolveCells(1, this.cells);
+          .resolveCells(this.cells);
       });
 
       it('should sample source & update value', function () {
@@ -50,7 +50,7 @@ describe('cellModel', function () {
           .not.toHaveBeenCalled();
       });
 
-      describe('when cells are resolved again at same tick', function () {
+      describe('when cells are resolved again', function () {
         beforeEach(function () {
           this.sourceFn.calls.reset();
           this.sourceFn.and.returnValue('source3');
@@ -59,32 +59,7 @@ describe('cellModel', function () {
           this.fromValueChanges.calls.reset();
 
           return cellModel
-            .resolveCells(1, this.cells);
-        });
-
-        it('should return same value & not resample source', function () {
-          expect(this.sourceFn).not.toHaveBeenCalled();
-          expect(this.fromFn.value()).toBe('source2');
-
-          expect(this.fromValue.value()).toBe(42);
-
-          expect(this.fromFnChanges)
-            .not.toHaveBeenCalled();
-          expect(this.fromValueChanges)
-            .not.toHaveBeenCalled();
-        });
-      });
-
-      describe('when cells are resolved again at another tick', function () {
-        beforeEach(function () {
-          this.sourceFn.calls.reset();
-          this.sourceFn.and.returnValue('source3');
-
-          this.fromFnChanges.calls.reset();
-          this.fromValueChanges.calls.reset();
-
-          return cellModel
-            .resolveCells(2, this.cells);
+            .resolveCells(this.cells);
         });
 
         it('should sample source & update value', function () {
@@ -125,25 +100,11 @@ describe('cellModel', function () {
         .toEqual(['source1_1', 'source2_1']);
     });
 
-    describe('when cells are resolved', function () {
-      beforeEach(function () {
-        this.source1.calls.reset();
-        this.source2.calls.reset();
-        return cellModel
-          .resolveCells(1, this.cells);
-      });
-
-      it('should sample each source only once', function () {
-        expect(this.source1.calls.count()).toBe(1);
-        expect(this.source2.calls.count()).toBe(1);
-      });
-    });
-
     describe('when none of the joined cells values change', function () {
       beforeEach(function () {
         this.previousValue = this.joinCell.value();
         return cellModel
-          .resolveCells(1, this.cells);
+          .resolveCells(this.cells);
       });
 
       it('should not change value', function () {
@@ -159,7 +120,7 @@ describe('cellModel', function () {
       beforeEach(function () {
         this.source1.and.returnValue('source1_2');
         return cellModel
-          .resolveCells(1, this.cells);
+          .resolveCells(this.cells);
       });
 
       it('should update joined value', function () {
@@ -177,7 +138,7 @@ describe('cellModel', function () {
       beforeEach(function () {
         this.source2.and.returnValue('source2_2');
         return cellModel
-          .resolveCells(1, this.cells);
+          .resolveCells(this.cells);
       });
 
       it('should update joined value', function () {
@@ -196,7 +157,7 @@ describe('cellModel', function () {
         this.source1.and.returnValue('source1_2');
         this.source2.and.returnValue('source2_2');
         return cellModel
-          .resolveCells(1, this.cells);
+          .resolveCells(this.cells);
       });
 
       it('should update joined value', function () {
@@ -237,25 +198,12 @@ describe('cellModel', function () {
         .toBe(1);
     });
 
-    describe('when cells are resolved', function () {
-      beforeEach(function () {
-        this.source.calls.reset();
-        return cellModel
-          .resolveCells(1, this.cells);
-      });
-
-      it('should sample source only once', function () {
-        expect(this.source.calls.count())
-          .toBe(1);
-      });
-    });
-
     describe('when source value does not change', function () {
       beforeEach(function () {
         this.initialValue = this.mapCell.value();
         this.mapFn.calls.reset();
         return cellModel
-          .resolveCells(1, this.cells);
+          .resolveCells(this.cells);
       });
 
       it('should not call <mapFn> and not change value', function () {
@@ -275,7 +223,7 @@ describe('cellModel', function () {
 
         this.source.and.returnValue('source_2');
         return cellModel
-          .resolveCells(1, this.cells);
+          .resolveCells(this.cells);
       });
 
       it('should call <mapFn> once and update mapped value', function () {

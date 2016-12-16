@@ -10,13 +10,11 @@ const subscriptionsModel = {
   getSubscription: subscriptionsGetSubscription,
   revokeView: subscriptionsRevokeView,
   resolveCells: subscriptionsResolveCells,
-  advanceTick: subscriptionsAdvanceTick,
 };
 export default R.curryService(subscriptionsModel);
 
 function subscriptionsCreateContext() {
   return {
-    TICK: 0,
     CELLS: [],
     SUBSCRIPTIONS: {},
   };
@@ -64,10 +62,6 @@ function subscriptionsRevokeView(cell, context) {
 }
 
 function subscriptionsResolveCells(context) {
-  return cellModel
-    .resolveCells(context.TICK + 1, context.CELLS);
-}
-
-function subscriptionsAdvanceTick(context) {
-  return R.over(R.lensProp('TICK'), R.inc, context);
+  cellModel.resolveCells(context.CELLS);
+  return context;
 }

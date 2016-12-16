@@ -3,8 +3,8 @@ export let __hotReload = true;
 self.STEAMDATING_CONFIG = self.STEAMDATING_CONFIG || {};
 // self.STEAMDATING_CONFIG.debug = true;
 self.STEAMDATING_CONFIG.debugFlags = {
-  // cell: 'debug',
-  cell: null,
+  cell: 'debug',
+  // cell: null,
   // cycle: 'warn',
   cycle: null,
   effects: 'debug',

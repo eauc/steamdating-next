@@ -114,11 +114,7 @@ const getSubscription$ = R.curry(function getSubscription(view, args) {
 
 function resolveCells() {
   return subscriptionsModel
-    .resolveCells(SUBSCRIPTIONS_CONTEXT)
-    .then(() => {
-      SUBSCRIPTIONS_CONTEXT = subscriptionsModel
-        .advanceTick(SUBSCRIPTIONS_CONTEXT);
-    });
+    .resolveCells(SUBSCRIPTIONS_CONTEXT);
 }
 
 if (self.STEAMDATING_CONFIG.debug) {
