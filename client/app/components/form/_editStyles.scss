@@ -30,7 +30,9 @@
         font-weight: 200%;
     }
 
-    &-disabled {
+    &-disabled,
+    &-disabled:hover,
+    &-disabled:focus {
         pointer-events: none;
         background-color: #B0B0B0;
         border-color: darken(#B0B0B0, 20%);
