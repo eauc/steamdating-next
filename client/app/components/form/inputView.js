@@ -150,6 +150,12 @@ function formInputDoUpdate(event) {
       R.map(R.prop('value'))
     );
   }
+  if (this.props.type === 'number') {
+    value = Number(value);
+  }
+  if (this.props.type === 'select') {
+    value = value === '' ? null : value;
+  }
   this.setState({
     value,
     pristine: false,
