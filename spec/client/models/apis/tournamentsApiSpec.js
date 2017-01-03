@@ -74,7 +74,7 @@ describe('tournamentsApiModel', function () {
         this.successHandler = this.context.onSuccess;
 
         this.event = this.successHandler({
-          data: 'tournamentsList',
+          tournaments: 'tournamentsList',
         });
       });
 
@@ -119,13 +119,11 @@ describe('tournamentsApiModel', function () {
 
         this.event = this.successHandler({
           link: '/id',
-          data: {
-            name: 'name',
-            date: 'date',
-            id: 'id',
-            // eslint-disable-next-line camelcase
-            updated_at: 'updated_at',
-            data: '{"tournament":"state"}',
+          name: 'name',
+          date: 'date',
+          updatedAt: 'updated_at',
+          tournament: {
+            data: 'state',
           },
         });
       });
@@ -136,13 +134,12 @@ describe('tournamentsApiModel', function () {
             eventName: 'success',
             tournament: {
               online: {
+                link: '/id',
                 date: 'date',
-                id: '/id',
                 name: 'name',
-                // eslint-disable-next-line camelcase
-                updated_at: 'updated_at',
+                updatedAt: 'updated_at',
               },
-              tournament: 'state',
+              data: 'state',
             },
           });
       });
@@ -156,7 +153,7 @@ describe('tournamentsApiModel', function () {
         onSuccess: { eventName: 'success' },
         tournament: {
           online: { name: 'name', date: 'date' },
-          tournament: 'state',
+          data: 'state',
         },
         urls: { mine: '/mine' },
       };
@@ -169,7 +166,7 @@ describe('tournamentsApiModel', function () {
         expect(this.context)
           .toEqual({
             data: {
-              data: '{"online":{"name":"name","date":"date"},"tournament":"state"}',
+              tournament: { data: 'state' },
               date: 'date',
               name: 'name',
             },
@@ -188,7 +185,7 @@ describe('tournamentsApiModel', function () {
 
     describe('when <tournament> has an online id', function () {
       beforeEach(function () {
-        this.params.tournament.online.id = '/id';
+        this.params.tournament.online.link = '/id';
         this.context = tournamentsApiModel.save(this.params);
       });
 
@@ -196,7 +193,7 @@ describe('tournamentsApiModel', function () {
         expect(this.context)
           .toEqual({
             data: {
-              data: '{"online":{"name":"name","date":"date","id":"/id"},"tournament":"state"}',
+              tournament: { data: 'state' },
               date: 'date',
               name: 'name',
             },
@@ -220,13 +217,11 @@ describe('tournamentsApiModel', function () {
 
         this.event = this.successHandler({
           link: '/id',
-          data: {
-            name: 'name',
-            date: 'date',
-            id: 'id',
-            // eslint-disable-next-line camelcase
-            updated_at: 'updated_at',
-            data: '{"tournament":"state"}',
+          name: 'name',
+          date: 'date',
+          updatedAt: 'updated_at',
+          tournament: {
+            data: 'state',
           },
         });
       });
@@ -237,13 +232,12 @@ describe('tournamentsApiModel', function () {
             eventName: 'success',
             tournament: {
               online: {
+                link: '/id',
                 date: 'date',
-                id: '/id',
                 name: 'name',
-                // eslint-disable-next-line camelcase
-                updated_at: 'updated_at',
+                updatedAt: 'updated_at',
               },
-              tournament: 'state',
+              data: 'state',
             },
           });
       });

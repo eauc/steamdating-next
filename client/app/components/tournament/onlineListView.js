@@ -25,7 +25,7 @@ function listGetInitialState() {
 function listRender() {
   const items = R.map((item) => (
     <TournamentOnlineListItem
-       key={item.id}
+       key={item.link}
        tournament={item} />
   ), this.state.list);
   return (

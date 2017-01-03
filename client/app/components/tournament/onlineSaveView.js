@@ -26,7 +26,7 @@ function onlineSaveRender() {
       <FormInput name="date"
                  label="Date"
                  type="text"
-                 placeholder="YYYY-MM-DD"
+                 placeholder="YYYY/MM/DD"
                  order="2" />
     </FormEdit>
   );

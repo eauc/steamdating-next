@@ -9,9 +9,9 @@ import { Page,
        } from 'app/components/page/page';
 import { Icon } from 'app/components/misc/misc';
 import { PlayerEdit } from 'app/components/players/players';
+/* eslint-enable no-unused-vars */
 import stateService from 'app/services/state';
 const { dispatch } = stateService;
-/* eslint-enable no-unused-vars */
 
 export const PlayersCreatePage = createComponent({
   render: playersCreatePageRender,

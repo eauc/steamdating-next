@@ -36,7 +36,7 @@ function itemRender() {
         {tournament.name}
       </td>
       <td className="lastUpdate">
-        {tournament.updated_at}
+        {tournament.updatedAt}
       </td>
     </tr>
   );

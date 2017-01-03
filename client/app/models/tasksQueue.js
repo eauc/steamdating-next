@@ -1,4 +1,3 @@
-  /* eslint-disable no-param-reassign */
 export let __hotReload = true;
 
 const tasksQueueModel = {
@@ -15,6 +14,7 @@ function tasksQueueCreate() {
   };
 }
 
+/* eslint-disable no-param-reassign */
 function tasksQueuePush([task, ...args], tqueue) {
   return new self.Promise((resolve, reject) => {
     tqueue.queue.push([task, resolve, reject, ...args]);

@@ -226,7 +226,7 @@ describe('tournamentComponent', function () {
         .toEqual({
           http: {
             data: {
-              data: '{"players":["players"],"online":{"name":"name","date":"date"}}',
+              tournament: { players:['players'] },
               date: 'date',
               name: 'name',
             },

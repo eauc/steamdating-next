@@ -27,23 +27,23 @@ const onlineUrlsSchema = {
   },
   required: ['link', 'mine'],
 };
+const onlineDateSchema = {
+  type: 'string',
+  pattern: '^20\\d{2}/(0[1-9]|1[0-2])/(0[1-9]|[12]\\d|3[01])$',
+};
 const onlineTournamentSchema = {
   type: 'object',
   properties: {
-    id: { type: 'number' },
-    date: {
-      type: 'string',
-      format: 'date',
-    },
+    date: onlineDateSchema,
     name: { type: 'string' },
     link: { type: 'string' },
     // eslint-disable-next-line camelcase
-    updated_at: {
+    updatedAt: {
       type: 'string',
       format: 'date-time',
     },
   },
-  required: ['id','date','name','link','updated_at'],
+  required: ['date','name','link','updatedAt'],
 };
 
 const onlineListSchema = {
@@ -54,7 +54,7 @@ export const onlineSaveFormSchema = {
   type: 'object',
   properties: {
     name: { type: 'string' },
-    date: { type: 'string', format: 'date' },
+    date: onlineDateSchema,
   },
   required: ['name','date'],
 };
