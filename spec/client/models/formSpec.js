@@ -30,7 +30,7 @@ describe('formModel', function () {
       });
     });
 
-    context('when there are errors', function () {
+    context('when there are fields errors', function () {
       this.form.edit = {
         number: 'string',
         string: 42,
@@ -46,6 +46,20 @@ describe('formModel', function () {
           .toBe('should be number');
         expect(formModel.fieldError('string', this.context))
           .toBe('should be string');
+      });
+    });
+
+    context('when there are global errors', function () {
+      this.form.edit = null;
+    }, function () {
+      it('should return invalid form', function () {
+        expect(formModel.isValid(this.context))
+          .toBe(false);
+      });
+
+      it('should set globals errors', function () {
+        expect(formModel.globalErrors(this.context))
+          .toEqual(['should be object']);
       });
     });
   });

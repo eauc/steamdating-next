@@ -32,6 +32,15 @@ function formEditFormSubscription() {
 
 function formEditRender() {
   log.cycle('formEdit render', this.props, this.state);
+  const errors = formModel.globalErrors(this.state.form);
+  const errorsInfos = R.map((error) => {
+    return (
+      <p key={error}
+         className="error-info">
+        {error}
+      </p>
+    );
+  }, errors);
   return (
     <form noValidate
           onSubmit={this.doSubmit}>
@@ -40,6 +49,7 @@ function formEditRender() {
           {this.props.label}
         </legend>
         {this.props.children}
+        {errorsInfos}
         <button className={{
                   submit: true,
                   disabled: !formModel.isValid(this.state.form),

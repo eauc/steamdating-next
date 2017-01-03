@@ -11,6 +11,7 @@ const formModel = {
   updateFieldValue: formUpdateFieldValue,
   fieldValue: formFieldValue,
   fieldError: formFieldError,
+  globalErrors: formGlobalErrors,
 };
 export default R.curryService(formModel);
 
@@ -47,4 +48,11 @@ function formFieldValue(path, form) {
 
 function formFieldError(path, form) {
   return R.pathOr('', ['error', `.${path}`, 0, 'message'], form);
+}
+
+function formGlobalErrors(form) {
+  return R.thread(form)(
+    R.pathOr([], ['error', '']),
+    R.pluck('message')
+  );
 }

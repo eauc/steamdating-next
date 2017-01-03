@@ -38,6 +38,15 @@
         border-color: darken(#B0B0B0, 20%);
     }
 
+    &-error {
+        &-info {
+            margin: 0.5em 0 1em 0;
+            color: $color_error;
+            font-size: 0.85em;
+            font-style: italic;
+        }
+    }
+
     @media(min-width: $tablet_break) {
         $group_horizontal_padding: 2em;
 
