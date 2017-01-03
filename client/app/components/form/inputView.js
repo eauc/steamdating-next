@@ -124,7 +124,10 @@ function formInputRender() {
 
 function formInputGetInitialState() {
   this.path = `${this.context.formName}.${this.props.name}`;
-  this.dispatchUpdate = R.debounce(300, R.bind(this.dispatchUpdate, this));
+  this.dispatchUpdate = R.debounce(
+    this.props.type === 'select' ? 50 : 300,
+    R.bind(this.dispatchUpdate, this)
+  );
   return {
     value: (this.props.multiple ? [] : null),
     pristine: true,
