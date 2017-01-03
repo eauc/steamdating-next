@@ -29,6 +29,14 @@ describe('factionsModel', function () {
         expect(this.context).toBe('/data/icons/icon2');
       });
     });
+
+    context('when <name> does not exist', function () {
+      this.name = 'doesNotExists';
+    }, function () {
+      it('should return empty path', function () {
+        expect(this.context).toBe('');
+      });
+    });
   });
 
   context('castersFor(<name>)', function () {

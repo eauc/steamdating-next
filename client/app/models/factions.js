@@ -9,7 +9,8 @@ const factionsModel = {
 export default R.curryService(factionsModel);
 
 function factionsIconFor(name, factions) {
-  return `/data/icons/${R.path([name, 'icon'], factions)}`;
+  const icon = R.path([name, 'icon'], factions);
+  return icon ? `/data/icons/${icon}` : '';
 }
 
 function factionsCasterFor(name, factions) {
