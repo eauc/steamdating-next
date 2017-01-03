@@ -1,3 +1,4 @@
+@test
 Feature: Home Page Tests
 
   Background:

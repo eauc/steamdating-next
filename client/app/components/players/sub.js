@@ -30,7 +30,7 @@ export const playersEditOtherNamesSub = registerSubscription(
             .map((state) => [R.path(['forms','player','base','name'], state)]);
     const playersNames = state
             .map(R.pathOr([], scope))
-            .map(R.pluck('name'));
+            .map(playersModel.names);
     return baseName
       .join(playersNames)
       .map(R.apply(R.without));

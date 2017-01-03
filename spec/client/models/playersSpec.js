@@ -197,4 +197,50 @@ describe('playersModel', function () {
                     ], ['name', 'origin', 'faction','lists']],
     ]);
   });
+
+  describe('names()', function () {
+    beforeEach(function () {
+      this.players = [
+        { name: 'toto' },
+        { name: 'titi' },
+        { name: 'tutu' },
+        { name: 'tata' },
+        { name: 'tete' },
+      ];
+    });
+
+    it('should return sorted players names', function () {
+      expect(playersModel.names(this.players))
+        .toEqual([
+          'tata',
+          'tete',
+          'titi',
+          'toto',
+          'tutu',
+        ]);
+    });
+  });
+
+  describe('factions()', function () {
+    beforeEach(function () {
+      this.players = [
+        { name: 'toto', faction: 'khador' },
+        { name: 'titi', faction: 'legion' },
+        { name: 'tutu', faction: 'menoth' },
+        { name: 'tata', faction: 'cryx' },
+        { name: 'tete', faction: 'cyriss' },
+      ];
+    });
+
+    it('should return players-factions object', function () {
+      expect(playersModel.factions(this.players))
+        .toEqual({
+          tata: 'cryx',
+          tete: 'cyriss',
+          titi: 'legion',
+          toto: 'khador',
+          tutu: 'menoth',
+        });
+    });
+  });
 });

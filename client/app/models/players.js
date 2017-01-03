@@ -3,30 +3,32 @@ export let __hotReload = true;
 import R from 'app/helpers/ramda';
 
 const playersModel = {
-  add: playersAdd,
-  filter: playersFilter,
-  remove: playersRemove,
-  sort: playersSort,
-  update: playersUpdate,
+  add,
+  filter,
+  remove,
+  sort,
+  update,
+  names,
+  factions,
 };
 
 export default R.curryService(playersModel);
 
 const LIST_COLUMNS = ['name','origin','faction','lists'];
 
-function playersAdd(add, players) {
+function add(addPlayer, players) {
   return R.thread(players)(
-    R.append(add),
+    R.append(addPlayer),
     R.uniqBy(R.prop('name'))
   );
 }
 
-function playersFilter(filterInput, players) {
-  let filter = R.isNil(filterInput) || R.isEmpty(filterInput)
+function filter(filterInput, players) {
+  let filterValue = R.isNil(filterInput) || R.isEmpty(filterInput)
         ? '.*'
         : filterInput;
-  filter = filter.replace(/\s+/g, '|');
-  const regex = new RegExp(filter, 'i');
+  filterValue = filterValue.replace(/\s+/g, '|');
+  const regex = new RegExp(filterValue, 'i');
   return R.thread(players)(
     R.map((player) => [player, R.toPairs(R.pick(LIST_COLUMNS, player))]),
     R.map(([player, pairs]) => [
@@ -46,21 +48,21 @@ function playersFilter(filterInput, players) {
   );
 }
 
-function playersRemove(name, players) {
+function remove(name, players) {
   return R.reject(R.whereEq({ name }), players);
 }
 
-function playersSort({ reverse, by }, players) {
+function sort({ reverse, by }, players) {
   const comparator = sortByComparator(by);
   let sorted = R.sort(comparator, players);
   if (reverse) sorted = R.reverse(sorted);
   return sorted;
 }
 
-function playersUpdate(name, update, players) {
+function update(name, updateValue, players) {
   const index = R.findIndex(R.whereEq({ name }), players);
   if (-1 === index) return players;
-  return R.adjust(R.deepMerge([update]), index, players);
+  return R.adjust(R.deepMerge([updateValue]), index, players);
 }
 
 function sortByComparator(by) {
@@ -73,4 +75,16 @@ function sortByComparator(by) {
     }
     return R.lt(byA, byB);
   });
+}
+
+function names(players) {
+  return R.sortBy(R.identity, R.pluck('name', players));
+}
+
+function factions(players) {
+  return R.reduce((mem, player) => {
+    // eslint-disable-next-line no-param-reassign
+    mem[player.name] = player.faction;
+    return mem;
+  }, {}, players);
 }

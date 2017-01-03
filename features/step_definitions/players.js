@@ -1,5 +1,6 @@
 const path = require('path');
 const somePlayers = require(path.resolve(`${__dirname}/../data/somePlayers.json`));
+const morePlayers = require(path.resolve(`${__dirname}/../data/morePlayers.json`));
 const morePlayersFilterMatches = {
   toto: {
     headers: ['Name', 'Origin', 'Faction', 'Lists'],
@@ -39,6 +40,7 @@ module.exports = function () {
     this.page.file()
       .visit()
       .doOpen('../data/morePlayers.json');
+    this.players = morePlayers.players;
   });
 
   this.Given('some Players have been defined', function () {

@@ -23,6 +23,7 @@
     background-color: white;
     border: $border_default;
     padding: 0.5em;
+    line-height: 1.35em;
 
     &[required] {
         border-width: 1px 1px 1px 5px;

@@ -39,7 +39,7 @@ function formIsValid({ error }) {
 }
 
 function formUpdateFieldValue(fieldPath, value, form) {
-  return R.assocPath(['edit', ...fieldPath], value, form);
+  return R.updateIn(['edit', ...fieldPath], value, form);
 }
 
 function formFieldValue(path, form) {

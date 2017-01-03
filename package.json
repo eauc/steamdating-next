@@ -28,7 +28,7 @@
     "dev:client:css:watch": "npm run build:client:css -- --watch",
     "jspm": "jspm",
     "karma": "karma",
-    "nightwatch": "nightwatch",
+    "features": "nightwatch",
     "postinstall": "bower install && jspm install && npm run -s build",
     "start": "babel-node server/app.js",
     "test": "karma start"

@@ -64,6 +64,11 @@ module.exports = {
           .to.be.visible;
         return this;
       },
+      expectSubmitToBeEnabled() {
+        this.expect.element('@submitButton')
+          .not.to.have.attribute('class').which.contains('disabled');
+        return this;
+      },
       expectSubmitToBeDisabled() {
         this.expect.element('@submitButton')
           .to.have.attribute('class').which.contains('disabled');
