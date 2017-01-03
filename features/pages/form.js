@@ -18,8 +18,8 @@ module.exports = {
             inputSelector,
             valueText
           );
-          this.getAttribute(optionSelector, 'value', (valueAttr) => {
-            this.setValue(inputSelector, valueAttr.value);
+          this.getText(optionSelector, (text) => {
+            this.setValue(inputSelector, text.value);
             this.setValue('//input[1]', '');
           });
         }, { inputTag: 'select' });
@@ -41,6 +41,7 @@ module.exports = {
       },
       doSubmit() {
         this.click('@submitButton');
+        return this;
       },
       expectInput(labelText, { value, inputTag = 'input' } = {}) {
         this.getInputSelectorFor(labelText, (inputSelector) => {

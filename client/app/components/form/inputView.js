@@ -68,11 +68,15 @@ function formInputRender() {
   }
   else if ('select' === this.props.type) {
     const options = R.thread(this.props.options)(
-      R.map((option) => (
-        <option key={option} value={option}>
-          {option}
-        </option>
-      )),
+      R.map((option) => {
+        const optionsArray = R.type(option) === 'Array' ? option : [option, option];
+        const [value, label] = optionsArray;
+        return (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        );
+      }),
       R.when(
         () => !this.props.multiple,
         R.prepend((<option key="null" value=""></option>))
@@ -84,7 +88,7 @@ function formInputRender() {
          id={this.path}
          className={className}
          name={this.props.name}
-         value={this.state.value}
+         value={R.defaultTo('', this.state.value)}
          onChange={this.doUpdate}
          {...props}>
         {options}
