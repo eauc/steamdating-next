@@ -2,17 +2,8 @@
 
 ** TODO
 
-- [X] effects/coeffects
-  - [X] httpRequest
-  - [X] dispatch
-  - [X] toaster
-  - [X] history
-- [X] event as objects
-- [X] separate state and subscriptions
-- [X] replace initializers with init events, using a main init event + 'dispatch' effects
-- [X] memoize subscriptions instead of null/tick
 - [ ] default values for toaster/prompt/...=all subscriptions
-- [ ] features online ?
 - [ ] pairing/steps trace
 - [ ] setup appCache
+- [ ] features online ?
 

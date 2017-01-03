@@ -26,18 +26,6 @@ self.STEAMDATING_APP = {
   state: stateDebug,
 };
 
-ReactDOM.render((
-  <NavMenu />
-), document.querySelector('.sd-NavMenu-container'));
-
-ReactDOM.render((
-  <PageRoot />
-), document.querySelector('.sd-Page-container'));
-
-ReactDOM.render((
-  <Prompt />
-), document.querySelector('.sd-Prompt-container'));
-
 function appInit() {
   log('STEAMDATING APP init');
   if (!self.STEAMDATING_CONFIG.debug &&
@@ -45,19 +33,31 @@ function appInit() {
     offlineService.registerWorker();
   }
   dispatch({ eventName: 'init' });
-}
 
-// eslint-disable-next-line no-unused-vars
-// import { DebugMain } from 'app/components/debug/debug';
-// ReactDOM.render((
-//   <DebugMain />
-// ), document.querySelector('.sd-Debug'));
-if (self.STEAMDATING_CONFIG.debug) {
-  System.import('app/components/debug/debug')
+  ReactDOM.render((
+    <NavMenu />
+  ), document.querySelector('.sd-NavMenu-container'));
+
+  ReactDOM.render((
+    <PageRoot />
+  ), document.querySelector('.sd-Page-container'));
+
+  ReactDOM.render((
+    <Prompt />
+  ), document.querySelector('.sd-Prompt-container'));
+
   // eslint-disable-next-line no-unused-vars
-    .then(({ DebugMain }) => {
-      ReactDOM.render((
-        <DebugMain />
-      ), document.querySelector('.sd-Debug'));
-    });
+  // import { DebugMain } from 'app/components/debug/debug';
+  // ReactDOM.render((
+  //   <DebugMain />
+  // ), document.querySelector('.sd-Debug'));
+  if (self.STEAMDATING_CONFIG.debug) {
+    System.import('app/components/debug/debug')
+    // eslint-disable-next-line no-unused-vars
+      .then(({ DebugMain }) => {
+        ReactDOM.render((
+          <DebugMain />
+        ), document.querySelector('.sd-Debug'));
+      });
+  }
 }
