@@ -91,8 +91,8 @@ describe('formModel', function () {
     ]);
   });
 
-  context('updateFieldValue(<field_path>, <value>)', function () {
-    return formModel.updateFieldValue(this.field, 'value', this.form);
+  context('updateFieldValue(<field_path>, <value>, <form.edit>)', function () {
+    return formModel.updateFieldValue(this.field, 'value', this.form.edit);
   }, function () {
     beforeEach(function () {
       this.form = formModel.create({
@@ -106,7 +106,7 @@ describe('formModel', function () {
         this.field = exple.field;
       }, function () {
         it('should update <field>\'s value', function () {
-          expect(formModel.fieldValue(this.field, this.context))
+          expect(formModel.fieldValue(this.field, { edit: this.context }))
             .toBe('value');
         });
       });

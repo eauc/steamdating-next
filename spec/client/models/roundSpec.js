@@ -3,6 +3,57 @@ import { example } from 'spec/client/helpers/helpers';
 import roundModel from 'app/models/round';
 
 describe('roundModel', function () {
+  describe('setPlayerName(<fieldPath>, <name>)', function () {
+    example(function ({ desc, fieldPath, name, result }) {
+      it(`should set player name in <fieldPath> and remove it elsewhere, with ${desc}`, function () {
+        const round = {
+          games: [
+            { player1: { name: 'tata' }, player2: { name: null } },
+            { player1: { name: null }, player2: { name: 'tutu' } },
+            { player1: { name: 'tete' }, player2: { name: null } },
+          ],
+        };
+
+        expect(roundModel.setPlayerName(fieldPath, name, round).games)
+          .toEqual(result);
+      });
+    }, [
+      ['desc','fieldPath','name','result'],
+      [
+        'new name, no conflict',
+        ['games','1','player1','name'], 'toto', [
+          { player1: { name: 'tata' }, player2: { name: null } },
+          { player1: { name: 'toto' }, player2: { name: 'tutu' } },
+          { player1: { name: 'tete' }, player2: { name: null } },
+        ],
+      ],
+      [
+        'new name, conflict',
+        ['games','0','player2','name'], 'tutu', [
+          { player1: { name: 'tata' }, player2: { name: 'tutu' } },
+          { player1: { name: null }, player2: { name: null } },
+          { player1: { name: 'tete' }, player2: { name: null } },
+        ],
+      ],
+      [
+        'change name, no conflict',
+        ['games','1','player2','name'], 'toto', [
+          { player1: { name: 'tata' }, player2: { name: null } },
+          { player1: { name: null }, player2: { name: 'toto' } },
+          { player1: { name: 'tete' }, player2: { name: null } },
+        ],
+      ],
+      [
+        'change name, conflict',
+        ['games','1','player2','name'], 'tata', [
+          { player1: { name: null }, player2: { name: null } },
+          { player1: { name: null }, player2: { name: 'tata' } },
+          { player1: { name: 'tete' }, player2: { name: null } },
+        ],
+      ],
+    ]);
+  });
+
   describe('annotatePairedPlayersNames({ players })', function () {
     beforeEach(function () {
       this.players = [

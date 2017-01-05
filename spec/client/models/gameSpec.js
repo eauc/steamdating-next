@@ -3,6 +3,27 @@ import { example } from 'spec/client/helpers/helpers';
 import gameModel from 'app/models/game';
 
 describe('gameModel', function () {
+  describe('resetPlayer({ name })', function () {
+    beforeEach(function () {
+      this.game = gameModel.create({
+        player1: { name: 'toto' },
+        player2: { name: 'titi' },
+      });
+    });
+
+    example(function ({ name, result }, desc) {
+      it(`should remove <name> from game, ${desc}`, function () {
+        expect(gameModel.playersNames(gameModel.resetPlayer({ name }, this.game)))
+          .toEqual(result);
+      });
+    }, [
+      ['name', 'result'],
+      ['toto', [null, 'titi']],
+      ['titi', ['toto', null]],
+      ['other', ['toto', 'titi']],
+    ]);
+  });
+
   describe('playersNames()', function () {
     example(function ({ game, names }, desc) {
       it(`should extract <game>'s players names, ${desc}`, function () {

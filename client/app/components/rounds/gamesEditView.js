@@ -7,6 +7,7 @@ import { FactionIcon } from 'app/components/factions/factions';
 import { FormInput } from 'app/components/form/form';
 /* eslint-enable no-unused-vars */
 import gameModel from 'app/models/game';
+import roundModel from 'app/models/round';
 
 export const RoundGamesEdit = createComponent({
   displayName: 'RoundGamesEdit',
@@ -25,7 +26,8 @@ function render() {
           <FormInput name={`games.${index}.player1.name`}
                      type="select"
                      options={this.props.playersNames}
-                     order={index * 3 + 1} />
+                     order={index * 3 + 1}
+                     updateWith={roundModel.setPlayerName$} />
         </td>
         <td className={{
               faction: true,
@@ -52,7 +54,8 @@ function render() {
           <FormInput name={`games.${index}.player2.name`}
                      type="select"
                      options={this.props.playersNames}
-                     order={index * 3 + 3} />
+                     order={index * 3 + 3}
+                     updateWith={roundModel.setPlayerName$} />
         </td>
       </tr>
     );

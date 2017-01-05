@@ -38,8 +38,8 @@ function formIsValid({ error }) {
   return !error;
 }
 
-function formUpdateFieldValue(fieldPath, value, form) {
-  return R.updateIn(['edit', ...fieldPath], value, form);
+function formUpdateFieldValue(fieldPath, value, edit) {
+  return R.updateIn(fieldPath, value, edit);
 }
 
 function formFieldValue(path, form) {

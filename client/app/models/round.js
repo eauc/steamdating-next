@@ -6,6 +6,7 @@ import playersModel from 'app/models/players';
 
 const roundModel = {
   create,
+  setPlayerName,
   annotatePairedPlayersNames,
   validate,
 };
@@ -17,6 +18,14 @@ function create({ players }, base) {
   return R.deepMerge([base], {
     games: R.times(() => gameModel.create({}), nbGames),
   });
+}
+
+function setPlayerName(fieldPath, name, round) {
+  console.log('setPlayerName', fieldPath, name, round);
+  return R.thread(round)(
+    R.over(R.lensProp('games'), R.map(gameModel.resetPlayer$({ name }))),
+    R.updateIn(fieldPath, name)
+  );
 }
 
 function annotatePairedPlayersNames({ players }, round) {

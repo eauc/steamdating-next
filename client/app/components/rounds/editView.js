@@ -31,7 +31,6 @@ function render() {
     { players },
     round
   );
-  console.log(playersNames);
   const formSchema = roundSchema(players);
   const warnings = R.pathOr([], ['edit','warnings'], this.state);
   const warningsInfos = R.map((warning) => (

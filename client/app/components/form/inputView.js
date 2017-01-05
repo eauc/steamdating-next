@@ -169,5 +169,6 @@ function formInputDispatchUpdate(value) {
     eventName: 'form-update',
     fieldName: this.path,
     value,
+    updateWith: this.props.updateWith,
   });
 }

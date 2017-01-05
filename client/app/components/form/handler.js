@@ -9,19 +9,28 @@ import formModel from 'app/models/form';
 
 registerHandler('form-reset', [
   path(scope, {}),
-], (state, { formName, value }) => R.assoc(
-  formName,
-  formModel.create(value),
-  state
-));
+], formResetHandler);
 
 registerHandler('form-update', [
   path(scope, {}),
-], (state, { fieldName, value }) => {
-  const [formName, ...fieldPath] = R.split('.', fieldName);
-  return R.over(
-    R.lensProp(formName),
-    formModel.updateFieldValue$(fieldPath, value),
+], formUpdateHandler);
+
+export function formResetHandler(state, { formName, value }) {
+  return R.assoc(
+    formName,
+    formModel.create(value),
     state
   );
-});
+}
+
+export function formUpdateHandler(state, {
+  fieldName, value, updateWith = formModel.updateFieldValue$,
+}) {
+  const [formName, ...fieldPath] = R.split('.', fieldName);
+  console.info(fieldName, formName, fieldPath);
+  return R.over(
+    R.lensPath([formName, 'edit']),
+    updateWith(fieldPath, value),
+    state
+  );
+}

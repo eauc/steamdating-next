@@ -14,7 +14,7 @@ describe('promptComponent', function () {
   context('promptUpdateValueHandler(<value>)', function () {
     return promptUpdateValueHandler(this.state, { value: 'value' });
   }, function () {
-    it('should setup form <name> with <value>', function () {
+    it('should setup prompt with <value>', function () {
       expect(this.context)
         .toEqual({ value: 'value' });
     });

@@ -4,6 +4,7 @@ import R from 'app/helpers/ramda';
 
 const gameModel = {
   create,
+  resetPlayer,
   playersNames,
   isMirror,
 };
@@ -34,6 +35,13 @@ function create(base = {}) {
       },
     },
   });
+}
+
+function resetPlayer({ name }, game) {
+  return R.thread(game)(
+    R.over(R.lensPath(['player1','name']), R.when(R.equals(name), () => null)),
+    R.over(R.lensPath(['player2','name']), R.when(R.equals(name), () => null))
+  );
 }
 
 function playersNames(game) {
