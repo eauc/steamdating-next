@@ -1,7 +1,6 @@
 export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
-import { coeffects } from 'app/helpers/middlewares/coeffects';
 import { effects } from 'app/helpers/middlewares/effects';
 import path from 'app/helpers/middlewares/path';
 import tap from 'app/helpers/middlewares/tap';
@@ -31,25 +30,10 @@ registerHandler('players-startCreate', [
   effects,
 ], playersStartCreateHandler);
 
-registerHandler('players-openCreate', [
-  tap,
-  coeffects(['history']),
-], playersOpenCreateHandler);
-
 registerHandler('players-startEdit', [
   tap,
   effects,
 ], playersStartEditHandler);
-
-registerHandler('players-openEdit', [
-  tap,
-  coeffects(['history']),
-], playersOpenEditHandler);
-
-registerHandler('players-closeEdit', [
-  tap,
-  coeffects(['history']),
-], playersCloseEditHandler);
 
 registerHandler('players-createCurrentEdit', [
   tap,
@@ -70,37 +54,26 @@ export function playersStartCreateHandler() {
   return {
     dispatch: [
       { eventName: 'form-reset', formName: 'player', value: {} },
-      { eventName: 'players-openCreate' },
+      { eventName: 'navigate', to: '/players/create' },
     ],
   };
 }
 
-export function playersOpenCreateHandler({ history }) {
-  history.push('/players/create');
-}
-
-export function playersStartEditHandler(_state_, { player }) {
+export function playersStartEditHandler(state, { player: { name } }) {
+  const player = playersModel.player({ name }, R.pathOr([], scope, state));
   return {
     dispatch: [
       { eventName: 'form-reset', formName: 'player', value: player },
-      { eventName: 'players-openEdit' },
+      { eventName: 'navigate', to: '/players/edit' },
     ],
   };
-}
-
-export function playersOpenEditHandler({ history }) {
-  history.push('/players/edit');
-}
-
-export function playersCloseEditHandler({ history }) {
-  history.goBack();
 }
 
 export function playersUpdateCurrentEditHandler(state) {
   return {
     dispatch: [
       R.assoc('eventName', 'players-update', R.pathOr({}, ['forms', 'player'], state)),
-      { eventName: 'players-closeEdit' },
+      { eventName: 'navigate-back' },
     ],
   };
 }
@@ -109,7 +82,7 @@ export function playersCreateCurrentEditHandler(state) {
   return {
     dispatch: [
       R.assoc('eventName', 'players-create', R.pathOr({}, ['forms', 'player'], state)),
-      { eventName: 'players-closeEdit' },
+      { eventName: 'navigate-back' },
     ],
   };
 }
@@ -118,7 +91,7 @@ export function playersRemoveCurrentEditHandler(state) {
   return {
     dispatch: [
       { eventName: 'players-remove', player: R.pathOr({}, ['forms', 'player', 'base'], state) },
-      { eventName: 'players-closeEdit' },
+      { eventName: 'navigate-back' },
     ],
   };
 }

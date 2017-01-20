@@ -1,9 +1,22 @@
-* SteamDating v2
+* SteamDating v2 [1/18]
 
-** TODO
-
+- [ ] input checkbox
+- [X] history effects
+- [ ] tables styles mixin
+- [ ] nav/menu new pages
+- [ ] update player name in rounds
+- [ ] round remove
+- [ ] round gameEdit
+- [ ] ramda mapIndexed lensProp
+- [ ] round/game summary models
+- [ ] round player result model
+- [ ] rounds summary
+  - [ ] filter/sort
+- [ ] round view
+  - [ ] filter/sort
+- [ ] refactor filterValue transform to regexp (put in filter model/sub)
 - [ ] default values for toaster/prompt/...=all subscriptions
-- [ ] pairing/steps trace
+- [ ] form hide global error "should be object"
+- [ ] SR pairing/steps trace
 - [ ] setup appCache
 - [ ] features online ?
-

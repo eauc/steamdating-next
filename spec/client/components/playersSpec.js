@@ -3,10 +3,7 @@ import { beforeEach,
          it } from 'spec/client/helpers/helpers';
 
 import { playersStartCreateHandler,
-         playersOpenCreateHandler,
          playersStartEditHandler,
-         playersOpenEditHandler,
-         playersCloseEditHandler,
          playersUpdateCurrentEditHandler,
          playersCreateCurrentEditHandler,
          playersRemoveCurrentEditHandler,
@@ -15,9 +12,6 @@ import { playersStartCreateHandler,
 describe('playersComponent', function () {
   beforeEach(function () {
     this.state = {};
-    this.history = jasmine.createSpyObj('history', [
-      'goBack', 'push',
-    ]);
   });
 
   context('playersStartCreateHandler()', function () {
@@ -28,51 +22,41 @@ describe('playersComponent', function () {
         .toEqual({
           dispatch: [
             { eventName: 'form-reset', formName: 'player', value: {} },
-            { eventName: 'players-openCreate' },
+            { eventName: 'navigate', to: '/players/create' },
           ],
         });
     });
   });
 
-  context('playersOpenCreateHandler()', function () {
-    return playersOpenCreateHandler({ history: this.history });
-  }, function () {
-    it('should open create page', function () {
-      expect(this.history.push)
-        .toHaveBeenCalledWith('/players/create');
-    });
-  });
-
-
   context('playersStartEditHandler(<player>)', function () {
-    return playersStartEditHandler('state', { player: 'playertoEdit' });
+    return playersStartEditHandler(
+      this.state,
+      { player: { name: this.playerToEdit.name } }
+    );
   }, function () {
+    beforeEach(function () {
+      this.state = {
+        tournament: {
+          players: [
+            { name: 'player1' },
+            { name: 'player2' },
+            { name: 'player3' },
+            { name: 'player4' },
+            { name: 'player5' },
+          ],
+        },
+      };
+      this.playerToEdit = this.state.tournament.players[2];
+    });
+
     it('should reset player form then open edit page', function () {
       expect(this.context)
         .toEqual({
           dispatch: [
-            { eventName: 'form-reset', formName: 'player', value: 'playertoEdit' },
-            { eventName: 'players-openEdit' },
+            { eventName: 'form-reset', formName: 'player', value: this.playerToEdit },
+            { eventName: 'navigate', to: '/players/edit' },
           ],
         });
-    });
-  });
-
-  context('playersOpenEditHandler(<player>)', function () {
-    return playersOpenEditHandler({ history: this.history });
-  }, function () {
-    it('should open edit page', function () {
-      expect(this.history.push)
-        .toHaveBeenCalledWith('/players/edit');
-    });
-  });
-
-  context('playersCloseEditHandler()', function () {
-    return playersCloseEditHandler({ history: this.history });
-  }, function () {
-    it('should close edit page', function () {
-      expect(this.history.goBack)
-        .toHaveBeenCalledTimes(1);
     });
   });
 
@@ -88,7 +72,7 @@ describe('playersComponent', function () {
         .toEqual({
           dispatch: [
             { eventName: 'players-create', edit: 'playerEditForm' },
-            { eventName: 'players-closeEdit' },
+            { eventName: 'navigate-back' },
           ],
         });
     });
@@ -106,7 +90,7 @@ describe('playersComponent', function () {
         .toEqual({
           dispatch: [
             { eventName: 'players-update', edit: 'playerEditForm' },
-            { eventName: 'players-closeEdit' },
+            { eventName: 'navigate-back' },
           ],
         });
     });
@@ -124,7 +108,7 @@ describe('playersComponent', function () {
         .toEqual({
           dispatch: [
             { eventName: 'players-remove', player: 'currentEditPlayer' },
-            { eventName: 'players-closeEdit' },
+            { eventName: 'navigate-back' },
           ],
         });
     });

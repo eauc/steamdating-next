@@ -61,16 +61,19 @@ describe('roundsComponent', function () {
 
     it('should reset round form', function () {
       expect(this.context.dispatch)
-        .toEqual({
-          eventName: 'form-reset',
-          formName: 'round',
-          value: {
-            games: [
-              gameModel.create(),
-              gameModel.create(),
-            ],
+        .toEqual([
+          {
+            eventName: 'form-reset',
+            formName: 'round',
+            value: {
+              games: [
+                gameModel.create(),
+                gameModel.create(),
+              ],
+            },
           },
-        });
+          { eventName: 'navigate', to: '/rounds/1' },
+        ]);
     });
   });
 });

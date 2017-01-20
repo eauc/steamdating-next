@@ -55,5 +55,5 @@ function playersEditDoUpdate() {
 }
 
 function playersEditDoCancel() {
-  dispatch({ eventName: 'players-closeEdit' });
+  dispatch({ eventName: 'navigate-back' });
 }

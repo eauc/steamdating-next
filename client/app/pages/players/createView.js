@@ -41,5 +41,5 @@ function playersCreateDoCreate() {
 }
 
 function playersCreateDoCancel() {
-  dispatch({ eventName: 'players-closeEdit' });
+  dispatch({ eventName: 'navigate-back' });
 }
