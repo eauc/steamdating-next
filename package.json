@@ -76,7 +76,7 @@
     },
     "dependencies": {
       "ajv": "npm:ajv@4.8.2",
-      "auth0-lock": "github:auth0/lock@10.2.2",
+      "auth0-lock": "github:auth0/lock@10.9.2",
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "moment": "npm:moment@2.14.1",
       "process": "github:jspm/nodelibs-process@0.1.2",
