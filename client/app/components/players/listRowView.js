@@ -40,7 +40,8 @@ function playersListRowRender() {
     );
   }, this.props.columns);
   return (
-    <tr onClick={this.doEdit}>
+    <tr onClick={this.doEdit}
+        title="Click to Edit Player">
       {cells}
     </tr>
   );

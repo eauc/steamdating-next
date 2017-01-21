@@ -20,7 +20,8 @@ function playersListHeaderRender() {
   const label = this.props.label || R.capitalize(name);
   const icon = `chevron-${this.props.sort.reverse ? 'up' : 'down'}`;
   return (
-    <th onClick={this.doSortBy}>
+    <th onClick={this.doSortBy}
+        title={`Click to Sort by ${R.capitalize(name)}`}>
       <span>{label} </span>
       <span className={{
               icon: true,

@@ -1,8 +1,8 @@
-* SteamDating v2 [2/18]
+* SteamDating v2 [3/18]
 
 - [ ] input checkbox
 - [X] history effects
-- [ ] tables styles mixin
+- [X] tables styles mixin
 - [ ] nav/menu new pages
 - [ ] update player name in rounds
 - [ ] round remove

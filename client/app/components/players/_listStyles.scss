@@ -1,41 +1,19 @@
 &-PlayersList {
     &-list {
-        width: 100%;
-        text-align: left;
-        border-collapse: collapse;
-    }
+        @include table;
 
-    tr {
-        cursor: pointer;
-
-        th:nth-child(n+4),
-        td:nth-child(n+4) {
-            display: none;
-
-            @media(min-width: $tablet_break) {
-                display: table-cell;
-            }
-        }
-    }
-
-    tbody {
         tr {
-            vertical-align: top;
+            cursor: pointer;
 
-            &:hover {
-                background-color: $color_hover;
+            th:nth-child(n+4),
+            td:nth-child(n+4) {
+                display: none;
+
+                @media(min-width: $tablet_break) {
+                    display: table-cell;
+                }
             }
         }
-    }
-
-    th,
-    td {
-        padding: 0.65em 0.25em;
-        border-bottom: 1px solid $color_border;
-    }
-
-    td {
-        border-color: lighten($color_border, 80%);
     }
 
     &Header {

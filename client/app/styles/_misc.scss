@@ -34,3 +34,29 @@
         outline: none;
     }
 }
+
+$table_border_color: lighten($color_border, 80%);
+@mixin table($hover: $color_hover,
+             $vertical-align: top) {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+
+    tbody {
+        tr {
+            vertical-align: $vertical-align;
+
+            &:hover {
+                background-color: $hover;
+            }
+        }
+    }
+    thead th {
+        border-color: $color_border;
+    }
+    th,
+    td {
+        padding: 0.65em 0.25em;
+        border-bottom: 1px solid $table_border_color;
+    }
+}
