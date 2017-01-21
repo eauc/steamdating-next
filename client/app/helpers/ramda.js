@@ -28,6 +28,7 @@ export default R.pipe(
   R.assoc('jsonStringify', jsonStringify),
   R.assoc('lensPathOr', lensPathOr),
   R.assoc('lensPropOr', lensPropOr),
+  R.assoc('mapIndexed', R.addIndex(R.map)),
   R.assoc('spy', spy),
   R.assoc('thread', thread),
   R.assoc('threadP', threadP),

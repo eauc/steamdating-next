@@ -1,4 +1,4 @@
-* SteamDating v2 [1/18]
+* SteamDating v2 [2/18]
 
 - [ ] input checkbox
 - [X] history effects
@@ -7,7 +7,7 @@
 - [ ] update player name in rounds
 - [ ] round remove
 - [ ] round gameEdit
-- [ ] ramda mapIndexed lensProp
+- [X] ramda mapIndexed lensProp
 - [ ] round/game summary models
 - [ ] round player result model
 - [ ] rounds summary

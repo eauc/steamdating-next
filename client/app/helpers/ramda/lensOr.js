@@ -4,7 +4,7 @@ import R from 'ramda';
 
 export const lensPropOr = R.curry(_lensPropOr);
 function _lensPropOr(or, prop) {
-  return R.lens(R.propOr(or, prop), R.assocPath(prop));
+  return R.lens(R.propOr(or, prop), R.assoc(prop));
 }
 
 export const lensPathOr = R.curry(_lensPathOr);

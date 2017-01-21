@@ -27,7 +27,7 @@ function debugHistoryGetInitialState() {
 }
 
 function debugHistoryRender() {
-  const history = R.reverse(R.addIndex(R.map)(([{ eventName }], index) => (
+  const history = R.reverse(R.mapIndexed(([{ eventName }], index) => (
     <tr key={index}
         className={{ current: (index + 1 === this.state.history.length) }}>
       <td>{index}</td>
@@ -40,7 +40,7 @@ function debugHistoryRender() {
       </td>
     </tr>
   ), this.state.history));
-  const log = R.addIndex(R.map)(([{ eventName }], index) => (
+  const log = R.mapIndexed(([{ eventName }], index) => (
     <tr key={index}>
       <td>{index}</td>
       <td onClick={() => stateDebug.replayLog(index)}>
