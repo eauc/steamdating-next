@@ -3,7 +3,7 @@ const R = require('ramda');
 module.exports = function () {
   this.Given('I open Rounds/Next page', function () {
     this.currentPage = this.page.rounds()
-      .visit();
+      .visit('Next Round');
   });
 
   this.Given('some players are paired', pairSomePlayers);
@@ -15,6 +15,13 @@ module.exports = function () {
       playersNames
     );
     this.currentPage.setPlayersNames(playersNamesPairs);
+    this.currentPage.setTables((playersNames.length + 1) / 2);
+    this.roundIndex = 1;
+    this.games = R.addIndex(R.map)(([p1, p2 = 'Phantom'], index) => ({
+      p1,
+      table: index + 1,
+      p2,
+    }), R.splitEvery(2, playersNames));
   });
 
   this.When('I pair some players', pairSomePlayers);
@@ -26,15 +33,20 @@ module.exports = function () {
       .setPlayerName(this.unpairedIndices[0], this.changedPairingName);
   });
 
+  this.When('I create the Next Round', function () {
+    this.page.form()
+      .doSubmit();
+  });
+
   this.Then('I can edit the Next Round information', function () {
     this.currentPage
       .expectGamesFormsForPlayers(this.players)
       .expectGamesSelectsForPlayers(this.players);
   });
 
-  this.Then('I can create the Next Round', function () {
-    this.page.form()
-      .expectSubmitToBeEnabled();
+  this.Then('I see the New Round\'s page', function () {
+    this.currentPage
+      .expectNthRoundPage(this);
   });
 
   this.Then('I cannot create the Next Round', function () {

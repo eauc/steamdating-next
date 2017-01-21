@@ -4,6 +4,7 @@ import R from 'app/helpers/ramda';
 
 const playersModel = {
   add,
+  player,
   filter,
   remove,
   sort,
@@ -23,17 +24,17 @@ function add(addPlayer, players) {
   );
 }
 
-function filter(filterInput, players) {
-  let filterValue = R.isNil(filterInput) || R.isEmpty(filterInput)
-        ? '.*'
-        : filterInput;
-  filterValue = filterValue.replace(/\s+/g, '|');
-  const regex = new RegExp(filterValue, 'i');
+function player({ name }, players) {
+  return R.find(R.propEq('name', name), players);
+}
+
+function filter({ filterRegExp }, players) {
   return R.thread(players)(
     R.map((player) => [player, R.toPairs(R.pick(LIST_COLUMNS, player))]),
     R.map(([player, pairs]) => [
       player,
-      R.filter(([_key_, value]) => regex.test(JSON.stringify(value)), pairs),
+      R.filter(([_key_, value]) => filterRegExp
+               .test(JSON.stringify(value)), pairs),
     ]),
     R.reject(([_player_, pairs]) => R.isEmpty(pairs)),
     (matches) => ({
@@ -59,12 +60,6 @@ function sort({ reverse, by }, players) {
   return sorted;
 }
 
-function update(name, updateValue, players) {
-  const index = R.findIndex(R.whereEq({ name }), players);
-  if (-1 === index) return players;
-  return R.adjust(R.deepMerge([updateValue]), index, players);
-}
-
 function sortByComparator(by) {
   return R.comparator((playerA, playerB) => {
     let byA = R.toLower(R.prop(by, playerA));
@@ -75,6 +70,12 @@ function sortByComparator(by) {
     }
     return R.lt(byA, byB);
   });
+}
+
+function update(name, updateValue, players) {
+  const index = R.findIndex(R.whereEq({ name }), players);
+  if (-1 === index) return players;
+  return R.adjust(R.deepMerge([updateValue]), index, players);
 }
 
 function names(players) {

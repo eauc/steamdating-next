@@ -7,6 +7,8 @@ const gameModel = {
   resetPlayer,
   playersNames,
   isMirror,
+  winForPlayer,
+  lossForPlayer,
 };
 
 export default R.curryService(gameModel);
@@ -18,6 +20,7 @@ function create(base = {}) {
       name: null,
       list: null,
       score: {
+        tournament: null,
         assassination: false,
         scenario: 0,
         army: 0,
@@ -28,6 +31,7 @@ function create(base = {}) {
       name: null,
       list: null,
       score: {
+        tournament: null,
         assassination: false,
         scenario: 0,
         army: 0,
@@ -57,4 +61,28 @@ function isMirror({ playersFactions }, game) {
       R.exists(game.player2.name) &&
       playersFactions[game.player1.name] === playersFactions[game.player2.name]
   );
+}
+
+function winForPlayer({ name }, game) {
+  const player1Win = (
+    game.player1.name === name &&
+      game.player1.score.tournament === 1
+  );
+  const player2Win = (
+    game.player2.name === name &&
+      game.player2.score.tournament === 1
+  );
+  return player1Win || player2Win;
+}
+
+function lossForPlayer({ name }, game) {
+  const player1Loss = (
+    game.player1.name === name &&
+      game.player1.score.tournament === 0
+  );
+  const player2Loss = (
+    game.player2.name === name &&
+      game.player2.score.tournament === 0
+  );
+  return player1Loss || player2Loss;
 }

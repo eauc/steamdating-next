@@ -12,3 +12,10 @@ export const filterSub = registerSubscription(
     .map(R.pathOr({}, scope))
     .map(filterModel.get$(name))
 );
+
+export const filterRegExpSub = registerSubscription(
+  'filter-regexp',
+  (state, [_sub_, name]) => state
+    .map(R.pathOr({}, scope))
+    .map(filterModel.getRegExp$(name))
+);

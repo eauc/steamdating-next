@@ -3,13 +3,19 @@ const R = require('ramda');
 module.exports = {
   commands: [
     {
-      doSetInputValue(labelText, value) {
-        this.getInputSelectorFor(labelText, (inputSelector) => {
-          this.clearValue(inputSelector);
-          R.forEach((key) => {
-            this.setValue(inputSelector, key);
-          }, R.splitEvery(1, `${value}`));
-        }, { inputTag: ['input', 'textarea'] });
+      doSetInputValue(inputSelector, value) {
+        this.clearValue(inputSelector);
+        R.forEach((key) => {
+          this.setValue(inputSelector, key);
+        }, R.splitEvery(1, `${value}`));
+        return this;
+      },
+      doSetLabelInputValue(labelText, value) {
+        this.getInputSelectorFor(
+          labelText,
+          (inputSelector) => this.doSetInputValue(inputSelector, value),
+          { inputTag: ['input', 'textarea'] }
+        );
         return this;
       },
       doSelectValue(labelText, valueText) {
@@ -60,7 +66,7 @@ module.exports = {
           this.expect.element(inputSelector)
             .to.have.attribute('class').which.contains('error');
         }, { inputTag: ['input','textarea','select'] });
-        this.expect.element(`//*[contains(text(), '${errorText}')]`)
+        this.expect.element(`//*[contains(., '${errorText}')]`)
           .to.be.visible;
         return this;
       },
@@ -75,7 +81,7 @@ module.exports = {
         return this;
       },
       getInputSelectorFor(labelText, fn, { inputTag = 'input' } = {}) {
-        const labelSelector = `//label[contains(text(), "${labelText}")]`;
+        const labelSelector = `//label[contains(., "${labelText}")]`;
         this.getAttribute(labelSelector, 'for', (labelFor) => {
           const inputTagArray = R.type(inputTag) === 'Array' ? inputTag : [inputTag];
           const inputTagRefs = R.join(' or ', R.map((tag) => `self::${tag}`, inputTagArray));
@@ -85,7 +91,7 @@ module.exports = {
         });
       },
       getOptionSelectorFor(inputSelector, valueText) {
-        return `${inputSelector}/option[contains(text(), "${valueText}")]`;
+        return `${inputSelector}/option[contains(., "${valueText}")]`;
       },
     },
   ],

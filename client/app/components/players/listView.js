@@ -2,15 +2,14 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
-import { sortSub } from 'app/components/sort/sort';
 import { factionsSub } from 'app/components/factions/factions';
 import { playersListSub } from 'app/components/players/sub';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
 import { FilterInput } from 'app/components/filter/filter';
 import { Icon } from 'app/components/misc/misc';
-import { PlayersListHeader } from 'app/components/players/listHeaderView';
 import { PlayersListRow } from 'app/components/players/listRowView';
+import { sortSub, SortHeader } from 'app/components/sort/sort';
 /* eslint-enable no-unused-vars */
 
 export const PlayersList = createComponent({
@@ -28,9 +27,10 @@ function playersListRender() {
   log.cycle('playersList render', this.state);
   const sort = R.propOr({}, 'sort', this.state);
   const headers = R.map((prop) => (
-    <PlayersListHeader
+    <SortHeader
        key={prop}
        name={prop}
+       sortName="players"
        sort={sort}
        />
   ), this.state.players.columns);

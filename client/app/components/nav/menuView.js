@@ -8,8 +8,6 @@ import { NavToggle } from 'app/components/nav/toggleView';
 import { AuthToggleButton } from 'app/components/auth/auth';
 import { TournamentSaveButton } from 'app/components/tournament/tournament';
 /* eslint-enable no-unused-vars */
-import stateService from 'app/services/state';
-const { dispatch } = stateService;
 
 export const NavMenu = createComponent({
   displayName: 'NavMenu',
@@ -17,7 +15,6 @@ export const NavMenu = createComponent({
   getInitialState: navMenuGetInitialState,
   doUpdateState: navMenuDoUpdateState,
   doToggleShow: navMenuDoToggleShow,
-  doEnterRounds: navMenuDoEnterRounds,
   componentWillMount: navMenuComponentWillMount,
   componentWillUnmount: navMenuComponentWillUnmount,
 });
@@ -38,7 +35,7 @@ function navMenuRender() {
                onClick={this.doToggleShow}>Players</NavLink>
       <NavLink currentHash={this.state.currentHash}
                path="/rounds"
-               onClick={this.doEnterRounds}>Rounds</NavLink>
+               onClick={this.doToggleShow}>Rounds</NavLink>
       <NavLink currentHash={this.state.currentHash}
                path="/about"
                onClick={this.doToggleShow}>About</NavLink>
@@ -70,11 +67,6 @@ function navMenuDoToggleShow() {
   this.setState({
     show: !this.state.show,
   });
-}
-
-function navMenuDoEnterRounds() {
-  this.doToggleShow();
-  dispatch({ eventName: 'rounds-init' });
 }
 
 function navMenuComponentWillMount() {

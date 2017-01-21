@@ -1,0 +1,53 @@
+&-Round {
+    max-width: $pc_break;
+
+    &-list {
+        @include table;
+
+        th, td {
+            text-align: center;
+        }
+        td:nth-child(4),
+        td:nth-last-child(4) {
+            max-width: 1em;
+        }
+        thead,
+        tbody {
+            cursor: pointer;
+        }
+    }
+
+    &GameRow,
+    &Header {
+        &-table,
+        &-faction,
+        &-score {
+            width: 1%;
+            white-space: nowrap;
+        }
+
+        &-faction,
+        &-score {
+            display: none;
+            @media(min-width: $tablet_break) {
+                display: table-cell;
+            }
+        }
+        &-win {
+            background-color: $color_valid_bckgnd;
+        }
+        &-loss {
+            background-color: $color_error_bckgnd;
+        }
+    }
+
+    &Header {
+        &-icon {
+            opacity: 0;
+
+            &-show {
+                opacity: 1;
+            }
+        }
+    }
+}

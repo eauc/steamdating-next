@@ -3,9 +3,10 @@ const R = require('ramda');
 module.exports = {
   commands: [
     {
-      visit() {
+      visit(page) {
         this.api.page.nav()
           .visitPage('Rounds');
+        this.api.click(`//*[contains(text(), "${page}")]`);
         return this;
       },
       nbGamesForPlayers(players) {
@@ -30,6 +31,17 @@ module.exports = {
           this.api.setValue('//input[1]', '');
         });
         this.lastPlayerOptionText = textValue;
+        return this;
+      },
+      setTables(nbTables) {
+        R.forEach((index) => {
+          this.setTable(index, index + 1);
+          this.api.pause(300);
+        }, R.range(0, nbTables));
+      },
+      setTable(index, value) {
+        this.api.page.form()
+          .doSetInputValue(`(//input)[${index + 1}]`, value);
         return this;
       },
       expectGamesFormsForPlayers(players) {
@@ -77,6 +89,24 @@ module.exports = {
           .to.be.visible;
         return this;
       },
+      expectNthRoundPage({ roundIndex, games }) {
+        this.section.pageContent.expect
+          .element(`.//*[contains(string(.), "Round ${roundIndex}")]`)
+          .to.be.visible;
+        R.forEach(({
+          p1 = 'Phantom',
+          p1ap = 0,
+          p1cp = 0,
+          table = 0,
+          p2 = 'Phantom',
+          p2ap = 0,
+          p2cp = 0,
+        }) => {
+          this.section.pageContent.expect
+            .element(`.//tr[contains(string(.), "${p1}")]`)
+            .text.to.match(new RegExp(`${p1ap}.*${p1cp}.*${p1}.*${table}.*${p2}.*${p2cp}.*${p2ap}`, 'i'));
+        }, games);
+      },
     },
   ],
   sections: {
@@ -85,7 +115,7 @@ module.exports = {
       locateStrategy: 'xpath',
       elements: {
         gameRow: {
-          selector: '//tr[count(.//select)=2 and count(.//input[@type="number"])=1]',
+          selector: './/tr[count(.//select)=2 and count(.//input[@type="number"])=1]',
           locateStrategy: 'xpath',
         },
       },

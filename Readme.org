@@ -1,4 +1,4 @@
-* SteamDating v2 [3/18]
+* SteamDating v2 [5/18]
 
 - [ ] input checkbox
 - [X] history effects
@@ -12,11 +12,11 @@
 - [ ] round player result model
 - [ ] rounds summary
   - [ ] filter/sort
-- [ ] round view
-  - [ ] filter/sort
-- [ ] refactor filterValue transform to regexp (put in filter model/sub)
-- [ ] default values for toaster/prompt/...=all subscriptions
-- [ ] form hide global error "should be object"
-- [ ] SR pairing/steps trace
-- [ ] setup appCache
-- [ ] features online ?
+- [X] round view
+  - [X] filter/sort
+- [X] refactor filterValue transform to regexp (put in filter model/sub)
+- [-] default values for toaster/prompt/...=all subscriptions
+- [-] form hide global error "should be object"
+- [-] SR pairing/steps trace
+- [-] setup appCache
+- [-] features online ?

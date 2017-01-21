@@ -7,6 +7,8 @@ import playersModel from 'app/models/players';
 const roundModel = {
   create,
   setPlayerName,
+  filter,
+  sort,
   annotatePairedPlayersNames,
   validate,
 };
@@ -26,6 +28,46 @@ function setPlayerName(fieldPath, name, round) {
     R.over(R.lensProp('games'), R.map(gameModel.resetPlayer$({ name }))),
     R.updateIn(fieldPath, name)
   );
+}
+
+function filter({ filterRegExp }, round) {
+  return R.over(
+    R.lensPropOr([], 'games'),
+    R.filter((game) => {
+      const test1 = filterRegExp.test(R.pathOr('', ['player1','name'], game));
+      const test2 = filterRegExp.test(R.pathOr('', ['player2','name'], game));
+      return test1 || test2;
+    }),
+    round
+  );
+}
+
+function sort({ reverse, by }, round) {
+  const comparator = sortByComparator(R.split('.', by));
+  return R.over(
+    R.lensPropOr([], 'games'),
+    R.pipe(
+      R.sort(comparator),
+      R.when(() => reverse, R.reverse)
+    ),
+    round
+  );
+}
+
+function sortByComparator(by) {
+  return R.comparator((gameA, gameB) => {
+    let byA = R.when(
+      R.compose(R.equals('String'), R.type),
+      R.toLower,
+      R.pathOr('', by, gameA)
+    );
+    let byB = R.when(
+      R.compose(R.equals('String'), R.type),
+      R.toLower,
+      R.pathOr('', by, gameB)
+    );
+    return R.lt(byA, byB);
+  });
 }
 
 function annotatePairedPlayersNames({ players }, round) {

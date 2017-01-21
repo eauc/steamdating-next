@@ -3,6 +3,7 @@ import { beforeEach,
          it } from 'spec/client/helpers/helpers';
 
 import { roundsInitHandler,
+         roundsStartCreateHandler,
          roundsCreateCurrentEditHandler,
        } from 'app/components/rounds/handler';
 
@@ -37,6 +38,40 @@ describe('roundsComponent', function () {
     });
   });
 
+  context('roundsStartCreateHandler()', function () {
+    return roundsStartCreateHandler(this.state);
+  }, function () {
+    beforeEach(function () {
+      this.state.tournament.rounds = [
+        { round: 1 },
+      ];
+      this.state.forms = {
+        round: {
+          edit: { round: 'next' },
+        },
+      };
+    });
+
+    it('should reset round form', function () {
+      expect(this.context.dispatch)
+        .toContain({
+          eventName: 'form-reset',
+          formName: 'round',
+          value: {
+            games: [
+              gameModel.create(),
+              gameModel.create(),
+            ],
+          },
+        });
+    });
+
+    it('should navigate to next round\'s page', function () {
+      expect(this.context.dispatch)
+        .toContain({ eventName: 'navigate', to: '/rounds/next' });
+    });
+  });
+
   context('roundsCreateCurrentEditHandler()', function () {
     return roundsCreateCurrentEditHandler(this.state);
   }, function () {
@@ -61,19 +96,21 @@ describe('roundsComponent', function () {
 
     it('should reset round form', function () {
       expect(this.context.dispatch)
-        .toEqual([
-          {
-            eventName: 'form-reset',
-            formName: 'round',
-            value: {
-              games: [
-                gameModel.create(),
-                gameModel.create(),
-              ],
-            },
+        .toContain({
+          eventName: 'form-reset',
+          formName: 'round',
+          value: {
+            games: [
+              gameModel.create(),
+              gameModel.create(),
+            ],
           },
-          { eventName: 'navigate', to: '/rounds/1' },
-        ]);
+        });
+    });
+
+    it('should navigate to new round\'s page', function () {
+      expect(this.context.dispatch)
+        .toContain({ eventName: 'navigate', to: '/rounds/1' });
     });
   });
 });

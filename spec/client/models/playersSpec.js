@@ -156,45 +156,45 @@ describe('playersModel', function () {
       ];
     });
 
-    example(function (exple, desc) {
+    example(function ({ filterRegExp, list, columns }, desc) {
       it(`should filter players matching <filter>, ${desc}`, function () {
-        expect(playersModel.filter(exple.filter, this.players))
-          .toEqual({ list: exple.list, columns: exple.columns });
+        expect(playersModel.filter({ filterRegExp }, this.players))
+          .toEqual({ list, columns });
       });
     }, [
-      ['filter', 'list', 'columns'],
+      ['filterRegExp', 'list', 'columns'],
       // no filter -> everything matches
-      ['', [{ name: 'tata', origin: 'Lyon', faction: 'Cryx' },
-            { name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
-            { name: 'titi', origin: 'Paris', faction: 'Khador' },
-            { name: 'tutu', origin: 'Lyon', faction: 'Khador' },
-           ], ['name','origin','faction','lists']],
+      [/.*/, [{ name: 'tata', origin: 'Lyon', faction: 'Cryx' },
+              { name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
+              { name: 'titi', origin: 'Paris', faction: 'Khador' },
+              { name: 'tutu', origin: 'Lyon', faction: 'Khador' },
+             ], ['name','origin','faction','lists']],
       // nothing matches
-      ['toto', [], ['name','origin','faction','lists']],
+      [/toto/i, [], ['name','origin','faction','lists']],
       // matches name
-      ['tete', [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
-               ], ['name','origin','faction','lists']],
-      ['tete toto', [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
-                    ], ['name','origin','faction','lists']],
-      ['tutu tete', [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
-                     { name: 'tutu', origin: 'Lyon', faction: 'Khador' },
-                    ], ['name','origin','faction','lists']],
+      [/tete/i, [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
+                ], ['name','origin','faction','lists']],
+      [/tete|toto/i, [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
+                     ], ['name','origin','faction','lists']],
+      [/tutu|tete/i, [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
+                      { name: 'tutu', origin: 'Lyon', faction: 'Khador' },
+                     ], ['name','origin','faction','lists']],
       // matches another column, sort this column first after name
-      ['cyg', [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
-              ], ['name', 'faction','origin','lists']],
-      ['cyg toto', [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
-                   ], ['name', 'faction','origin','lists']],
-      ['Khad Cyg', [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
-                    { name: 'titi', origin: 'Paris', faction: 'Khador' },
-                    { name: 'tutu', origin: 'Lyon', faction: 'Khador' },
-                   ], ['name', 'faction', 'origin', 'lists']],
-      // matches multiple columns
-      ['dij cyg', [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
-                  ], ['name', 'origin', 'faction', 'lists']],
-      ['kha dijon', [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
+      [/cyg/i, [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
+               ], ['name', 'faction','origin','lists']],
+      [/cyg|toto/i, [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
+                    ], ['name', 'faction','origin','lists']],
+      [/Khad|Cyg/i, [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
                      { name: 'titi', origin: 'Paris', faction: 'Khador' },
                      { name: 'tutu', origin: 'Lyon', faction: 'Khador' },
-                    ], ['name', 'origin', 'faction','lists']],
+                    ], ['name', 'faction', 'origin', 'lists']],
+      // matches multiple columns
+      [/dij|cyg/i, [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
+                   ], ['name', 'origin', 'faction', 'lists']],
+      [/kha|dijon/i, [{ name: 'tete', origin: 'Dijon', faction: 'Cygnar' },
+                      { name: 'titi', origin: 'Paris', faction: 'Khador' },
+                      { name: 'tutu', origin: 'Lyon', faction: 'Khador' },
+                     ], ['name', 'origin', 'faction','lists']],
     ]);
   });
 

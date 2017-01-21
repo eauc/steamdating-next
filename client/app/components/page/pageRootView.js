@@ -12,6 +12,7 @@ import { PlayersListPage } from 'app/pages/players/listView';
 import { PlayersCreatePage } from 'app/pages/players/createView';
 import { PlayersEditPage } from 'app/pages/players/editView';
 import { RoundsNextPage } from 'app/pages/rounds/nextView';
+import { RoundsNthPage } from 'app/pages/rounds/nthView';
 import { AboutPage } from 'app/pages/about/view';
 
 export const PageRoot = createComponent({
@@ -32,8 +33,9 @@ function rootRender() {
           <Route path="edit" components={PlayersEditPage} />
         </Route>
         <Route path="rounds">
-          <IndexRedirect to="next" />
+          <IndexRedirect to="all" />
           <Route path="next" components={RoundsNextPage} />
+          <Route path=":nRound" components={RoundsNthPage} />
         </Route>
         <Route path="about" component={AboutPage} />
       </Route>

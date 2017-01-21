@@ -8,20 +8,20 @@ import { React, createComponent } from 'app/helpers/react';
 import { Icon } from 'app/components/misc/misc';
 /* eslint-enable no-unused-vars */
 
-export const PlayersListHeader = createComponent({
-  displayName: 'PlayersListHeader',
-  render: playersListHeaderRender,
-  getInitialState: playersListHeaderGetInitialState,
-  doSortBy: playersListDoSortBy,
+export const SortHeader = createComponent({
+  displayName: 'SortHeader',
+  render,
+  getInitialState,
+  doSortBy,
 });
 
-function playersListHeaderRender() {
+function render() {
   const name = this.props.name;
   const label = this.props.label || R.capitalize(name);
   const icon = `chevron-${this.props.sort.reverse ? 'up' : 'down'}`;
   return (
     <th onClick={this.doSortBy}
-        title={`Click to Sort by ${R.capitalize(name)}`}>
+        title={`Click to Sort by ${label}`}>
       <span>{label} </span>
       <span className={{
               icon: true,
@@ -33,11 +33,11 @@ function playersListHeaderRender() {
   );
 }
 
-function playersListHeaderGetInitialState() {
+function getInitialState() {
   return {};
 }
 
-function playersListDoSortBy() {
+function doSortBy() {
   const by = this.props.name;
   let reverse = this.props.sort.reverse;
   if (by === this.props.sort.by) reverse = !reverse;
@@ -45,7 +45,7 @@ function playersListDoSortBy() {
 
   dispatch({
     eventName: 'sort-set',
-    name: 'players',
+    name: this.props.sortName,
     reverse,
     by,
   });

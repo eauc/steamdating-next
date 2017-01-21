@@ -9,7 +9,8 @@ Feature: Rounds Next
 
   Scenario: Valid Pairing
     When I pair all available players
-    Then I can create the Next Round
+    And I create the Next Round
+    Then I see the New Round's page
 
   Scenario: Partial Pairing
     When I pair some players

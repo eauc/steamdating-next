@@ -16,16 +16,6 @@
         }
     }
 
-    &Header {
-        &-icon {
-            opacity: 0;
-
-            &-show {
-                opacity: 1;
-            }
-        }
-    }
-
     &Row {
         &-faction {
             white-space: nowrap;

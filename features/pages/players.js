@@ -49,13 +49,13 @@ module.exports = {
       doFillPlayerForm(player) {
         const form = this.api.page.form();
         if (!R.isNil(player.name)) {
-          form.doSetInputValue('Name', player.name);
+          form.doSetLabelInputValue('Name', player.name);
         }
         if (!R.isNil(player.origin)) {
-          form.doSetInputValue('Origin', player.origin);
+          form.doSetLabelInputValue('Origin', player.origin);
         }
         if (!R.isNil(player.notes)) {
-          form.doSetInputValue('Notes', player.notes);
+          form.doSetLabelInputValue('Notes', player.notes);
         }
         if (!R.isNil(player.faction)) {
           form.doSelectValue('Faction', player.faction);

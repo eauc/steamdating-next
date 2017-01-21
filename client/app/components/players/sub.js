@@ -6,16 +6,22 @@ const { registerSubscription } = stateService;
 import playersModel from 'app/models/players';
 import factionsModel from 'app/models/factions';
 import { scope } from 'app/components/players/state';
-import { filterSub } from 'app/components/filter/filter';
+import { filterRegExpSub } from 'app/components/filter/filter';
 import { sortSub } from 'app/components/sort/sort';
 import { factionsSub } from 'app/components/factions/factions';
 
-export const playersListSub = registerSubscription(
-  'players-list',
+export const playersSub = registerSubscription(
+  'players',
   (state) => state
     .map(R.pathOr([], scope))
-    .join(filterSub(['players']))
-    .map(([players, filter]) => playersModel.filter(filter, players))
+);
+
+export const playersListSub = registerSubscription(
+  'players-list',
+  () => playersSub([])
+    .join(filterRegExpSub(['players']))
+    .map(([players, filterRegExp]) => playersModel
+         .filter({ filterRegExp }, players))
     .join(sortSub(['players', 'name']))
     .map(([{ list, columns }, sort]) => ({
       list: playersModel.sort(sort, list),

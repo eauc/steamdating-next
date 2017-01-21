@@ -189,4 +189,104 @@ describe('roundModel', function () {
       }],
     ]);
   });
+
+  describe('filter({ filterRegExp })', function () {
+    beforeEach(function () {
+      this.round = {
+        games: [
+          { table: 1, player1: { name: 'tata' }, player2: { name: null } },
+          { table: 3, player1: { name:   null }, player2: { name: 'toutou' } },
+          { table: 4, player1: { name: 'titi' }, player2: { name: 'tyty' } },
+          { table: 2, player1: { name: 'tutu' }, player2: { name: 'teuteu' } },
+          { table: null, player1: { name: 'toto' }, player2: { name: 'toti' } },
+        ],
+      };
+    });
+
+    example(function ({ filterRegExp, games }, desc) {
+      it(`should sort round's games by <sort>, ${desc}`, function () {
+        expect(roundModel.filter({ filterRegExp }, this.round).games)
+          .toEqual(games);
+      });
+    }, [
+      ['filterRegExp', 'games'],
+      [/ta/, [
+        { table: 1, player1: { name: 'tata' }, player2: { name: null } },
+      ]],
+      [/xy/, []],
+      [/to/, [
+        { table: 3, player1: { name:   null }, player2: { name: 'toutou' } },
+        { table: null, player1: { name: 'toto' }, player2: { name: 'toti' } },
+      ]],
+      [/ti/, [
+        { table: 4, player1: { name: 'titi' }, player2: { name: 'tyty' } },
+        { table: null, player1: { name: 'toto' }, player2: { name: 'toti' } },
+      ]],
+    ]);
+  });
+
+  describe('sort({ reverse, by })', function () {
+    beforeEach(function () {
+      this.round = {
+        games: [
+          { table: 1, player1: { name: 'tata' }, player2: { name: null } },
+          { table: 3, player1: { name:   null }, player2: { name: 'toutou' } },
+          { table: 4, player1: { name: 'titi' }, player2: { name: 'tyty' } },
+          { table: 2, player1: { name: 'tutu' }, player2: { name: 'teuteu' } },
+          { table: null, player1: { name: 'toto' }, player2: { name: 'toti' } },
+        ],
+      };
+    });
+
+    example(function ({ sort, games }, desc) {
+      it(`should sort round's games by <sort>, ${desc}`, function () {
+        expect(roundModel.sort(sort, this.round).games)
+          .toEqual(games);
+      });
+    }, [
+      ['sort', 'games'],
+      [{ reverse: false, by: 'player1.name' }, [
+        { table: 3, player1: { name:   null }, player2: { name: 'toutou' } },
+        { table: 1, player1: { name: 'tata' }, player2: { name: null } },
+        { table: 4, player1: { name: 'titi' }, player2: { name: 'tyty' } },
+        { table: null, player1: { name: 'toto' }, player2: { name: 'toti' } },
+        { table: 2, player1: { name: 'tutu' }, player2: { name: 'teuteu' } },
+      ]],
+      [{ reverse: true, by: 'player1.name' }, [
+        { table: 2, player1: { name: 'tutu' }, player2: { name: 'teuteu' } },
+        { table: null, player1: { name: 'toto' }, player2: { name: 'toti' } },
+        { table: 4, player1: { name: 'titi' }, player2: { name: 'tyty' } },
+        { table: 1, player1: { name: 'tata' }, player2: { name: null } },
+        { table: 3, player1: { name:   null }, player2: { name: 'toutou' } },
+      ]],
+      [{ reverse: false, by: 'player2.name' }, [
+        { table: 1, player1: { name: 'tata' }, player2: { name: null } },
+        { table: 2, player1: { name: 'tutu' }, player2: { name: 'teuteu' } },
+        { table: null, player1: { name: 'toto' }, player2: { name: 'toti' } },
+        { table: 3, player1: { name:   null }, player2: { name: 'toutou' } },
+        { table: 4, player1: { name: 'titi' }, player2: { name: 'tyty' } },
+      ]],
+      [{ reverse: true, by: 'player2.name' }, [
+        { table: 4, player1: { name: 'titi' }, player2: { name: 'tyty' } },
+        { table: 3, player1: { name:   null }, player2: { name: 'toutou' } },
+        { table: null, player1: { name: 'toto' }, player2: { name: 'toti' } },
+        { table: 2, player1: { name: 'tutu' }, player2: { name: 'teuteu' } },
+        { table: 1, player1: { name: 'tata' }, player2: { name: null } },
+      ]],
+      [{ reverse: false, by: 'table' }, [
+        { table: null, player1: { name: 'toto' }, player2: { name: 'toti' } },
+        { table: 1, player1: { name: 'tata' }, player2: { name: null } },
+        { table: 2, player1: { name: 'tutu' }, player2: { name: 'teuteu' } },
+        { table: 3, player1: { name:   null }, player2: { name: 'toutou' } },
+        { table: 4, player1: { name: 'titi' }, player2: { name: 'tyty' } },
+      ]],
+      [{ reverse: true, by: 'table' }, [
+        { table: 4, player1: { name: 'titi' }, player2: { name: 'tyty' } },
+        { table: 3, player1: { name:   null }, player2: { name: 'toutou' } },
+        { table: 2, player1: { name: 'tutu' }, player2: { name: 'teuteu' } },
+        { table: 1, player1: { name: 'tata' }, player2: { name: null } },
+        { table: null, player1: { name: 'toto' }, player2: { name: 'toti' } },
+      ]],
+    ]);
+  });
 });
