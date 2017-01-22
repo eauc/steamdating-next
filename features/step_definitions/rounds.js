@@ -1,12 +1,64 @@
 const R = require('ramda');
+const matchingGames = {
+  to: [
+    { p1ap: 32, p1cp: 3, p1: 'titi', table: 2, p2: 'toto', p2cp: 5, p2ap: 75 },
+    { p1ap: 46, p1cp: 0, p1: 'toutou', table: 3, p2: 'tutu', p2cp: 4, p2ap: 30 },
+  ],
+  te: [
+    { p1ap: 52, p1cp: 5, p1: 'tete', table: 1, p2: 'teuteu', p2cp: 3, p2ap: 21 },
+  ],
+};
+const sortedGames = {
+  Player2: [
+    { p1ap: 0, p1cp: 0, p1: 'tyty', table: 4, p2: 'Phantom', p2cp: 0, p2ap: 0 },
+    { p1ap: 52, p1cp: 5, p1: 'tete', table: 1, p2: 'teuteu', p2cp: 3, p2ap: 21 },
+    { p1ap: 32, p1cp: 3, p1: 'titi', table: 2, p2: 'toto', p2cp: 5, p2ap: 75 },
+    { p1ap: 46, p1cp: 0, p1: 'toutou', table: 3, p2: 'tutu', p2cp: 4, p2ap: 30 },
+  ],
+  Table: [
+    { p1ap: 52, p1cp: 5, p1: 'tete', table: 1, p2: 'teuteu', p2cp: 3, p2ap: 21 },
+    { p1ap: 32, p1cp: 3, p1: 'titi', table: 2, p2: 'toto', p2cp: 5, p2ap: 75 },
+    { p1ap: 46, p1cp: 0, p1: 'toutou', table: 3, p2: 'tutu', p2cp: 4, p2ap: 30 },
+    { p1ap: 0, p1cp: 0, p1: 'tyty', table: 4, p2: 'Phantom', p2cp: 0, p2ap: 0 },
+  ],
+};
 
 module.exports = function () {
+  this.Given('some Rounds have been defined', function () {
+    this.page.file()
+      .visit()
+      .doOpen('../data/someRounds.json');
+  });
+
   this.Given('I open Rounds/Next page', function () {
     this.currentPage = this.page.rounds()
       .visit('Next Round');
   });
 
+  this.Given(/^I open Rounds\/(\d+) page$/, function (index) {
+    this.currentPage = this.page.rounds()
+      .visit(`Round${index}`);
+  });
+
   this.Given('some players are paired', pairSomePlayers);
+
+  this.When('I filter the Round with "$filter"', function (filter) {
+    this.currentPage
+      .doFilterWith(filter);
+    this.filterValue = filter;
+  });
+
+  this.When('I sort the Round by "$by"', function (by) {
+    this.currentPage
+      .doFilterWith('.')
+      .doSortBy(by);
+    this.by = by;
+  });
+
+  this.When('I invert the Round sort order', function () {
+    this.currentPage
+      .doSortBy(this.by);
+  });
 
   this.When('I pair all available players', function () {
     const playersNames = R.pluck('name', this.players);
@@ -46,7 +98,7 @@ module.exports = function () {
 
   this.Then('I see the New Round\'s page', function () {
     this.currentPage
-      .expectNthRoundPage(this);
+      .expectGames(this);
   });
 
   this.Then('I cannot create the Next Round', function () {
@@ -62,6 +114,21 @@ module.exports = function () {
   this.Then('the player name is removed from its previous pairing', function () {
     this.currentPage
       .expectPairingToBeEmpty(this.changedPairingIndex);
+  });
+
+  this.Then('I see the matching Games', function () {
+    this.currentPage
+      .expectGames({ games: matchingGames[this.filterValue] });
+  });
+
+  this.Then('I see the Round sorted by "$by"', function (by) {
+    this.currentPage
+      .expectGames({ games: sortedGames[by] });
+  });
+
+  this.Then('I see the Round sorted by "$by" in reverse order', function (by) {
+    this.currentPage
+      .expectGames({ games: R.reverse(sortedGames[by]) });
   });
 };
 

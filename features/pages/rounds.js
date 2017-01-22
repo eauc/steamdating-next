@@ -6,7 +6,21 @@ module.exports = {
       visit(page) {
         this.api.page.nav()
           .visitPage('Rounds');
-        this.api.click(`//*[contains(text(), "${page}")]`);
+        this.api.click(`//*[contains(@class, "PageMenu")]//*[contains(string(.), "${page}")]`);
+        return this;
+      },
+      doFilterWith(filter) {
+        this.section.pageContent
+          .clearValue('@roundFilter')
+          .setValue('@roundFilter', filter);
+        this.filterValue = filter;
+        this.api.pause(500);
+        return this;
+      },
+      doSortBy(by) {
+        this.section.pageContent
+          .click(`//*[contains(text(), "${by}")]`);
+        this.sortBy = by;
         return this;
       },
       nbGamesForPlayers(players) {
@@ -20,6 +34,7 @@ module.exports = {
             1000, true
           );
         }, nameIndexPairs);
+        return this;
       },
       setPlayerName(index, name) {
         const inputSelector = `(//select)[${index + 1}]`;
@@ -38,6 +53,7 @@ module.exports = {
           this.setTable(index, index + 1);
           this.api.pause(300);
         }, R.range(0, nbTables));
+        return this;
       },
       setTable(index, value) {
         this.api.page.form()
@@ -78,6 +94,7 @@ module.exports = {
       expectPairingToBeEmpty(index) {
         const inputSelector = `(//select)[${index + 1}]`;
         this.expect.element(inputSelector).to.have.value.that.equals('');
+        return this;
       },
       expectUnpairedPlayersError(unpairedPlayersNames) {
         const containsUnpairedPlayersNames = R.pipe(
@@ -89,23 +106,29 @@ module.exports = {
           .to.be.visible;
         return this;
       },
-      expectNthRoundPage({ roundIndex, games }) {
-        this.section.pageContent.expect
-          .element(`.//*[contains(string(.), "Round ${roundIndex}")]`)
-          .to.be.visible;
-        R.forEach(({
-          p1 = 'Phantom',
-          p1ap = 0,
-          p1cp = 0,
-          table = 0,
-          p2 = 'Phantom',
-          p2ap = 0,
-          p2cp = 0,
-        }) => {
+      expectGames({ roundIndex, games }) {
+        if (roundIndex) {
           this.section.pageContent.expect
-            .element(`.//tr[contains(string(.), "${p1}")]`)
-            .text.to.match(new RegExp(`${p1ap}.*${p1cp}.*${p1}.*${table}.*${p2}.*${p2cp}.*${p2ap}`, 'i'));
-        }, games);
+            .element(`.//*[contains(string(.), "Round ${roundIndex}")]`)
+            .to.be.visible;
+        }
+        const gamesRegExp = R.pipe(
+          R.map(({
+            p1 = 'Phantom',
+          p1ap = 0,
+            p1cp = 0,
+            table = 0,
+            p2 = 'Phantom',
+            p2ap = 0,
+            p2cp = 0,
+          }) => `${p1ap}.*${p1cp}.*${p1}.*${table}.*${p2}.*${p2cp}.*${p2ap}`),
+          R.join('.*\n.*'),
+          (gamesString) => new RegExp(gamesString, 'i')
+        )(games);
+        this.api.expect
+          .element(`//table[contains(string(.), ${games[0].p1})]`)
+          .text.to.match(gamesRegExp);
+        return this;
       },
     },
   ],
@@ -116,6 +139,10 @@ module.exports = {
       elements: {
         gameRow: {
           selector: './/tr[count(.//select)=2 and count(.//input[@type="number"])=1]',
+          locateStrategy: 'xpath',
+        },
+        roundFilter: {
+          selector: './/input[@placeholder="Filter"]',
           locateStrategy: 'xpath',
         },
       },
