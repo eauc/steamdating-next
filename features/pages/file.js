@@ -1,6 +1,7 @@
 const path = require('path');
+const { createPage } = require('../helpers/page.js');
 
-module.exports = {
+module.exports = createPage({
   commands: [
     {
       visit() {
@@ -9,11 +10,9 @@ module.exports = {
         return this;
       },
       doOpen(filePath) {
-        const labelSelector = '//label[.//*[contains(text(), "Open")]]';
-        this.getAttribute(labelSelector, 'for', (labelFor) => {
-          const inputSelector = `//input[@id="${labelFor.value}"]`;
+        this.getAttribute(this.selector('openFileLabel'), 'for', (labelFor) => {
           const fileName = path.resolve(`${__dirname}/${filePath}`);
-          this.setValue(inputSelector, fileName);
+          this.setValue(this.selector('openFileInput', labelFor), fileName);
           this.api.page.prompt()
             .doOk();
         });
@@ -21,11 +20,8 @@ module.exports = {
       },
     },
   ],
-  sections: {
-    pageContent: {
-      selector: '//*[contains(@class, \'sd-Page\')]',
-      locateStrategy: 'xpath',
-      elements: {},
-    },
+  selectors: {
+    openFileLabel: ['page', '//label[contains(string(.), "Open")]'],
+    openFileInput: ['page', (labelFor) => `//input[@id="${labelFor.value}"]`],
   },
-};
+});

@@ -31,13 +31,13 @@ module.exports = function () {
   });
 
   this.Given('I open Rounds/Next page', function () {
-    this.currentPage = this.page.rounds()
-      .visit('Next Round');
+    this.currentPage = this.page.roundsNext()
+      .visit();
   });
 
   this.Given(/^I open Rounds\/(\d+) page$/, function (index) {
-    this.currentPage = this.page.rounds()
-      .visit(`Round${index}`);
+    this.currentPage = this.page.roundsNth()
+      .visit(index);
   });
 
   this.Given('some players are paired', pairSomePlayers);
@@ -66,8 +66,8 @@ module.exports = function () {
       (name, index) => [index, name],
       playersNames
     );
-    this.currentPage.setPlayersNames(playersNamesPairs);
-    this.currentPage.setTables((playersNames.length + 1) / 2);
+    this.currentPage.doSetPlayersNames(playersNamesPairs);
+    this.currentPage.doSetTables((playersNames.length + 1) / 2);
     this.roundIndex = 1;
     this.games = R.addIndex(R.map)(([p1, p2 = 'Phantom'], index) => ({
       p1,
@@ -82,7 +82,7 @@ module.exports = function () {
     this.changedPairingIndex = 1;
     this.changedPairingName = this.pairedPlayersNames[this.changedPairingIndex];
     this.currentPage
-      .setPlayerName(this.unpairedIndices[0], this.changedPairingName);
+      .doSetPlayerName(this.unpairedIndices[0], this.changedPairingName);
   });
 
   this.When('I create the Next Round', function () {
@@ -97,7 +97,7 @@ module.exports = function () {
   });
 
   this.Then('I see the New Round\'s page', function () {
-    this.currentPage
+    this.page.roundsNth()
       .expectGames(this);
   });
 
@@ -153,5 +153,5 @@ function pairSomePlayers() {
     this.pairedIndices
   );
   this.currentPage
-    .setPlayersNames(nameIndexPairs);
+    .doSetPlayersNames(nameIndexPairs);
 }

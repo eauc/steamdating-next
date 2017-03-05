@@ -69,11 +69,11 @@ module.exports = {
           locateStrategy: 'tag name',
         },
         okButton: {
-          selector: './/button[contains(text(), \'Ok\')]',
+          selector: './/button[contains(string(.), \'Ok\')]',
           locateStrategy: 'xpath',
         },
         cancelButton: {
-          selector: './/button[contains(text(), \'No\')]',
+          selector: './/button[contains(string(.), \'No\')]',
           locateStrategy: 'xpath',
         },
       },

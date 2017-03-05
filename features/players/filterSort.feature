@@ -13,10 +13,15 @@ Feature: Players Filter & Sort
     | kha    |
     | abs    |
 
-  Scenario: Sort Players list
+  Scenario Outline: Sort Players list
     Given more Players have been defined
     And I open Players page
-    When I sort the Players list by "Faction"
-    Then I see the Players sorted by "Faction"
+    When I sort the Players list by "<by>"
+    Then I see the Players sorted by "<by>"
     When I invert the sort order
-    Then I see the Players sorted by "Faction" in revert order
+    Then I see the Players sorted by "<by>" in revert order
+
+    Examples:
+    | by      |
+    | Faction |
+    | Origin  |

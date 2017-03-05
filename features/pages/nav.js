@@ -1,19 +1,17 @@
-module.exports = {
+const { createPage } = require('../helpers/page.js');
+
+module.exports = createPage({
   commands: [
     {
       visitPage(page) {
         this.api
-          .url(this.api.launchUrl);
-        this
-          .section.navigation
-          .click(`.//*[contains(text(),'${page}')]`);
+          .url(this.api.launchUrl)
+          .click(this.selector('pageNav', page));
         return this;
       },
     },
   ],
-  sections: {
-    navigation: {
-      selector: '.sd-Nav',
-    },
+  selectors: {
+    pageNav: ['nav', (page) => `//*[contains(text(),'${page}')]`],
   },
-};
+});

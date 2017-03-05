@@ -66,7 +66,7 @@ module.exports = {
           this.expect.element(inputSelector)
             .to.have.attribute('class').which.contains('error');
         }, { inputTag: ['input','textarea','select'] });
-        this.expect.element(`//*[contains(., '${errorText}')]`)
+        this.expect.element(`//*[contains(@class, 'error') and contains(string(.), '${errorText}')]`)
           .to.be.visible;
         return this;
       },
@@ -81,7 +81,7 @@ module.exports = {
         return this;
       },
       getInputSelectorFor(labelText, fn, { inputTag = 'input' } = {}) {
-        const labelSelector = `//label[contains(., "${labelText}")]`;
+        const labelSelector = `//label[contains(string(.), "${labelText}")]`;
         this.getAttribute(labelSelector, 'for', (labelFor) => {
           const inputTagArray = R.type(inputTag) === 'Array' ? inputTag : [inputTag];
           const inputTagRefs = R.join(' or ', R.map((tag) => `self::${tag}`, inputTagArray));
@@ -91,7 +91,7 @@ module.exports = {
         });
       },
       getOptionSelectorFor(inputSelector, valueText) {
-        return `${inputSelector}/option[contains(., "${valueText}")]`;
+        return `${inputSelector}/option[contains(string(.), "${valueText}")]`;
       },
     },
   ],

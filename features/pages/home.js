@@ -1,8 +1,10 @@
+const { createPage } = require('../helpers/page.js');
+
 const CONST = {
   promptTestDummyValue: 71,
 };
 
-module.exports = {
+module.exports = createPage({
   commands: [
     {
       visit() {
@@ -11,8 +13,8 @@ module.exports = {
         return this;
       },
       doTest(feature) {
-        this.section.pageContent
-          .click(`@test${feature}`);
+        this.api
+          .click(this.selector('testMenu', feature));
         return this;
       },
       doValidatePrompt() {
@@ -58,36 +60,27 @@ module.exports = {
       },
     },
   ],
-  sections: {
-    pageContent: {
-      selector: '//*[contains(@class, \'sd-Page\')]',
-      locateStrategy: 'xpath',
-      elements: {
-        testAlert: {
-          selector: './/*[contains(text(),\'Test Alert\')]',
-          locateStrategy: 'xpath',
-        },
-        testConfirm: {
-          selector: './/*[contains(text(),\'Test Confirm\')]',
-          locateStrategy: 'xpath',
-        },
-        testPrompt: {
-          selector: './/*[contains(text(),\'Test Prompt\')]',
-          locateStrategy: 'xpath',
-        },
-        testToaster: {
-          selector: './/*[contains(text(),\'Test Toaster\')]',
-          locateStrategy: 'xpath',
-        },
-        testValidate: {
-          selector: './/*[contains(text(),\'Validate\')]',
-          locateStrategy: 'xpath',
-        },
-        testValidateArgs: {
-          selector: './/*[contains(text(),\'ValidateArgs\')]',
-          locateStrategy: 'xpath',
-        },
-      },
+  selectors: {
+    testMenu: ['menu', function (feature) { return this.elements[`test${feature}`].selector; }],
+  },
+  elements: {
+    testAlert: {
+      selector: '//*[contains(text(),\'Test Alert\')]',
+    },
+    testConfirm: {
+      selector: '//*[contains(text(),\'Test Confirm\')]',
+    },
+    testPrompt: {
+      selector: '//*[contains(text(),\'Test Prompt\')]',
+    },
+    testToaster: {
+      selector: '//*[contains(text(),\'Test Toaster\')]',
+    },
+    testValidate: {
+      selector: '//*[contains(text(),\'Validate\')]',
+    },
+    testValidateArgs: {
+      selector: '//*[contains(text(),\'ValidateArgs\')]',
     },
   },
-};
+});
