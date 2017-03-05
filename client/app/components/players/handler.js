@@ -9,6 +9,7 @@ const { registerHandler } = stateService;
 import { scope } from 'app/components/players/state';
 import playerModel from 'app/models/player';
 import playersModel from 'app/models/players';
+import roundsModel from 'app/models/rounds';
 
 registerHandler('players-create', [
   path(scope, []),
@@ -17,9 +18,7 @@ registerHandler('players-create', [
   return playersModel.add(player, state);
 });
 
-registerHandler('players-update', [
-  path(scope, []),
-], (state, { base, edit }) => playersModel.update(base.name, edit, state));
+registerHandler('players-update', playersUpdateHandler);
 
 registerHandler('players-remove', [
   path(scope, []),
@@ -49,6 +48,16 @@ registerHandler('players-removeCurrentEdit', [
   tap,
   effects,
 ], playersRemoveCurrentEditHandler);
+
+export function playersUpdateHandler(state, { base, edit }) {
+  return R.thread(state)(
+    R.over(R.lensPath(scope), playersModel.update$(base.name, edit)),
+    R.over(
+      R.lensPathOr([], ['tournament','rounds']),
+      roundsModel.renamePlayer$({ oldName: base.name, newName: edit.name })
+    )
+  );
+}
 
 export function playersStartCreateHandler() {
   return {

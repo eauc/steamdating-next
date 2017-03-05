@@ -52,6 +52,7 @@ function formInputRender() {
     'input-error': showError,
   };
   const props = R.pick(['required','type','order','multiple','placeholder'], this.props);
+  const isCheckbox = (this.props.type === 'checkbox');
   let input;
   if ('textarea' === this.props.type) {
     input = (
@@ -96,13 +97,15 @@ function formInputRender() {
     );
   }
   else {
+    const value = isCheckbox ? 'checked' : this.state.value;
     input = (
       <input
          ref="input"
          id={this.path}
          className={className}
          name={this.props.name}
-         value={this.state.value || ''}
+         checked={this.state.value}
+         value={value || ''}
          onChange={this.doUpdate}
          {...props}
          />
@@ -112,9 +115,11 @@ function formInputRender() {
     <div>
       <label className="label"
              htmlFor={this.path}>
-        {this.props.label}
+        {isCheckbox ? input : ''}
+        <span> </span>
+        <span>{this.props.label}</span>
       </label>
-      {input}
+      {!isCheckbox ? input : ''}
       <p className="error-info">
         {showError ? error : ''}
       </p>
@@ -124,8 +129,12 @@ function formInputRender() {
 
 function formInputGetInitialState() {
   this.path = `${this.context.formName}.${this.props.name}`;
+  const shortDebounce = (
+    this.props.type === 'select'
+      || this.props.type === 'checkbox'
+  );
   this.dispatchUpdate = R.debounce(
-    this.props.type === 'select' ? 50 : 300,
+    shortDebounce ? 50 : 300,
     R.bind(this.dispatchUpdate, this)
   );
   return {
@@ -149,6 +158,9 @@ function formInputDoUpdate(event) {
       R.filter(R.prop('selected')),
       R.map(R.prop('value'))
     );
+  }
+  if (this.props.type === 'checkbox') {
+    value = (event.target.checked);
   }
   if (this.props.type === 'number') {
     value = Number(value);

@@ -1,0 +1,61 @@
+&-GameEdit {
+    &-gamesList {
+        @include table($hover: inherit);
+        text-align: center;
+
+        tbody {
+            td:first-child,
+            td:last-child {
+                max-width: 1em;
+            }
+            th {
+                padding-top: 1.3em;
+            }
+            td {
+                padding: 0;
+
+                &.sd-GameEdit-ck {
+                    padding-top: 1.3em;
+                }
+                &.sd-GameWinLossEdit {
+                    padding: 1em 0;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    input, select {
+        padding: 0.3em 0.1em;
+        @media(min-width: $tablet_break) {
+            padding: 0.5em;
+        }
+    }
+    &-faction {
+        display: none;
+
+        @media(min-width: $tablet_break) {
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
+    &-table, &-faction {
+        width: 1%;
+
+        input {
+            max-width: 3em;
+        }
+    }
+}
+
+&-GameWinLossEdit {
+    &-hint {
+        @extend .sd-text-muted;
+        font-size: 80%;
+    }
+    &-win {
+        background-color: $color_valid_bckgnd;
+    }
+    &-loss {
+        background-color: $color_error_bckgnd;
+    }
+}

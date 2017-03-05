@@ -1,5 +1,9 @@
-* SteamDating v2 [5/18]
+* SteamDating v2 [9/26]
 
+- [X] split rounds page object
+- [X] refac players sortBy feature
+- [X] factorize pageContent/pageMenu selector between pages (selectors file ?)
+- [X] test section selector restriction : doesn't work -> helper function to do it manually
 - [ ] input checkbox
 - [X] history effects
 - [X] tables styles mixin
@@ -15,8 +19,12 @@
 - [X] round view
   - [X] filter/sort
 - [X] refactor filterValue transform to regexp (put in filter model/sub)
-- [-] default values for toaster/prompt/...=all subscriptions
-- [-] form hide global error "should be object"
-- [-] SR pairing/steps trace
-- [-] setup appCache
-- [-] features online ?
+- [ ] default values for toaster/prompt/...=all subscriptions
+- [ ] form hide global error "should be object"
+- [ ] SR pairing/steps trace
+- [ ] setup appCache
+- [ ] features online ?
+- [ ] faction image undefined -> pas de tag img
+- [ ] pb refresh roundNth pages
+- [ ] small screen menu a droit
+- [ ] round edit: table number input witdh

@@ -62,8 +62,8 @@ function sort({ reverse, by }, players) {
 
 function sortByComparator(by) {
   return R.comparator((playerA, playerB) => {
-    let byA = R.toLower(R.prop(by, playerA));
-    let byB = R.toLower(R.prop(by, playerB));
+    let byA = R.toLower(R.defaultTo("", R.prop(by, playerA)));
+    let byB = R.toLower(R.defaultTo("", R.prop(by, playerB)));
     if (byA === byB && by !== 'name') {
       return R.lt(R.toLower(R.prop('name', playerA)),
                   R.toLower(R.prop('name', playerB)));

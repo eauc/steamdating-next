@@ -26,6 +26,18 @@ registerHandler('rounds-createCurrentEdit', [
   effects,
 ], roundsCreateCurrentEditHandler);
 
+registerHandler('rounds-remove', [
+  effects,
+], roundsRemoveHandler);
+
+registerHandler('rounds-startGameEdit', [
+  effects,
+], roundsStartGameEditHandler);
+
+registerHandler('rounds-updateCurrentGameEdit', [
+  effects,
+], roundsUpdateCurrentGameEditHandler);
+
 export function roundsInitHandler(state) {
   return {
     dispatch: {
@@ -71,6 +83,44 @@ export function roundsCreateCurrentEditHandler(state) {
         ),
       },
       { eventName: 'navigate', to: `/rounds/${newRoundIndex}` },
+    ],
+  };
+}
+
+export function roundsRemoveHandler(state, { index }) {
+  return {
+    state: R.over(R.lensPath(scope), roundsModel.remove$({ index }), state),
+    dispatch: { eventName: 'navigate', to: '/rounds/all' },
+  };
+}
+
+export function roundsStartGameEditHandler(state, { roundIndex, gameIndex }) {
+  const game = R.thread(state)(
+    R.pathOr({}, scope),
+    roundsModel.round$({ index: roundIndex }),
+    roundModel.game$({ index: gameIndex })
+  );
+  return {
+    state: R.assocPath(['game','currentEdit'], { roundIndex, gameIndex }, state),
+    dispatch: [
+      { eventName: 'form-reset', formName: 'game', value: game },
+      { eventName: 'navigate', to: '/games/edit' },
+    ],
+  };
+}
+
+export function roundsUpdateCurrentGameEditHandler(state) {
+  const game = R.pathOr({}, ['forms','game','edit'], state);
+  const { roundIndex, gameIndex } = R.pathOr({}, ['game','currentEdit'], state);
+  return {
+    state: R.over(
+      R.lensPath(scope),
+      roundsModel.updateGame$({ game, roundIndex, gameIndex }),
+      state
+    ),
+    dispatch: [
+      { eventName: 'form-reset', formName: 'game', value: game },
+      { eventName: 'navigate-back' },
     ],
   };
 }

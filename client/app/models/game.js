@@ -5,10 +5,15 @@ import R from 'app/helpers/ramda';
 const gameModel = {
   create,
   resetPlayer,
-  playersNames,
+  renamePlayer,
+  setWinLoss,
   isMirror,
+  playersNames,
+  listForPlayer,
+  opponentForPlayer,
   winForPlayer,
   lossForPlayer,
+  scoreForPlayer,
 };
 
 export default R.curryService(gameModel);
@@ -48,11 +53,30 @@ function resetPlayer({ name }, game) {
   );
 }
 
-function playersNames(game) {
-  return [
-    R.path(['player1','name'], game),
-    R.path(['player2','name'], game),
-  ];
+function renamePlayer({ oldName, newName }, game) {
+  return R.thread(game)(
+    R.when(
+      R.pathEq(['player1','name'], oldName),
+      R.assocPath(['player1','name'], newName)
+    ),
+    R.when(
+      R.pathEq(['player2','name'], oldName),
+      R.assocPath(['player2','name'], newName)
+    )
+  );
+}
+
+function setWinLoss(fieldPath, value, game) {
+  const oldValue = R.path(fieldPath, game);
+  if (oldValue === value) return game;
+  if (value === 0) return R.assocPath(fieldPath, 0, game);
+
+  const [player, ...path] = fieldPath;
+  const otherPlayer = (player === 'player1') ? 'player2' : 'player1';
+  return R.thread(game)(
+    R.assocPath(fieldPath, 1),
+    R.assocPath([otherPlayer, ...path], 0)
+  );
 }
 
 function isMirror({ playersFactions }, game) {
@@ -61,6 +85,41 @@ function isMirror({ playersFactions }, game) {
       R.exists(game.player2.name) &&
       playersFactions[game.player1.name] === playersFactions[game.player2.name]
   );
+}
+
+function playersNames(game) {
+  return [
+    R.path(['player1','name'], game),
+    R.path(['player2','name'], game),
+  ];
+}
+
+function listForPlayer({ name }, game) {
+  const player1List = (
+    game.player1.name === name
+      ? game.player1.list
+      : null
+  );
+  const player2List = (
+    game.player2.name === name
+      ? game.player2.list
+      : null
+  );
+  return player1List || player2List;
+}
+
+function opponentForPlayer({ name }, game) {
+  const player1Opponent = (
+    game.player1.name === name
+      ? game.player2.name
+      : null
+  );
+  const player2Opponent = (
+    game.player2.name === name
+      ? game.player1.name
+      : null
+  );
+  return player1Opponent || player2Opponent;
 }
 
 function winForPlayer({ name }, game) {
@@ -85,4 +144,18 @@ function lossForPlayer({ name }, game) {
       game.player2.score.tournament === 0
   );
   return player1Loss || player2Loss;
+}
+
+function scoreForPlayer({ name }, game) {
+  const player1Score = (
+    game.player1.name === name
+      ? game.player1.score
+      : null
+  );
+  const player2Score = (
+    game.player2.name === name
+      ? game.player2.score
+      : null
+  );
+  return player1Score || player2Score;
 }

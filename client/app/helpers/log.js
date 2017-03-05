@@ -17,6 +17,8 @@ self.STEAMDATING_CONFIG.debugFlags = {
   sub: null,
   state: 'info',
   storage: 'warn',
+  // tasks: 'debug',
+  tasks: null,
   // validator: 'debug',
   validator: null,
 };

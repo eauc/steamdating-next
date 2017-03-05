@@ -4,7 +4,7 @@ import R from 'app/helpers/ramda';
 import log from 'app/helpers/log';
 import stateService from 'app/services/state';
 const { dispatch } = stateService;
-import { formSub } from 'app/components/form/sub';
+import { formValidateSub } from 'app/components/form/sub';
 import formModel from 'app/models/form';
 /* eslint-disable no-unused-vars */
 import { React, createComponent } from 'app/helpers/react';
@@ -27,7 +27,7 @@ export const FormEdit = createComponent({
 });
 
 function formEditFormSubscription() {
-  return formSub([this.props.name, () => this.props.schema]);
+  return formValidateSub([this.props.name, () => this.props.schema]);
 }
 
 function formEditRender() {
@@ -54,8 +54,7 @@ function formEditRender() {
                   submit: true,
                   disabled: !formModel.isValid(this.state.form),
                 }}
-                type="submit"
-                onClick={this.doSubmit}>
+                type="submit">
           <Icon name="check" />
         </button>
       </fieldset>
@@ -77,11 +76,12 @@ function formEditGetChildContext() {
 
 function formEditDoSubmit(event) {
   event.preventDefault();
-  if (this.state.form.error) return;
+  if (this.state.form.error) return false;
   if (R.type(this.props.onSubmit) === 'Function') {
     this.props.onSubmit(this.state.form);
   }
   else {
     dispatch({ eventName: this.props.onSubmit, form: this.state.form });
   }
+  return false;
 }

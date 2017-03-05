@@ -2,7 +2,7 @@ export let __hotReload = true;
 
 import R from 'app/helpers/ramda';
 import ajv from 'app/helpers/ajv';
-import { gameSchema } from 'app/components/games/games';
+import { gameSchema } from 'app/components/games/state';
 import stateService from 'app/services/state';
 const { registerValidator } = stateService;
 import roundModel from 'app/models/round';

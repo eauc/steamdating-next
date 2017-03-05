@@ -1,0 +1,32 @@
+&-RoundsSummary {
+    &-nextRound {
+        @include button;
+    }
+    &-list {
+        @include table;
+
+        td, th {
+            white-space: nowrap;
+        }
+        tbody tr {
+            cursor: pointer;
+        }
+    }
+    &-list &-player {
+        cursor: pointer;
+    }
+    &-list &-lists {
+        width: 1%;
+        background-color: $color_warning_bckgnd;
+
+        &.sd-RoundsSummary-ok {
+            background-color: $color_primary_light;
+        }
+    }
+    &-win {
+        background-color: $color_valid_bckgnd;
+    }
+    &-loss {
+        background-color: $color_error_bckgnd;
+    }
+}

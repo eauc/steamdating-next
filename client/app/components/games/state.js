@@ -24,8 +24,14 @@ export const gamePointSchema = {
 export const gameScoreSchema = {
   type: 'object',
   properties: {
+    tournament: integerOrNullSchema,
     assassination: { type: 'boolean' },
-    scenario: gamePointSchema,
+    scenario: {
+      allOf: [
+        gamePointSchema,
+        { maximum: 5 },
+      ],
+    },
     army: gamePointSchema,
     custom: { type: 'number' },
   },

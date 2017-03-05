@@ -33,6 +33,31 @@ export const roundsNthSub = registerSubscription(
     .map(([round, sort]) => roundModel.sort(sort, round))
 );
 
+export const roundsSummarySub = registerSubscription(
+  'rounds-summary',
+  (state) => state
+    .map(R.pathOr([], scope))
+    .join(playersSub([]))
+    .map(([rounds, players]) => ({
+      nRounds: R.length(rounds),
+      players: R.map(
+        (player) => roundsModel.playerSummary({ player }, rounds),
+        players
+      ),
+    }))
+    .join(filterRegExpSub(['roundsSummary']))
+    .map(([summary, filterRegExp]) => R.over(
+      R.lensProp('players'),
+      R.filter((player) => filterRegExp.test(player.name)),
+      summary
+    ))
+    .join(sortSub(['roundsSummary', 'name']))
+    .map(([summary, sort]) => R.thread(summary)(
+      R.over(R.lensProp('players'), playersModel.sort$(sort)),
+      R.assoc('sort', sort)
+    ))
+);
+
 export const roundsEditSub = registerSubscription(
   'rounds-edit',
   () => formSub(['round'])

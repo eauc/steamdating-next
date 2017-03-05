@@ -6,9 +6,13 @@ import playersModel from 'app/models/players';
 
 const roundModel = {
   create,
+  game,
   setPlayerName,
+  renamePlayer,
+  updateGame,
   filter,
   sort,
+  playerResult,
   annotatePairedPlayersNames,
   validate,
 };
@@ -22,11 +26,34 @@ function create({ players }, base) {
   });
 }
 
+function game({ index }, round) {
+  return R.thread(round)(
+    R.propOr([], 'games'),
+    R.nth(index)
+  );
+}
+
 function setPlayerName(fieldPath, name, round) {
   console.log('setPlayerName', fieldPath, name, round);
   return R.thread(round)(
     R.over(R.lensProp('games'), R.map(gameModel.resetPlayer$({ name }))),
     R.updateIn(fieldPath, name)
+  );
+}
+
+function renamePlayer({ oldName, newName }, round) {
+  return R.over(
+    R.lensProp('games'),
+    R.map(gameModel.renamePlayer$({ oldName, newName })),
+    round
+  );
+}
+
+function updateGame({ game, gameIndex }, round) {
+  return R.over(
+    R.lensProp('games'),
+    R.update(gameIndex, game),
+    round
   );
 }
 
@@ -68,6 +95,31 @@ function sortByComparator(by) {
     );
     return R.lt(byA, byB);
   });
+}
+
+function playerResult({ player }, round) {
+  return R.thread(round.games)(
+    R.findIndex((game) => R.contains(
+      player.name,
+      gameModel.playersNames(game)
+    )),
+    (index) => R.thread(index)(
+      R.ifElse(
+        R.lte(0),
+        R.nth(R.__, round.games),
+        () => gameModel.create({ player1: { name: player.name } })
+      ),
+      (game) => ({
+        index,
+        table: game.table,
+        list: gameModel.listForPlayer({ name: player.name }, game),
+        opponent: gameModel.opponentForPlayer({ name: player.name }, game),
+        win: gameModel.winForPlayer({ name: player.name }, game),
+        loss: gameModel.lossForPlayer({ name: player.name }, game),
+        score: gameModel.scoreForPlayer({ name: player.name }, game),
+      })
+    )
+  );
 }
 
 function annotatePairedPlayersNames({ players }, round) {

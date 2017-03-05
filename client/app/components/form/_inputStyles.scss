@@ -10,7 +10,12 @@
     }
     &-input {
         @include input;
+        width: 100%;
+        box-sizing: border-box;
 
+        &[type="checkbox"] {
+            width: auto;
+        }
         &-valid[required] {
             border-color: $color_valid;
             &:focus {

@@ -1,5 +1,6 @@
 export let __hotReload = true;
 
+import 'babel/polyfill';
 import R from 'app/helpers/ramda';
 self.R = R;
 import Ajv from 'ajv';
